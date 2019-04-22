@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Http;
 
-namespace EDIS.Areas.BMED.Models
+namespace EDIS.Areas.BMED.Models.RepairModels
 {
     [Table("BMEDAttainFiles")]
     public class AttainFileModel

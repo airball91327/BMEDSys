@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace EDIS.Areas.BMED.Models
+namespace EDIS.Areas.BMED.Models.RepairModels
 {
     public class ScrapAssetModel
     {

@@ -1,24 +1,18 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace EDIS.Areas.BMED.Models
+namespace EDIS.Areas.BMED.Models.RepairModels
 {
-    public class EngsInDeptsViewModel
+    public class EngsInAssetsViewModel
     {
         [Display(Name = "選取")]
         public Boolean IsSelected { get; set; }
-        [Display(Name = "建築代號")]
-        public int BuildingId { get; set; }
-        [Display(Name = "建築名稱")]
-        public string BuildingName { get; set; }
-        [Display(Name = "樓層代號")]
-        public string FloorId { get; set; }
-        [Display(Name = "樓層名稱")]
-        public string FloorName { get; set; }
-        [Display(Name = "地點代號")]
-        public string PlaceId { get; set; }
-        [Display(Name = "地點名稱")]
-        public string PlaceName { get; set; }
+        [Display(Name = "設備編號")]
+        public string DeviceNo { get; set; }
+        [Display(Name = "財產編號")]
+        public string AssetNo { get; set; }
+        [Display(Name = "儀器名稱")]
+        public string Cname { get; set; }
         [Display(Name = "負責工程師代號")]
         public int? EngId { get; set; }
         [Display(Name = "負責工程師帳號")]

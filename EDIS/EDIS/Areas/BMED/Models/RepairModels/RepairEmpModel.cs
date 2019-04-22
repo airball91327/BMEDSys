@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EDIS.Areas.BMED.Models
+namespace EDIS.Areas.BMED.Models.RepairModels
 {
+    [Table("BMEDRepairEmps")]
     public class RepairEmpModel
     {
         [Key, Column(Order = 1)]

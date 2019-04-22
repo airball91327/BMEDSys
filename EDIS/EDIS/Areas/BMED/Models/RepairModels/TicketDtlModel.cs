@@ -4,8 +4,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace EDIS.Areas.BMED.Models
+namespace EDIS.Areas.BMED.Models.RepairModels
 {
+    [Table("BMEDTicketDtls")]
     public class TicketDtlModel
     {
         [Key, Column(Order = 1)]
