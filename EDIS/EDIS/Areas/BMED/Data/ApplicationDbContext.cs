@@ -22,10 +22,10 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<RepairModel> BMEDRepairs { get; set; }
         public DbSet<RepairDtlModel> BMEDRepairDtls { get; set; }
         public DbSet<RepairFlowModel> BMEDRepairFlows { get; set; }
-        //public DbSet<AppUserModel> AppUsers { get; set; }
-        //public DbSet<AppRoleModel> AppRoles { get; set; }
-        //public DbSet<DepartmentModel> Departments { get; set; }
-        //public DbSet<UsersInRolesModel> UsersInRoles { get; set; }
+        public DbSet<AppUserModel> AppUsers { get; set; }
+        public DbSet<AppRoleModel> AppRoles { get; set; }
+        public DbSet<DepartmentModel> Departments { get; set; }
+        public DbSet<UsersInRolesModel> UsersInRoles { get; set; }
         public DbSet<AssetModel> BMEDAssets { get; set; }
         public DbSet<DealStatusModel> BMEDDealStatuses { get; set; }
         public DbSet<FailFactorModel> BMEDFailFactors { get; set; }
@@ -45,9 +45,9 @@ namespace EDIS.Areas.BMED.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //builder.Entity<AppUserModel>().HasKey(c => c.Id);
-            //builder.Entity<AppRoleModel>().HasKey(c => c.RoleId);
-            //builder.Entity<UsersInRolesModel>().HasKey(c => new {c.UserId, c.RoleId});
+            builder.Entity<AppUserModel>().HasKey(c => c.Id);
+            builder.Entity<AppRoleModel>().HasKey(c => c.RoleId);
+            builder.Entity<UsersInRolesModel>().HasKey(c => new {c.UserId, c.RoleId});
             builder.Entity<RepairFlowModel>().HasKey(c => new { c.DocId, c.StepId });
             //builder.Entity<DocIdStore>().HasKey(c => new { c.DocType, c.DocId});
             builder.Entity<RepairEmpModel>().HasKey(c => new { c.DocId, c.UserId });

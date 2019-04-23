@@ -18,6 +18,9 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required]
         [Display(Name = "申請人姓名")]
         public string UserName { get; set; }
+        [NotMapped]
+        [Display(Name = "申請人姓名")]
+        public string UserFullName { get; set; }
         [Required]
         [Display(Name = "所屬部門")]
         public string DptId { get; set; }
@@ -28,9 +31,11 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required]
         [Display(Name = "電子信箱")]
         public string Email { get; set; }
-        [Required]
-        [Display(Name = "聯絡方式")]
-        public string Contact { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
+        [Display(Name = "分機")]
+        public string Ext { get; set; }
+        [Display(Name = "MVPN")]
+        public string Mvpn { get; set; }
         [Required]
         [Display(Name = "成本中心")]
         public string AccDpt { get; set; }
@@ -56,10 +61,18 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "申請日期")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
-        public DateTime? ApplyDate { get; set; }
+        public DateTime ApplyDate { get; set; }
         [Required]
         [Display(Name = "故障描述")]
         public string TroubleDes { get; set; }
+        [Required]
+        [Display(Name = "負責工程師")]
+        public int EngId { get; set; }
+        [NotMapped]
+        public string EngName { get; set; }
+        [NotMapped]
+        [Display(Name = "指定工程師")]
+        public int? PrimaryEngId { get; set; }
         [Required]
         [Display(Name = "驗收人代號")]
         public int CheckerId { get; set; }
