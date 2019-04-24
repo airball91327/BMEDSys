@@ -13,35 +13,24 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class DeptStockController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
         private int pageSize = 100;
 
-        public DeptStockController(ApplicationDbContext context)
+        public DeptStockController(BMEDDbContext context)
         {
             _context = context;
         }
 
         public ActionResult Index(IFormCollection fm, int page = 1)
         {
-            string stockClsId = fm["StockClsId"];
-            string stockItemId = fm["StockItemId"];
             string stockno = fm["qtySTOCKNO"];
             string dname = fm["qtyDEPTNAME"];
             string brand = fm["qtyBRAND"];
             List<DeptStockModel> dv = _context.BMEDDeptStocks.ToList();
-            if (!string.IsNullOrEmpty(stockClsId))
-            {
-                int clsId = Convert.ToInt32(stockClsId);
-                dv = dv.Where(d => d.StockClsId == clsId).ToList();
-            }
-            if (!string.IsNullOrEmpty(stockItemId))
-            {
-                int itemId = Convert.ToInt32(stockItemId);
-                dv = dv.Where(d => d.StockItemId == itemId).ToList();
-            }
             if (!string.IsNullOrEmpty(stockno))
             {
                 dv = dv.Where(d => d.StockNo.Contains(stockno)).ToList();

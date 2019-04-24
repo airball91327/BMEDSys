@@ -10,12 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class TicketController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public TicketController(ApplicationDbContext context)
+        public TicketController(BMEDDbContext context)
         {
             _context = context;
         }

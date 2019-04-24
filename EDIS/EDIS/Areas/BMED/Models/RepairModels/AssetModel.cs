@@ -11,10 +11,10 @@ namespace EDIS.Areas.BMED.Models.RepairModels
     {
         [Key]
         [Required]
-        [Display(Name = "設備編號")]
-        public string DeviceNo { get; set; }
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
+        [Display(Name = "醫工碼")]
+        public string BmedNo { get; set; }
         [Required]
         [Display(Name = "設備類別")]
         public string AssetClass { get; set; }
@@ -63,7 +63,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string DelivDptName { get; set; }
         [Required]
         [Display(Name = "保管人代號")]
-        public string DelivUid { get; set; }
+        public int? DelivUid { get; set; }
         [Display(Name = "保管人姓名")]
         public string DelivEmp { get; set; }
         [Display(Name = "存放地點")]
@@ -100,5 +100,44 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public DateTime? Rtt { get; set; }
         [NotMapped]
         public string upload { get; set; }
+    }
+
+    [Table("BMEDDeviceClassCode")]
+    public class DeviceClassCode
+    {
+        [Display(Name = "設備分類碼")]
+        [Key]
+        public string M_code { get; set; }
+        [Required]
+        [Display(Name = "設備分類名稱")]
+        public string M_name { get; set; }
+    }
+
+    public class RepAssetVModel
+    {
+        [Display(Name = "購入日")]
+        public DateTime? BuyDate { get; set; }
+        [Display(Name = "廠商")]
+        public string VenderName { get; set; }
+        [Display(Name = "成本")]
+        public decimal? Cost { get; set; }
+
+    }
+
+    public class QryAsset
+    {
+        [Display(Name = "成本中心")]
+        public string AccDpt { get; set; }
+        [Display(Name = "保管部門")]
+        public string DelivDpt { get; set; }
+        [Display(Name = "財產編號")]
+        public string AssetNo { get; set; }
+        [Display(Name = "設備名稱")]
+        public string AssetName { get; set; }
+        [Display(Name = "醫工碼")]
+        public string BmedNo { get; set; }
+        [Display(Name = "型號")]
+        public string Type { get; set; }
+
     }
 }

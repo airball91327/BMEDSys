@@ -16,15 +16,16 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class AttainFileController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly IHostingEnvironment _hostingEnvironment;
 
-        public AttainFileController(ApplicationDbContext context,
+        public AttainFileController(BMEDDbContext context,
                                     IRepository<AppUserModel, int> userRepo,
                                     IHostingEnvironment hostingEnvironment)
         {

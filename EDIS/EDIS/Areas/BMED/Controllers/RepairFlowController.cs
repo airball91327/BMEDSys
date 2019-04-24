@@ -10,24 +10,26 @@ using EDIS.Areas.BMED.Models;
 using EDIS.Models.Identity;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Repositories;
+using EDIS.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class RepairFlowController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IRepository<RepairModel, string> _repRepo;
-        private readonly IRepository<RepairFlowModel, string[]> _repflowRepo;
+        private readonly BMEDDbContext _context;
+        private readonly BMEDIRepository<RepairModel, string> _repRepo;
+        private readonly BMEDIRepository<RepairFlowModel, string[]> _repflowRepo;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
 
-        public RepairFlowController(ApplicationDbContext context,
-                                    IRepository<RepairModel, string> repairRepo,
-                                    IRepository<RepairFlowModel, string[]> repairflowRepo,
+        public RepairFlowController(BMEDDbContext context,
+                                    BMEDIRepository<RepairModel, string> repairRepo,
+                                    BMEDIRepository<RepairFlowModel, string[]> repairflowRepo,
                                     IRepository<AppUserModel, int> userRepo,
                                     CustomUserManager customUserManager,
                                     CustomRoleManager customRoleManager)

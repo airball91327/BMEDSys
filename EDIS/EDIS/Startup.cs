@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using EDIS.Data;
+using EDIS.Areas.BMED.Data;
 using EDIS.Models;
 using EDIS.Services;
 using EDIS.Repositories;
+using EDIS.Areas.BMED.Repositories;
 using EDIS.Models.RepairModels;
 using EDIS.Models.Identity;
 using EDIS.Models.LocationModels;
@@ -38,7 +40,10 @@ namespace EDIS
         {
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));//AzureConnection//EdisConnection
-           
+
+            services.AddDbContext<BMEDDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));//AzureConnection//EdisConnection
+
             services.AddScoped<IRepository<RepairModel, string>, RepairRepository>();
             services.AddScoped<IRepository<RepairDtlModel, string>, RepairDtlRepository>();
             services.AddScoped<IRepository<RepairFlowModel, string[]>, RepairFlowRepository>();
@@ -49,6 +54,12 @@ namespace EDIS
             services.AddScoped<IRepository<FloorModel, string[]>, FloorRepository>();
             services.AddScoped<IRepository<RepairEmpModel, string[]>, RepairEmpRepository>();
             services.AddScoped<IRepository<AppRoleModel, int>, AppRoleRepository>();
+
+            services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairModel, string>, BMEDRepairRepository>();
+            services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairDtlModel, string>, BMEDRepairDtlRepository>();
+            services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairFlowModel, string[]>, BMEDRepairFlowRepository>();
+            services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairEmpModel, string[]>, BMEDRepairEmpRepository>();
+            services.AddScoped<BMEDIRepository<Areas.BMED.Models.DocIdStore, string[]>, BMEDDocIdStoreRepository>();
 
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             services.AddIdentity<ApplicationUser, ApplicationRole>()
