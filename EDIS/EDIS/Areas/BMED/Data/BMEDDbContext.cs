@@ -10,15 +10,15 @@ using EDIS.Models.Identity;
 
 namespace EDIS.Areas.BMED.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class BMEDDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        public BMEDDbContext(DbContextOptions<BMEDDbContext> options)
             : base(options)
         {
             
         }
 
-        //public DbSet<DocIdStore> DocIdStores { get; set; }
+        public DbSet<DocIdStore> BMEDDocIdStore { get; set; }
         public DbSet<RepairModel> BMEDRepairs { get; set; }
         public DbSet<RepairDtlModel> BMEDRepairDtls { get; set; }
         public DbSet<RepairFlowModel> BMEDRepairFlows { get; set; }
@@ -39,8 +39,8 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<VendorModel> BMEDVendors { get; set; }
         //public DbSet<ExternalUserModel> ExternalUsers { get; set; }
         public DbSet<EngsInAssetsModel> BMEDEngsInAssets { get; set; }
-        public DbSet<EngSubStaff> EngSubStaff { get; set; }
-        public DbSet<ScrapAssetModel> ScrapAssets { get; set; }
+        //public DbSet<EngSubStaff> EngSubStaff { get; set; }
+        //public DbSet<ScrapAssetModel> ScrapAssets { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -48,8 +48,10 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<AppUserModel>().HasKey(c => c.Id);
             builder.Entity<AppRoleModel>().HasKey(c => c.RoleId);
             builder.Entity<UsersInRolesModel>().HasKey(c => new {c.UserId, c.RoleId});
+            builder.Entity<DocIdStore>().HasKey(c => new { c.DocType, c.DocId});
+            builder.Entity<RepairModel>().HasKey(c => new { c.DocId });
+            builder.Entity<RepairDtlModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairFlowModel>().HasKey(c => new { c.DocId, c.StepId });
-            //builder.Entity<DocIdStore>().HasKey(c => new { c.DocType, c.DocId});
             builder.Entity<RepairEmpModel>().HasKey(c => new { c.DocId, c.UserId });
             builder.Entity<RepairCostModel>().HasKey(c => new { c.DocId, c.SeqNo });
             builder.Entity<TicketDtlModel>().HasKey(c => new { c.TicketDtlNo, c.SeqNo });
@@ -60,8 +62,8 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<VendorModel>().HasKey(c => new { c.VendorId });
             //builder.Entity<ExternalUserModel>().HasKey(c => new { c.Id });
             builder.Entity<EngsInAssetsModel>().HasKey(c => new { c.EngId, c.DeviceNo });
-            builder.Entity<EngSubStaff>().HasKey(c => new { c.EngId });
-            builder.Entity<ScrapAssetModel>().HasKey(c => new { c.DocId, c.DeviceNo, c.AssetNo });
+            //builder.Entity<EngSubStaff>().HasKey(c => new { c.EngId });
+            //builder.Entity<ScrapAssetModel>().HasKey(c => new { c.DocId, c.DeviceNo, c.AssetNo });
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     public class Tmail
     {
         public MailAddress from;

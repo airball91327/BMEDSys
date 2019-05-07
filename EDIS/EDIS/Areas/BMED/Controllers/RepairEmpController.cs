@@ -7,6 +7,7 @@ using EDIS.Areas.BMED.Models;
 using EDIS.Models.Identity;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Repositories;
+using EDIS.Repositories;
 using EDIS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,28 +17,27 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class RepairEmpController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly IRepository<RepairModel, string> _repRepo;
-        private readonly IRepository<RepairDtlModel, string> _repdtlRepo;
-        private readonly IRepository<RepairFlowModel, string[]> _repflowRepo;
+        private readonly BMEDDbContext _context;
+        private readonly BMEDIRepository<RepairModel, string> _repRepo;
+        private readonly BMEDIRepository<RepairDtlModel, string> _repdtlRepo;
+        private readonly BMEDIRepository<RepairFlowModel, string[]> _repflowRepo;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly IRepository<DepartmentModel, string> _dptRepo;
-        private readonly IRepository<BMEDDocIdStore, string[]> _dsRepo;
-        private readonly IRepository<RepairEmpModel, string[]> _repempRepo;
+        private readonly BMEDIRepository<RepairEmpModel, string[]> _repempRepo;
         private readonly IEmailSender _emailSender;
         private readonly CustomUserManager userManager;
 
-        public RepairEmpController(ApplicationDbContext context,
-                                   IRepository<RepairModel, string> repairRepo,
-                                   IRepository<RepairDtlModel, string> repairdtlRepo,
-                                   IRepository<RepairFlowModel, string[]> repairflowRepo,
+        public RepairEmpController(BMEDDbContext context,
+                                   BMEDIRepository<RepairModel, string> repairRepo,
+                                   BMEDIRepository<RepairDtlModel, string> repairdtlRepo,
+                                   BMEDIRepository<RepairFlowModel, string[]> repairflowRepo,
                                    IRepository<AppUserModel, int> userRepo,
                                    IRepository<DepartmentModel, string> dptRepo,
-                                   IRepository<BMEDDocIdStore, string[]> dsRepo,
-                                   IRepository<RepairEmpModel, string[]> repairempRepo,
+                                   BMEDIRepository<RepairEmpModel, string[]> repairempRepo,
                                    IEmailSender emailSender,
                                    CustomUserManager customUserManager)
         {
@@ -47,7 +47,6 @@ namespace EDIS.Areas.BMED.Controllers
             _repflowRepo = repairflowRepo;
             _userRepo = userRepo;
             _dptRepo = dptRepo;
-            _dsRepo = dsRepo;
             _repempRepo = repairempRepo;
             _emailSender = emailSender;
             userManager = customUserManager;

@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace EDIS.Areas.BMED.Repositories
 {
-    public interface IRepository<TEntity, TKey>
+    public interface BMEDIRepository<TEntity, TKey>
         where TEntity : class
     {
         TKey Create(TEntity entity);

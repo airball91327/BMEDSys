@@ -7,11 +7,11 @@ using EDIS.Areas.BMED.Models.RepairModels;
 
 namespace EDIS.Areas.BMED.Repositories
 {
-    public class RepairRepository : IRepository<RepairModel, string>
+    public class BMEDRepairRepository : BMEDIRepository<RepairModel, string>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairRepository(ApplicationDbContext context)
+        public BMEDRepairRepository(BMEDDbContext context)
         {
             _context = context;
         }
@@ -57,11 +57,11 @@ namespace EDIS.Areas.BMED.Repositories
         }
     }
 
-    public class RepairDtlRepository : IRepository<RepairDtlModel, string>
+    public class BMEDRepairDtlRepository : BMEDIRepository<RepairDtlModel, string>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairDtlRepository(ApplicationDbContext context)
+        public BMEDRepairDtlRepository(BMEDDbContext context)
         {
             _context = context;
         }
@@ -97,11 +97,11 @@ namespace EDIS.Areas.BMED.Repositories
         }
     }
 
-    public class RepairFlowRepository : IRepository<RepairFlowModel, string[]>
+    public class BMEDRepairFlowRepository : BMEDIRepository<RepairFlowModel, string[]>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairFlowRepository(ApplicationDbContext context)
+        public BMEDRepairFlowRepository(BMEDDbContext context)
         {
             _context = context;
         }
@@ -140,11 +140,11 @@ namespace EDIS.Areas.BMED.Repositories
         }
     }
 
-    public class RepairEmpRepository : IRepository<RepairEmpModel, string[]>
+    public class BMEDRepairEmpRepository : BMEDIRepository<RepairEmpModel, string[]>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairEmpRepository(ApplicationDbContext context)
+        public BMEDRepairEmpRepository(BMEDDbContext context)
         {
             _context = context;
         }

@@ -10,12 +10,13 @@ using System.Threading.Tasks;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class RepairSearchController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairSearchController(ApplicationDbContext context)
+        public RepairSearchController(BMEDDbContext context)
         {
             _context = context;
         }

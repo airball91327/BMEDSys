@@ -14,18 +14,14 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "材料編號")]
         public int StockId { get; set; }
         [Required]
-        [ForeignKey("DeptStockClasses")]
         [Display(Name = "庫存類別")]
-        public int StockClsId { get; set; }
+        public string StockCls { get; set; }
         [Required]
-        [Display(Name = "庫存品項")]
-        public int StockItemId { get; set; }
         [Display(Name = "材料編號")]
         public string StockNo { get; set; }
         [Required]
         [Display(Name = "材料名稱")]
         public string StockName { get; set; }
-        [Required]
         [Display(Name = "單位")]
         public string Unite { get; set; }
         [Display(Name = "單價")]

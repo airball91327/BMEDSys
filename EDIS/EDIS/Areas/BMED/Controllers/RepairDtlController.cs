@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace EDIS.Areas.BMED.Controllers
 {
+    [Area("BMED")]
     [Authorize]
     public class RepairDtlController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public RepairDtlController(ApplicationDbContext context)
+        public RepairDtlController(BMEDDbContext context)
         {
             _context = context;
         }
