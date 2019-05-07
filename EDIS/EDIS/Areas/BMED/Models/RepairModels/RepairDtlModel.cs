@@ -29,6 +29,9 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "維修方式")]
         public string InOut { get; set; }
         [NotMapped]
+        [Display(Name = "財產編號")]
+        public string AssetNo { get; set; }
+        [NotMapped]
         [Display(Name = "儀器名稱")]
         public string AssetName { get; set; }
         [NotMapped]

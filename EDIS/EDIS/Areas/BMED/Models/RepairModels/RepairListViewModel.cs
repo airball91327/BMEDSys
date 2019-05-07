@@ -45,9 +45,15 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string Flg { get; set; }
         public int FlowUid { get; set; }
         public string FlowCls { get; set; }
+        public string FlowDptId { get; set; }
         [Display(Name = "申請日期")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime ApplyDate { get; set; }
+        [Display(Name = "完工日期")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        public DateTime? EndDate { get; set; }
+        [Display(Name = "[有][無]費用")]
+        public string IsCharged { get; set; }
         public RepairModel repdata { get; set; }
     }
 }

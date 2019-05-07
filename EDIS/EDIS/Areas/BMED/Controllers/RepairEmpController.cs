@@ -25,7 +25,7 @@ namespace EDIS.Areas.BMED.Controllers
         private readonly IRepository<RepairFlowModel, string[]> _repflowRepo;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly IRepository<DepartmentModel, string> _dptRepo;
-        private readonly IRepository<DocIdStore, string[]> _dsRepo;
+        private readonly IRepository<BMEDDocIdStore, string[]> _dsRepo;
         private readonly IRepository<RepairEmpModel, string[]> _repempRepo;
         private readonly IEmailSender _emailSender;
         private readonly CustomUserManager userManager;
@@ -36,7 +36,7 @@ namespace EDIS.Areas.BMED.Controllers
                                    IRepository<RepairFlowModel, string[]> repairflowRepo,
                                    IRepository<AppUserModel, int> userRepo,
                                    IRepository<DepartmentModel, string> dptRepo,
-                                   IRepository<DocIdStore, string[]> dsRepo,
+                                   IRepository<BMEDDocIdStore, string[]> dsRepo,
                                    IRepository<RepairEmpModel, string[]> repairempRepo,
                                    IEmailSender emailSender,
                                    CustomUserManager customUserManager)

@@ -22,5 +22,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public string qtyApplyDateTo { get; set; }
+        public string qtyDateType { get; set; }
+        public string qtyIsCharged { get; set; }
+        public bool qtySearchAllDoc { get; set; }
     }
 }
