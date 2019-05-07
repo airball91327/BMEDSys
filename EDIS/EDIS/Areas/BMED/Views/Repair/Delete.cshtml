@@ -1,4 +1,4 @@
-﻿@model EDIS.Models.RepairModels.RepairModel
+﻿@model EDIS.Areas.BMED.Models.RepairModels.RepairModel
 
 @{
     Layout = "~/Views/Shared/_PassedLayout.cshtml";
@@ -13,19 +13,19 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.UserAccount)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.UserAccount)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.UserName)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserFullName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserFullName)
         </dd>
 
         <dt>
@@ -93,35 +93,11 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LocType)
+            @Html.DisplayNameFor(model => model.PlaceLoc)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LocType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Building)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.BuildingName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Floor)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.FloorName)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Area)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AreaName)
+            @Html.DisplayFor(model => model.PlaceLoc)
         </dd>
 
         <dt>

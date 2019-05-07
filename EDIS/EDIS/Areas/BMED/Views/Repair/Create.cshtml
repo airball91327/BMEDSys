@@ -1,4 +1,4 @@
-﻿@model EDIS.Models.RepairModels.RepairModel
+﻿@model EDIS.Areas.BMED.Models.RepairModels.RepairModel
 
 @{
     Layout = "~/Views/Shared/_PassedLayout.cshtml";
@@ -44,8 +44,8 @@
             <div class=form-inline>
                 <div class=form-group>
                     <label asp-for="UserName" class="control-title"></label>
-                    <input asp-for="UserAccount" class="form-control" readonly />
                     <input asp-for="UserName" class="form-control" readonly />
+                    <input asp-for="UserFullName" class="form-control" readonly />
                     <span asp-validation-for="UserId" class="text-danger"></span>
                 </div>
             </div>
@@ -137,7 +137,7 @@
         </div>
         <div class="row">
             <div class="form-inline">
-                <label asp-for="LocType" class="control-title"></label>
+                <label asp-for="PlaceLoc" class="control-title"></label>
                 <div class="radio">
                     <label>
                         <input type="radio" name="LocType" id="LocType1" value="本單位" checked>
