@@ -20,7 +20,7 @@
 <h4>請修</h4>
 <hr />
 <div id="pnlFILES" style="margin: 10pt">
-    @await Component.InvokeAsync("AttainFileList", new { id = Model.DocId, typ = "1" })
+    @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "1", viewType = "Views" })
 </div>
 
 <ul class="nav nav-pills" style="font-size:120%">
@@ -37,27 +37,27 @@
 <div class="tab-content">
     <div id="repair" class="tab-pane fade in active">
         <div>
-            @await Component.InvokeAsync("RepDetail2", new { id = Model.DocId })
+            @await Component.InvokeAsync("BMEDRepDetail2", new { id = Model.DocId })
         </div>
     </div>
     <div id="repairdtl" class="tab-pane fade">
         <p>
-            @await Component.InvokeAsync("RepDetail", new { id = Model.DocId })
+            @await Component.InvokeAsync("BMEDRepDetail", new { id = Model.DocId })
         </p>
     </div>
     <div id="repairemp" class="tab-pane fade">
         <p>
-            @await Component.InvokeAsync("RepEmpList2", new { id = Model.DocId })
+            @await Component.InvokeAsync("BMEDRepEmpList", new { id = Model.DocId, viewType = "Views" })
         </p>
     </div>
     <div id="repaircost" class="tab-pane fade">
         <div>
-            @await Component.InvokeAsync("RepCostList2", new { id = Model.DocId })
+            @await Component.InvokeAsync("BMEDRepCostList", new { id = Model.DocId, viewType = "Views" })
         </div>
     </div>
     <div id="repairflow" class="tab-pane fade">
         <div>
-            @await Component.InvokeAsync("RepFlowList", new { id = Model.DocId })
+            @await Component.InvokeAsync("BMEDRepFlowList", new { id = Model.DocId })
         </div>
     </div>
 </div>

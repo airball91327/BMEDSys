@@ -30,7 +30,7 @@
 <h4>請修單</h4>
 <hr />
 <div id="pnlFILES" style="margin: 10pt">
-    @*@await Component.InvokeAsync("BMEDAttainFileList2", new { id = Model.DocId, typ = "1" })*@
+    @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "1", viewType = "Edit" })
 </div>
 <div class="form-group">
     <div>
@@ -46,7 +46,7 @@
                 <h4 class="modal-title">選擇上傳檔案</h4>
             </div>
             <div class="modal-body">
-                @*@await Component.InvokeAsync("BMEDAttainFileUpload2", new { doctype = "1", docid = Model.DocId })*@
+                @await Component.InvokeAsync("BMEDAttainFileUpload", new { doctype = "1", docid = Model.DocId })
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">離開</button>

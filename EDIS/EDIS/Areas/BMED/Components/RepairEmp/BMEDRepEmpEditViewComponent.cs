@@ -14,12 +14,12 @@ namespace EDIS.Areas.BMED.Components.RepairEmp
 {
     public class BMEDRepEmpEditViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
 
-        public BMEDRepEmpEditViewComponent(ApplicationDbContext context,
+        public BMEDRepEmpEditViewComponent(BMEDDbContext context,
                                            IRepository<AppUserModel, int> userRepo,
                                            CustomUserManager customUserManager,
                                            CustomRoleManager customRoleManager)

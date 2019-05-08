@@ -43,7 +43,7 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public ActionResult List(string docid = null, string doctyp = null)
         {
-            return ViewComponent("AttainFileList2", new { id = docid, typ = doctyp});
+            return ViewComponent("AttainFileList", new { id = docid, typ = doctyp, viewType="Edit" });
         }
 
         [HttpPost]
@@ -53,7 +53,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Upload2(AttainFileModel attainFile)
+        public async Task<IActionResult> Upload(AttainFileModel attainFile)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
             long size = attainFile.Files.Sum(f => f.Length);
@@ -66,7 +66,7 @@ namespace EDIS.Areas.BMED.Controllers
                 try
                 {
 
-                    string s = "/Files";
+                    string s = "/Files/BMED";
 //#if DEBUG
 //                    s = "/App_Data";
 //#endif
@@ -151,7 +151,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
 
             TempData["SendMsg"] = "上傳成功";
-            return RedirectToAction("Edit", "Repair", new { area = "", id = attainFile.DocId });
+            return RedirectToAction("Edit", "Repair", new { area = "BMED", id = attainFile.DocId });
 
             //return new JsonResult(attainFile)
             //{
@@ -173,7 +173,7 @@ namespace EDIS.Areas.BMED.Controllers
                 try
                 {
 
-                    string s = "/Files";
+                    string s = "/Files/BMED";
                     //#if DEBUG
                     //                    s = "/App_Data";
                     //#endif
@@ -263,123 +263,6 @@ namespace EDIS.Areas.BMED.Controllers
             };
         }
 
-        public ActionResult Upload(string doctype, string docid)
-        {
-            AttainFileModel attainFile = new AttainFileModel();
-            attainFile.DocType = doctype;
-            attainFile.DocId = docid;
-            attainFile.SeqNo = 1;
-            attainFile.IsPublic = "N";
-            attainFile.FileLink = "default";
-
-            return View(attainFile);
-        }
-        [HttpPost]
-        public async Task<IActionResult> Upload(AttainFileModel attainFile)
-        {
-            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-            long size = attainFile.Files.Sum(f => f.Length);
-
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-
-                    string s = "/Files";
-                    //#if DEBUG
-                    //                    s = "/App_Data";
-                    //#endif
-                    switch (attainFile.DocType)
-                    {
-                        case "0":
-                            s += "/Budget/";
-                            break;
-                        case "1":
-                            s += "/Repair/";
-                            break;
-                        case "2":
-                            s += "/Keep/";
-                            break;
-                        case "3":
-                            s += "/BuyEvaluate/";
-                            break;
-                        case "4":
-                            s += "/Delivery/";
-                            break;
-                        case "5":
-                            s += "/Asset/";
-                            break;
-                    }
-                    var i = _context.BMEDAttainFiles
-                                    .Where(a => a.DocType == attainFile.DocType)
-                                    .Where(a => a.DocId == attainFile.DocId).ToList();
-                    attainFile.SeqNo = i.Count == 0 ? 1 : i.Select(a => a.SeqNo).Max() + 1;
-
-                    string WebRootPath = _hostingEnvironment.WebRootPath;
-                    string path = Path.Combine(WebRootPath + s + attainFile.DocId + "_"
-                    + attainFile.SeqNo.ToString() + Path.GetExtension(attainFile.Files[0].FileName));
-                    // Upload files.
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        await attainFile.Files[0].CopyToAsync(stream);
-                    }
-
-                    // Save file details to AttainFiles table.
-                    string filelink = attainFile.DocId + "_"
-                    + attainFile.SeqNo.ToString() + Path.GetExtension(attainFile.Files[0].FileName);
-                    switch (attainFile.DocType)
-                    {
-                        case "0":
-                            attainFile.FileLink = "Budget/" + filelink;
-                            break;
-                        case "1":
-                            attainFile.FileLink = "Repair/" + filelink;
-                            break;
-                        case "2":
-                            attainFile.FileLink = "Keep/" + filelink;
-                            break;
-                        case "3":
-                            attainFile.FileLink = "BuyEvaluate/" + filelink;
-                            break;
-                        case "4":
-                            attainFile.FileLink = "Delivery/" + filelink;
-                            break;
-                        case "5":
-                            attainFile.FileLink = "Asset/" + filelink;
-                            break;
-                    }
-                    attainFile.Rtt = DateTime.Now;
-                    attainFile.Rtp = ur.Id;
-                    _context.BMEDAttainFiles.Add(attainFile);
-                    _context.SaveChanges();
-
-                }
-                catch (Exception e)
-                {
-                    throw new Exception(e.Message);
-                }
-            }
-            else
-            {
-                string msg = "";
-                foreach (var error in ViewData.ModelState.Values.SelectMany(modelState => modelState.Errors))
-                {
-                    msg += error.ErrorMessage + Environment.NewLine;
-                }
-                throw new Exception(msg);
-            }
-
-            return Ok();
-
-            //return new JsonResult(attainFile)
-            //{
-            //    Value = new { success = true, error = "" },
-            //};
-        }
-
         // GET: AttainFile/Edit/5
         public async Task<IActionResult> Edit(string id)
         {
@@ -396,10 +279,10 @@ namespace EDIS.Areas.BMED.Controllers
             return View(attainFileModel);
         }
 
-        public ActionResult Delete2(string id = null, int seq = 0, string typ = null)
+        public ActionResult Delete(string id = null, int seq = 0, string typ = null)
         {
             string WebRootPath = _hostingEnvironment.WebRootPath;
-            string path1 = Path.Combine(WebRootPath + "/Files/");
+            string path1 = Path.Combine(WebRootPath + "/Files/BMED/");
             AttainFileModel attainfiles = _context.BMEDAttainFiles.Find(typ, id, seq);
             if (attainfiles != null)
             {
@@ -408,7 +291,7 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     if (typ == "2")
                     {
-                        ff = new FileInfo(Path.Combine(path1, attainfiles.FileLink.Replace("Files/", "")));
+                        ff = new FileInfo(Path.Combine(path1, attainfiles.FileLink.Replace("Files/BMED/", "")));
                         ff.Delete();
                     }
                     else
@@ -427,14 +310,14 @@ namespace EDIS.Areas.BMED.Controllers
             List<AttainFileModel> af = _context.BMEDAttainFiles.Where(f => f.DocId == id)
                                                                .Where(f => f.DocType == typ).ToList();
 
-            return ViewComponent("AttainFileList2", new { id = id, typ = typ });
+            return ViewComponent("AttainFileList", new { id = id, typ = typ, viewType = "Edit" });
         }
 
         /* For Create View's scale.*/
         public ActionResult Delete3(string id = null, int seq = 0, string typ = null)
         {
             string WebRootPath = _hostingEnvironment.WebRootPath;
-            string path1 = Path.Combine(WebRootPath + "/Files/");
+            string path1 = Path.Combine(WebRootPath + "/Files/BMED/");
             AttainFileModel attainfiles = _context.BMEDAttainFiles.Find(typ, id, seq);
             if (attainfiles != null)
             {
@@ -443,7 +326,7 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     if (typ == "2")
                     {
-                        ff = new FileInfo(Path.Combine(path1, attainfiles.FileLink.Replace("Files/", "")));
+                        ff = new FileInfo(Path.Combine(path1, attainfiles.FileLink.Replace("Files/BMED/", "")));
                         ff.Delete();
                     }
                     else

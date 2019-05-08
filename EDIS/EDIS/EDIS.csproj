@@ -93,6 +93,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\Repair\" />
+    <Folder Include="wwwroot\js\BMED\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\Files\Manual\UserManual.pptx" />

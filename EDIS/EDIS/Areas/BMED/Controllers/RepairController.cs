@@ -204,7 +204,7 @@ namespace EDIS.Areas.BMED.Controllers
                        .ToList()
                        .ForEach(j => rv.Add(new RepairListVModel
                        {
-                           DocType = "請修",
+                           DocType = "醫工請修",
                            RepType = j.repair.RepType,
                            DocId = j.repair.DocId,
                            ApplyDate = j.repair.ApplyDate,
@@ -281,7 +281,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }).ToList()
                     .ForEach(j => rv.Add(new RepairListVModel
                     {
-                        DocType = "請修",
+                        DocType = "醫工請修",
                         RepType = j.repair.RepType,
                         DocId = j.repair.DocId,
                         ApplyDate = j.repair.ApplyDate,
@@ -352,7 +352,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }).ToList()
                     .ForEach(j => rv.Add(new RepairListVModel
                     {
-                        DocType = "請修",
+                        DocType = "醫工請修",
                         RepType = j.repair.RepType,
                         DocId = j.repair.DocId,
                         ApplyDate = j.repair.ApplyDate,
@@ -622,9 +622,9 @@ namespace EDIS.Areas.BMED.Controllers
         }
         public string GetID()
         {
-            BMEDDocIdStore ds = new BMEDDocIdStore();
-            ds.DocType = "請修";
-            string s = _dsRepo.Find(x => x.DocType == "請修").Select(x => x.DocId).Max();
+            DocIdStore ds = new DocIdStore();
+            ds.DocType = "醫工請修";
+            string s = _dsRepo.Find(x => x.DocType == "醫工請修").Select(x => x.DocId).Max();
             string did = "";
             int yymm = (System.DateTime.Now.Year - 1911) * 100 + System.DateTime.Now.Month;
             if (!string.IsNullOrEmpty(s))
@@ -655,9 +655,9 @@ namespace EDIS.Areas.BMED.Controllers
             string did = "";
             try
             {
-                BMEDDocIdStore ds = new BMEDDocIdStore();
-                ds.DocType = "請修";
-                string s = _dsRepo.Find(x => x.DocType == "請修").Select(x => x.DocId).Max();
+                DocIdStore ds = new DocIdStore();
+                ds.DocType = "醫工請修";
+                string s = _dsRepo.Find(x => x.DocType == "醫工請修").Select(x => x.DocId).Max();
                 int yymmdd = (System.DateTime.Now.Year - 1911) * 10000 + (System.DateTime.Now.Month) * 100 + System.DateTime.Now.Day;
                 if (!string.IsNullOrEmpty(s))
                 {
