@@ -356,7 +356,7 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                     }
                     break;
-                case "工務經辦":
+                case "醫工經辦":
                     list = new List<SelectListItem>();
                     u = _context.AppUsers.Where(ur => ur.UserName == "1814").FirstOrDefault();
                     if (!string.IsNullOrEmpty(u.DptId))
@@ -459,8 +459,6 @@ namespace EDIS.Areas.BMED.Controllers
                 case "醫工工程師":
 
                     /* Get all engineers. */
-                    //s = _context.EngsInDepts.Include(e => e.AppUsers).Include(e => e.Departments)
-                    //                        .GroupBy(e => e.EngId).Select(group => group.First().EngId.ToString()).ToList();
                     s = roleManager.GetUsersInRole("MedEngineer").ToList();
                     var repEngId = _context.AppUsers.Find(r.EngId).UserName;
 

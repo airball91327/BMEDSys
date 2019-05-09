@@ -15,9 +15,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [ForeignKey("AppUsers")]
         public int EngId { get; set; }
         [Key, Column(Order = 2)]
-        [Display(Name = "設備編號")]
-        public string DeviceNo { get; set; }
         [Display(Name = "財產編號")]
+        [ForeignKey("BMEDAssets")]
         public string AssetNo { get; set; }
         [Required]
         [Display(Name = "負責工程師")]
@@ -31,5 +30,6 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public DateTime? Rtt { get; set; }
 
         public virtual AppUserModel AppUsers { get; set; }
+        public virtual AssetModel Assets { get; set; }
     }
 }

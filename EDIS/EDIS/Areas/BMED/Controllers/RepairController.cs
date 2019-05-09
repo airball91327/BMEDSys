@@ -232,7 +232,7 @@ namespace EDIS.Areas.BMED.Controllers
                     List<RepairFlowModel> rf = _context.BMEDRepairFlows.Where(f => f.Status == "2").ToList();
 
                     if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "Manager")
-                                                            || userManager.IsInRole(User, "RepEngineer"))
+                                                            || userManager.IsInRole(User, "MedEngineer"))
                     {
                         if (userManager.IsInRole(User, "Manager"))
                         {
@@ -240,7 +240,7 @@ namespace EDIS.Areas.BMED.Controllers
                             f => f.DocId, r => r.DocId, (f, r) => f).ToList();
                         }
                         /* If no other search values, search the docs belong the login engineer. */
-                        if (userManager.IsInRole(User, "RepEngineer") && searchAllDoc == false)
+                        if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == false)
                         {
                             rf = rf.Join(_context.BMEDRepairFlows.Where(f2 => f2.UserId == ur.Id),
                                  f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
@@ -313,11 +313,11 @@ namespace EDIS.Areas.BMED.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepEngineer"))
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
                         /* Else return the docs belong the login engineer.  */
-                        if (userManager.IsInRole(User, "RepEngineer") && searchAllDoc == true)
+                        if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == true)
                         {
                             repairFlows = repairFlows.Where(f => f.flow.Status == "?" && f.flow.Cls.Contains("工程師")).ToList();
                         }
@@ -462,7 +462,7 @@ namespace EDIS.Areas.BMED.Controllers
             ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
 
             /* Get all engineers by role. */
-            var allEngs = roleManager.GetUsersInRole("RepEngineer").ToList();
+            var allEngs = roleManager.GetUsersInRole("MedEngineer").ToList();
             List<SelectListItem> list = new List<SelectListItem>();
             SelectListItem li = new SelectListItem();
             foreach (string l in allEngs)
@@ -604,15 +604,7 @@ namespace EDIS.Areas.BMED.Controllers
         public ActionResult Detail()
         {
             RepairModel repair = new RepairModel();
-            //repair.Buildings = new List<SelectListItem>
-            //{
-            //    new SelectListItem{Text = "第一醫療大樓",Value="第一醫療大樓"},
-            //    new SelectListItem{Text = "第二醫療大樓",Value="第二醫療大樓"},
-            //    new SelectListItem{Text = "第三醫療大樓",Value="第三醫療大樓"},
-            //    new SelectListItem{Text = "中華路院區",Value="中華路院區"},
-            //    new SelectListItem{Text = "兒童醫院",Value="兒童醫院"},
-            //    new SelectListItem{Text = "向上大樓",Value="向上大樓"}
-            //};
+
             return PartialView(repair);
         }
 
@@ -681,7 +673,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
             catch (Exception e)
             {
-                RedirectToAction("Create", "Repair", new { Area = "" });
+                RedirectToAction("Create", "Repair", new { Area = "BMED" });
             }
             return did;
         }
@@ -729,7 +721,7 @@ namespace EDIS.Areas.BMED.Controllers
         public JsonResult GetAllEngs()
         {
             /* Get all engineers by role. */
-            var allEngs = roleManager.GetUsersInRole("RepEngineer").ToList();
+            var allEngs = roleManager.GetUsersInRole("MedEngineer").ToList();
             List<AppUserModel> list = new List<AppUserModel>();
             foreach (string l in allEngs)
             {
@@ -752,7 +744,7 @@ namespace EDIS.Areas.BMED.Controllers
             /* 擷取預設負責工程師 */
             if (engineers.Count() == 0)  //該部門無預設工程師
             {
-                var tempEng = _context.AppUsers.Where(a => a.UserName == "181316")
+                var tempEng = _context.AppUsers.Where(a => a.UserName == "344027")
                                                .Select(a => new
                                                {
                                                    EngId = a.Id,
@@ -812,8 +804,8 @@ namespace EDIS.Areas.BMED.Controllers
             /* Get all print details according to the DocId. */
             RepairModel repair = _context.BMEDRepairs.Find(DocId);
             RepairDtlModel dtl = _context.BMEDRepairDtls.Find(DocId);
-            RepairEmpModel emp = _context.BMEDRepairEmps
-                                 .Where(ep => ep.DocId == DocId).FirstOrDefault();
+            RepairEmpModel emp = _context.BMEDRepairEmps.Where(ep => ep.DocId == DocId).FirstOrDefault();
+
             /* Get the last flow. */
             string[] s = new string[] { "?", "2" };
             RepairFlowModel flow = _context.BMEDRepairFlows.Where(f => f.DocId == DocId)

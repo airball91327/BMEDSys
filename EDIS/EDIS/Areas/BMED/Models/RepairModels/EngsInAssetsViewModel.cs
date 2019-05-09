@@ -7,10 +7,12 @@ namespace EDIS.Areas.BMED.Models.RepairModels
     {
         [Display(Name = "選取")]
         public Boolean IsSelected { get; set; }
-        [Display(Name = "設備編號")]
-        public string DeviceNo { get; set; }
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
+        [Display(Name = "醫工碼")]
+        public string BmedNo { get; set; }
+        [Display(Name = "設備類別")]
+        public string AssetClass { get; set; }
         [Display(Name = "儀器名稱")]
         public string Cname { get; set; }
         [Display(Name = "負責工程師代號")]

@@ -61,7 +61,7 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<DeptStockModel>().HasKey(c => new { c.StockId });
             builder.Entity<VendorModel>().HasKey(c => new { c.VendorId });
             //builder.Entity<ExternalUserModel>().HasKey(c => new { c.Id });
-            builder.Entity<EngsInAssetsModel>().HasKey(c => new { c.EngId, c.DeviceNo });
+            builder.Entity<EngsInAssetsModel>().HasKey(c => new { c.EngId, c.AssetNo });
             //builder.Entity<EngSubStaff>().HasKey(c => new { c.EngId });
             //builder.Entity<ScrapAssetModel>().HasKey(c => new { c.DocId, c.DeviceNo, c.AssetNo });
             // Customize the ASP.NET Identity model and override the defaults if needed.

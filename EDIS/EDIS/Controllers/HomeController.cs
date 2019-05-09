@@ -8,6 +8,7 @@ using EDIS.Models;
 using EDIS.Models.RepairModels;
 using Microsoft.AspNetCore.Authorization;
 using EDIS.Data;
+using EDIS.Areas.BMED.Data;
 using EDIS.Repositories;
 using EDIS.Models.Identity;
 
@@ -16,16 +17,19 @@ namespace EDIS.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _BMEDcontext;
         private readonly IRepository<RepairModel, string> _repRepo;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomUserManager userManager;
 
         public HomeController(ApplicationDbContext context,
-                                IRepository<RepairModel, string> repairRepo,
-                                IRepository<AppUserModel, int> userRepo,
-                                CustomUserManager customUserManager)
+                              BMEDDbContext BMEDcontext,
+                              IRepository<RepairModel, string> repairRepo,
+                              IRepository<AppUserModel, int> userRepo,
+                              CustomUserManager customUserManager)
         {
             _context = context;
+            _BMEDcontext = BMEDcontext;
             _repRepo = repairRepo;
             _userRepo = userRepo;
             userManager = customUserManager;
@@ -43,6 +47,11 @@ namespace EDIS.Controllers
             UnsignCounts v = new UnsignCounts();
             v.RepairCount = repairCount;
             v.KeepCount = 0;
+
+            var BMEDrepairCount = _BMEDcontext.BMEDRepairFlows.Where(f => f.Status == "?")
+                                                              .Where(f => f.UserId == ur.Id).Count();
+
+            ViewData["BMEDRepairCount"] = BMEDrepairCount;
 
             return View(v);
         }

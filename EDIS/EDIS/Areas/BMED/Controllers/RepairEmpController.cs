@@ -72,7 +72,7 @@ namespace EDIS.Areas.BMED.Controllers
                 _context.SaveChanges();
                 // Recount the all repair time, and set value to RepairDtl.
                 RepairDtlModel dtl = _context.BMEDRepairDtls.Where(d => d.DocId == repairEmp.DocId)
-                   .FirstOrDefault();
+                                                            .FirstOrDefault();
                 if (dtl != null)
                 {
                     int hr = _context.BMEDRepairEmps.Where(p => p.DocId == repairEmp.DocId)
@@ -125,7 +125,7 @@ namespace EDIS.Areas.BMED.Controllers
                 }
 
                 // Return ViewComponent for ajax request.
-                return ViewComponent("RepEmpList", new { id = repairEmp.DocId });
+                return ViewComponent("BMEDRepEmpList", new { id = repairEmp.DocId, viewType = "Edit" });
             }
             else
             {
@@ -141,7 +141,7 @@ namespace EDIS.Areas.BMED.Controllers
 
         public ActionResult GetEmpList(string docId)
         {
-            return ViewComponent("RepEmpList", new { id = docId });
+            return ViewComponent("BMEDRepEmpList", new { id = docId, viewType = "Edit" });
         }
 
         public ActionResult Delete(string id, string uName)

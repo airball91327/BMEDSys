@@ -30,7 +30,8 @@ namespace EDIS.Areas.BMED.Controllers
             ViewData["FLOWTYPE"] = new SelectList(FlowlistItem, "Value", "Text");
 
             /* 成本中心 & 申請部門的下拉選單資料 */
-            var departments = _context.Departments.ToList();
+            var dptList = new[] { "K", "P", "C" };   //本院部門
+            var departments = _context.Departments.Where(d => dptList.Contains(d.Loc)).ToList();
             List<SelectListItem> listItem = new List<SelectListItem>();
             foreach (var item in departments)
             {
@@ -40,7 +41,6 @@ namespace EDIS.Areas.BMED.Controllers
                     Value = item.DptId
                 });
             }
-
             ViewData["ACCDPT"] = new SelectList(listItem, "Value", "Text");
             ViewData["APPLYDPT"] = new SelectList(listItem, "Value", "Text");
 
@@ -197,7 +197,7 @@ namespace EDIS.Areas.BMED.Controllers
                 .ToList()
                 .ForEach(j => rv.Add(new RepairSearchListVModel
                 {
-                    DocType = "請修",
+                    DocType = "醫工請修",
                     RepType = j.repair.RepType,
                     DocId = j.repair.DocId,
                     ApplyDate = j.repair.ApplyDate,

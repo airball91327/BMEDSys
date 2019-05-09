@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace EDIS.Areas.BMED.Components.Repair
 {
-    public class RepIndexViewComponent : ViewComponent
+    public class BMEDRepIndexViewComponent : ViewComponent
     {
         private readonly BMEDDbContext _context;
 
-        public RepIndexViewComponent(BMEDDbContext context)
+        public BMEDRepIndexViewComponent(BMEDDbContext context)
         {
             _context = context;
         }

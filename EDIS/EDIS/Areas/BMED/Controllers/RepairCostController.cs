@@ -57,12 +57,33 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 try
                 {
-                    var dupData = _context.BMEDRepairCosts.Where(c => c.DocId == repairCost.DocId && c.PartName == repairCost.PartName && c.Standard == repairCost.Standard).FirstOrDefault();
-                    if(dupData != null)
+                    if (repairCost.StockType == "2")
                     {
-                        string msg = "資料重複儲存!!";
-                        return BadRequest(msg);
+                        var dupData = _context.BMEDRepairCosts.Include(c => c.TicketDtl)
+                                                              .Where(c => c.DocId == repairCost.DocId &&
+                                                                     c.PartName == repairCost.PartName &&
+                                                                     c.Standard == repairCost.Standard &&
+                                                                     c.TicketDtl.TicketDtlNo == repairCost.TicketDtl.TicketDtlNo).FirstOrDefault();
+                        if (dupData != null)
+                        {
+                            string msg = "資料重複儲存!!";
+                            return BadRequest(msg);
+                        }
                     }
+                    else
+                    {
+                        var dupData = _context.BMEDRepairCosts.Include(c => c.TicketDtl)
+                                                              .Where(c => c.DocId == repairCost.DocId &&
+                                                                     c.PartName == repairCost.PartName &&
+                                                                     c.Standard == repairCost.Standard &&
+                                                                     c.SignNo == repairCost.SignNo).FirstOrDefault();
+                        if (dupData != null)
+                        {
+                            string msg = "資料重複儲存!!";
+                            return BadRequest(msg);
+                        }
+                    }
+
                     int seqno = _context.BMEDRepairCosts.Where(c => c.DocId == repairCost.DocId)
                                                         .Select(c => c.SeqNo).DefaultIfEmpty().Max();
                     repairCost.SeqNo = seqno + 1;
@@ -127,7 +148,7 @@ namespace EDIS.Areas.BMED.Controllers
                         _context.SaveChanges();
                     }
 
-                    return ViewComponent("RepCostList", new { id = repairCost.DocId });
+                    return ViewComponent("BMEDRepCostList", new { id = repairCost.DocId, viewType = "Edit" });
                 }
                 catch (Exception e)
                 {
