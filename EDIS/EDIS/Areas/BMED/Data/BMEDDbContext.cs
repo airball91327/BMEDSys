@@ -18,7 +18,6 @@ namespace EDIS.Areas.BMED.Data
             
         }
 
-        public DbSet<DocIdStore> BMEDDocIdStore { get; set; }
         public DbSet<RepairModel> BMEDRepairs { get; set; }
         public DbSet<RepairDtlModel> BMEDRepairDtls { get; set; }
         public DbSet<RepairFlowModel> BMEDRepairFlows { get; set; }
@@ -48,7 +47,6 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<AppUserModel>().HasKey(c => c.Id);
             builder.Entity<AppRoleModel>().HasKey(c => c.RoleId);
             builder.Entity<UsersInRolesModel>().HasKey(c => new {c.UserId, c.RoleId});
-            builder.Entity<DocIdStore>().HasKey(c => new { c.DocType, c.DocId});
             builder.Entity<RepairModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairDtlModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairFlowModel>().HasKey(c => new { c.DocId, c.StepId });

@@ -66,15 +66,15 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public ActionResult GetQueryList(QryRepListData qdata)
         {
-            string docid = qdata.qtyDOCID;
-            string ano = qdata.qtyASSETNO;
-            string acc = qdata.qtyACCDPT;
-            string aname = qdata.qtyASSETNAME;
-            string dptid = qdata.qtyDPTID;
-            string qtyDate1 = qdata.qtyApplyDateFrom;
-            string qtyDate2 = qdata.qtyApplyDateTo;
-            string ftype = qdata.qtyFLOWTYPE;
-            string qtyDealStatus = qdata.qtyDealStatus;
+            string docid = qdata.BMEDqtyDOCID;
+            string ano = qdata.BMEDqtyASSETNO;
+            string acc = qdata.BMEDqtyACCDPT;
+            string aname = qdata.BMEDqtyASSETNAME;
+            string dptid = qdata.BMEDqtyDPTID;
+            string qtyDate1 = qdata.BMEDqtyApplyDateFrom;
+            string qtyDate2 = qdata.BMEDqtyApplyDateTo;
+            string ftype = qdata.BMEDqtyFLOWTYPE;
+            string qtyDealStatus = qdata.BMEDqtyDealStatus;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;

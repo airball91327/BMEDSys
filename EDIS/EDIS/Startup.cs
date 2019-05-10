@@ -59,7 +59,6 @@ namespace EDIS
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairDtlModel, string>, BMEDRepairDtlRepository>();
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairFlowModel, string[]>, BMEDRepairFlowRepository>();
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairEmpModel, string[]>, BMEDRepairEmpRepository>();
-            services.AddScoped<BMEDIRepository<Areas.BMED.Models.DocIdStore, string[]>, BMEDDocIdStoreRepository>();
 
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             services.AddIdentity<ApplicationUser, ApplicationRole>()

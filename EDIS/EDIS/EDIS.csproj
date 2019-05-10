@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="ClosedXML" Version="0.94.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.8" PrivateAssets="All" />
@@ -72,6 +73,9 @@
     <Content Update="Views\Shared\Components\AttainFileUpload3\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Shared\Components\BMEDRepIndex\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\Components\RepCostList2\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -99,7 +103,6 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\Repair\" />
-    <Folder Include="wwwroot\js\BMED\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="wwwroot\Files\Manual\UserManual.pptx" />

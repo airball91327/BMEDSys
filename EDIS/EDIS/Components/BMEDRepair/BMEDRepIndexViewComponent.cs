@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDIS.Areas.BMED.Components.Repair
+namespace EDIS.Components.Repair
 {
     public class BMEDRepIndexViewComponent : ViewComponent
     {
@@ -24,7 +24,7 @@ namespace EDIS.Areas.BMED.Components.Repair
             FlowlistItem.Add(new SelectListItem { Text = "待簽核", Value = "待簽核" });
             FlowlistItem.Add(new SelectListItem { Text = "流程中", Value = "流程中" });
             FlowlistItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
-            ViewData["FLOWTYPE"] = new SelectList(FlowlistItem, "Value", "Text", "待簽核");
+            ViewData["BMEDFlowType"] = new SelectList(FlowlistItem, "Value", "Text", "待簽核");
 
             /* 成本中心 & 申請部門的下拉選單資料 */
             var dptList = new[] { "K", "P", "C" };   //本院部門
@@ -38,8 +38,8 @@ namespace EDIS.Areas.BMED.Components.Repair
                     Value = item.DptId
                 });
             }
-            ViewData["ACCDPT"] = new SelectList(listItem, "Value", "Text");
-            ViewData["APPLYDPT"] = new SelectList(listItem, "Value", "Text");
+            ViewData["BMEDAccDpt"] = new SelectList(listItem, "Value", "Text");
+            ViewData["BMEDApplyDpt"] = new SelectList(listItem, "Value", "Text");
 
             /* 處理狀態的下拉選單 */
             var dealStatuses = _context.BMEDDealStatuses.ToList();
@@ -52,9 +52,17 @@ namespace EDIS.Areas.BMED.Components.Repair
                     Value = item.Title
                 });
             }
-            ViewData["DealStatus"] = new SelectList(listItem2, "Value", "Text");
+            ViewData["BMEDDealStatus"] = new SelectList(listItem2, "Value", "Text");
+
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["BMEDIsCharged"] = new SelectList(listItem3, "Value", "Text");
 
             QryRepListData data = new QryRepListData();
+            /* Set Default search value. */
+            data.BMEDqtyDateType = "申請日";
 
             return View(data);
         }

@@ -24,29 +24,29 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.combobox').combobox();
+        $('.BMEDcombobox').combobox();
         /* While loading this page, default search repairDocs. */
-        $("#repSearchForm").submit();
+        $("#BMEDrepSearchForm").submit();
 
-        $("#exportExcelBtn").click(function () {
-            var DocId = $("#qtyDOCID").val();
-            var AssetNo = $("#qtyASSETNO").val();
-            var AccDpt = $("#qtyACCDPT").val();
-            var AssetName = $("#qtyASSETNAME").val();
-            var FlowType = $("#qtyFLOWTYPE").val();
-            var DptId = $("#qtyDPTID").val();;
-            var Date1 = $("#qtyApplyDateFrom").val();
-            var Date2 = $("#qtyApplyDateTo").val();
-            var DealStatus = $("#qtyDealStatus").val();
-            var IsCharged = $("#qtyIsCharged").val();
-            var DateType = $('input[name="qtyDateType"]:checked').val();
+        $("#BMEDexportExcelBtn").click(function () {
+            var DocId = $("#BMEDqtyDOCID").val();
+            var AssetNo = $("#BMEDqtyASSETNO").val();
+            var AccDpt = $("#BMEDqtyACCDPT").val();
+            var AssetName = $("#BMEDqtyASSETNAME").val();
+            var FlowType = $("#BMEDqtyFLOWTYPE").val();
+            var DptId = $("#BMEDqtyDPTID").val();;
+            var Date1 = $("#BMEDqtyApplyDateFrom").val();
+            var Date2 = $("#BMEDqtyApplyDateTo").val();
+            var DealStatus = $("#BMEDqtyDealStatus").val();
+            var IsCharged = $("#BMEDqtyIsCharged").val();
+            var DateType = $('input[name="BMEDqtyDateType"]:checked').val();
             var SearchAllDoc = false;
-            if ($("#qtySearchAllDoc").is(':checked') == true) {
+            if ($("#BMEDqtySearchAllDoc").is(':checked') == true) {
                 SearchAllDoc = true;
             }
 
             $.ajax({
-                url: "@Url.Action("ExportToExcel", "Repair", new { Area = "" })",
+                url: "@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })",
                 data: {
                     qtyDocId: DocId,
                     qtyAssetNo: AssetNo,
@@ -63,7 +63,7 @@
                 },
                 success: function (response, textStatus, jqXHR) {
 
-                    window.location.href = '@Url.Action("ExportToExcel", "Repair", new { Area = "" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
+                    window.location.href = '@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
                         + '&qtyAccDpt=' + AccDpt + '&qtyAssetName=' + AssetName + '&qtyFlowType=' + FlowType + '&qtyDptId=' + DptId
                         + '&Date1=' + Date1 + '&Date2=' + Date2 + '&DealStatus=' + DealStatus + '&IsCharged=' + IsCharged
                         + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc;
@@ -75,12 +75,12 @@
         });
     });
     function ReSubmit() {
-        $("#repSearchForm").submit();
+        $("#BMEDrepSearchForm").submit();
     }
 </script>
 
 <form asp-controller="Repair" asp-action="Index" asp-area="BMED" data-ajax="true"
-      data-ajax-update="#pnlREPLIST" data-ajax-method="POST" id="repSearchForm"
+      data-ajax-update="#BMEDpnlREPLIST" data-ajax-method="POST" id="BMEDrepSearchForm"
       data-ajax-begin="$.Toast.showToast({
       'title':'查詢中，請稍待...',
       'icon':'loading',
@@ -95,15 +95,15 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyDOCID" class="control-title">表單編號</label>
-                    <input asp-for="qtyDOCID" class="form-control" />
+                    <input asp-for="BMEDqtyDOCID" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label for="qtyASSETNO" class="control-title">財產編號</label>
-                    <input asp-for="qtyASSETNO" class="form-control-s" />
+                    <input asp-for="BMEDqtyASSETNO" class="form-control-s" />
                 </div>
                 <div class="form-group">
                     <label for="qtyACCDPT" class="control-title">成本中心</label>
-                    <select asp-for="qtyACCDPT" asp-items="@ViewData["ACCDPT"] as SelectList" class="form-control combobox">
+                    <select asp-for="BMEDqtyACCDPT" asp-items="@ViewData["BMEDAccDpt"] as SelectList" class="form-control BMEDcombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -113,17 +113,17 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyASSETNAME" class="control-title">設備名稱<br />(關鍵字)</label>
-                    <input asp-for="qtyASSETNAME" class="form-control" />
+                    <input asp-for="BMEDqtyASSETNAME" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label for="qtyFLOWTYPE" class="control-title">流程狀態</label>
-                    <select asp-for="qtyFLOWTYPE" asp-items="@ViewData["FLOWTYPE"] as SelectList" class="form-control-s">
+                    <select asp-for="BMEDqtyFLOWTYPE" asp-items="@ViewData["BMEDFlowType"] as SelectList" class="form-control-s">
 
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="qtyDPTID" class="control-title">申請部門</label>
-                    <select asp-for="qtyDPTID" asp-items="@ViewData["APPLYDPT"] as SelectList" class="form-control combobox">
+                    <select asp-for="BMEDqtyDPTID" asp-items="@ViewData["BMEDApplyDpt"] as SelectList" class="form-control BMEDcombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -133,21 +133,21 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyDealStatus" class="control-title">處理狀態</label>
-                    <select asp-for="qtyDealStatus" asp-items="@ViewData["DealStatus"] as SelectList" class="form-control">
+                    <select asp-for="BMEDqtyDealStatus" asp-items="@ViewData["BMEDDealStatus"] as SelectList" class="form-control">
                         <option value="">請選擇</option>
                     </select>
                 </div>
                 <label for="qtyIsCharged" class="control-title">[有][無]費用</label>
-                <select asp-for="qtyIsCharged" asp-items="@ViewData["IsCharged"] as SelectList" class="form-control-s">
+                <select asp-for="BMEDqtyIsCharged" asp-items="@ViewData["BMEDIsCharged"] as SelectList" class="form-control-s">
                     <option value="">請選擇</option>
                 </select>
-                @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
-                {
+                @*@if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
+                {*@
                     <div class="form-group">
                         <label class="control-title">查詢其他<br />工程師案件</label>
-                        <input type="checkbox" asp-for="qtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
+                        <input type="checkbox" asp-for="BMEDqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
                     </div>
-                }
+                @*}*@
             </div>
         </div>
         <div class="row">
@@ -155,12 +155,12 @@
                 <div class="form-group">
                     <label for="qtyApplyDateFrom" class="control-title">日期查詢</label>
                     <span style="padding-top: 7px;">
-                        @Html.RadioButtonFor(model => model.qtyDateType, "申請日")&nbsp;申請日
-                        @Html.RadioButtonFor(model => model.qtyDateType, "結案日")&nbsp;結案日
+                        @Html.RadioButtonFor(model => model.BMEDqtyDateType, "申請日")&nbsp;申請日
+                        @Html.RadioButtonFor(model => model.BMEDqtyDateType, "結案日")&nbsp;結案日
                     </span>
-                    <input asp-for="qtyApplyDateFrom" class="form-control" />
+                    <input asp-for="BMEDqtyApplyDateFrom" class="form-control" />
                     <span> ~ </span>
-                    <input asp-for="qtyApplyDateTo" class="form-control" />
+                    <input asp-for="BMEDqtyApplyDateTo" class="form-control" />
                 </div>
             </div>
         </div>
@@ -168,12 +168,12 @@
             <div class=form-inline>
                 <div class="form-group col-md-offset-1 col-md-1">
                     <div>
-                        <input id="btnQTY" type="submit" value="查詢" class="btn btn-default btn-group-justified" />
+                        <input id="BMEDbtnQTY" type="submit" value="查詢" class="btn btn-default btn-group-justified" />
                     </div>
                 </div>
                 <div class="form-group">
                     <div>
-                        <input type="button" class="btn btn-primary" id="exportExcelBtn" value="匯出Excel" />
+                        <input type="button" class="btn btn-primary" id="BMEDexportExcelBtn" value="匯出Excel" />
                     </div>
                 </div>
             </div>
@@ -181,4 +181,4 @@
     </div>
 </form>
 
-<div id="pnlREPLIST"></div>
+<div id="BMEDpnlREPLIST"></div>
