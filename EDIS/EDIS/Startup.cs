@@ -63,6 +63,7 @@ namespace EDIS
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddEntityFrameworkStores<BMEDDbContext>()
                 .AddRoleStore<ApplicationRole>()
                 .AddUserStore<ApplicationUser>()
                 .AddDefaultTokenProviders()

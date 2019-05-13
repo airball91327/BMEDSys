@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EDIS.Areas.BMED.Components.RepairDtl
+namespace EDIS.Areas.BMED.Components.Repair
 {
     public class BMEDRepDetailViewComponent : ViewComponent
     {

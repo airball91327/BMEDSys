@@ -63,7 +63,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string DelivDptName { get; set; }
         [Required]
         [Display(Name = "保管人代號")]
-        public int? DelivUid { get; set; }
+        public string DelivUid { get; set; }
         [Display(Name = "保管人姓名")]
         public string DelivEmp { get; set; }
         [Display(Name = "存放地點")]

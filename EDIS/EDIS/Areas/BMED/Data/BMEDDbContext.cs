@@ -18,20 +18,20 @@ namespace EDIS.Areas.BMED.Data
             
         }
 
-        public DbSet<RepairModel> BMEDRepairs { get; set; }
-        public DbSet<RepairDtlModel> BMEDRepairDtls { get; set; }
-        public DbSet<RepairFlowModel> BMEDRepairFlows { get; set; }
         public DbSet<AppUserModel> AppUsers { get; set; }
         public DbSet<AppRoleModel> AppRoles { get; set; }
         public DbSet<DepartmentModel> Departments { get; set; }
         public DbSet<UsersInRolesModel> UsersInRoles { get; set; }
+        public DbSet<RepairModel> BMEDRepairs { get; set; }
+        public DbSet<RepairDtlModel> BMEDRepairDtls { get; set; }
+        public DbSet<RepairFlowModel> BMEDRepairFlows { get; set; }
         public DbSet<AssetModel> BMEDAssets { get; set; }
         public DbSet<DealStatusModel> BMEDDealStatuses { get; set; }
         public DbSet<FailFactorModel> BMEDFailFactors { get; set; }
         public DbSet<RepairEmpModel> BMEDRepairEmps { get; set; }
         public DbSet<RepairCostModel> BMEDRepairCosts { get; set; }
-        public DbSet<TicketModel> BMEDTickets { get; set; }
         public DbSet<TicketDtlModel> BMEDTicketDtls { get; set; }
+        public DbSet<TicketModel> BMEDTickets { get; set; }
         public DbSet<Ticket_seq_tmpModel> BMEDTicket_seq_tmps { get; set; }
         public DbSet<AttainFileModel> BMEDAttainFiles { get; set; }
         public DbSet<DeptStockModel> BMEDDeptStocks { get; set; }
@@ -50,6 +50,9 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<RepairModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairDtlModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairFlowModel>().HasKey(c => new { c.DocId, c.StepId });
+            builder.Entity<AssetModel>().HasKey(c => new { c.AssetNo });
+            builder.Entity<DealStatusModel>().HasKey(c => new { c.Id });
+            builder.Entity<FailFactorModel>().HasKey(c => new { c.Id });
             builder.Entity<RepairEmpModel>().HasKey(c => new { c.DocId, c.UserId });
             builder.Entity<RepairCostModel>().HasKey(c => new { c.DocId, c.SeqNo });
             builder.Entity<TicketDtlModel>().HasKey(c => new { c.TicketDtlNo, c.SeqNo });

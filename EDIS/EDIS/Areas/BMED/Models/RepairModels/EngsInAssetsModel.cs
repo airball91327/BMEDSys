@@ -22,7 +22,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "負責工程師")]
         public string UserName { get; set; }
         [Display(Name = "異動人員")]
-        public int Rtp { get; set; }
+        public int? Rtp { get; set; }
         [NotMapped]
         [Display(Name = "異動人員帳號")]
         public string RtpName { get; set; }

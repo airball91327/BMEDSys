@@ -17,12 +17,10 @@ $.fn.addItems = function (data) {
 
 $(function () {
 
-    SetEngsDropDown();
-
     $('#AssetNo').change(function () {
         /* Get engineers. */
         $.ajax({
-            url: '../BMED/Repair/GetAssetEngId',
+            url: '../Repair/GetAssetEngId',
             type: "POST",
             dataType: "json",
             data: {
@@ -44,7 +42,7 @@ $(function () {
     $("#DptId").change(function () {
         var DptId = $(this).val();
         $.ajax({
-            url: '../BMED/Repair/GetDptName',
+            url: '../Repair/GetDptName',
             type: "POST",
             dataType: "json",
             data: { dptId: DptId },
@@ -81,6 +79,36 @@ $(function () {
         });    
     });
 
+    /* If user select "本單位" */
+    $("input[type=radio][name=LocType]").change(function () {
+        if (this.value == '本單位') {
+
+            $("#AccDpt").attr("readonly", "readonly");
+            $("#AccDptName").attr("readonly", "readonly");
+            /* Get AccDptId and Name. */
+            $("#AccDpt").val($("#DptId").val());
+            $.ajax({
+                url: '../Repair/GetDptName',
+                type: "POST",
+                dataType: "json",
+                data: { dptId: $("#DptId").val() },
+                success: function (data) {
+                    if (data == "") {
+                        $("#AccDptNameErrorMsg").html("查無部門!");
+                    }
+                    else {
+                        $("#AccDptNameErrorMsg").html("");
+                    }
+                    $("#AccDptName").val(data);
+                }
+            });
+        }
+        else {
+            $("#AccDpt").removeAttr("readonly");
+            $("#AccDptName").removeAttr("readonly");
+        }
+    });
+
     /* If user select "增設", show Mgr dropdown for user to select. */
     $("#DptMgr").hide();    //Default setting.
     $("input[type=radio][name=RepType]").change(function () {
@@ -96,7 +124,7 @@ $(function () {
     $("#MgrQryBtn").click(function () {
         var queryStr = $("#DptMgrQry").val();
         $.ajax({
-            url: '../BMED/Repair/QueryUsers',
+            url: '../Repair/QueryUsers',
             type: "GET",
             data: { QueryStr: queryStr },
             success: function (data) {
@@ -109,7 +137,7 @@ $(function () {
     $("#CheckerQryBtn").click(function () {
         var queryStr = $("#CheckerQry").val();
         $.ajax({
-            url: '../BMED/Repair/QueryUsers',
+            url: '../Repair/QueryUsers',
             type: "GET",
             data: { QueryStr: queryStr },
             success: function (data) {
@@ -144,7 +172,7 @@ function onSuccess() {
         window.printRepairDoc(DocId);
     }
 
-    location.href = '../Home/Index';
+    location.href = '../../Home/Index';
 }
 
 function getAssetName() {
@@ -156,7 +184,7 @@ function getAssetName() {
         data: { assetNo: AssetNo },
         success: function (data) {
             //console.log(data); // debug
-            if (data == "") {
+            if (data == "查無資料") {
                 $("#AssetNameErrorMsg").html("查無資料!");
             }
             else {
@@ -189,80 +217,4 @@ function printRepairDoc(DocId) {
     printPage.document.write("<BODY onload='window.print();window.close()'>");
     printPage.document.write(printContent);
     printPage.document.close();
-}
-
-/* Get and check the user department's location, if has many location, show #divLocations. */
-function GetDptLocation(DptId) { 
-    $.ajax({
-        url: '../Repair/GetDptLoc',
-        type: "POST",
-        dataType: "json",
-        data: { dptId: DptId },
-        success: function (data) {
-            //console.log(data); //Debug
-            if (data == "查無地點") {
-                $("#divLocations").hide();
-                alert("查無部門資料!");
-            }
-            else if (data == "多個地點") {
-                $("#divLocations").show();
-            }
-            else {          
-                $("#Building").val(data.buildingId);
-                $('#Building').trigger("change");
-                $("#Floor").val(data.floorId);
-                $('#Floor').trigger("change");
-                $("#Area").val(data.placeId);
-                $('#Area').trigger("change");
-       
-                $("#divLocations").hide();
-            }
-        }
-    });
-}
-
-function SetEngsDropDown() {
-    $.ajax({
-        url: '../Repair/GetAllEngs',
-        type: "GET",
-        dataType: "json",
-        data: { },
-        success: function (data) {
-            //console.log(data); // For debug.
-            var select = $('#PrimaryEngId');
-            var i = 0;
-            var defaultOption = 0;
-            var displayTrigger = 0;
-            select.empty();
-            $.each(data, function (index, item) {  // item is now an object containing properties 
-                if (i === defaultOption) {
-                    select.append($('<option selected="selected"></option>').text("無").val(0));
-                }
-                else {
-                    if (item.dptId != displayTrigger) {
-                        switch (item.dptId) {
-                            case '8411':
-                                select.append($('<optgroup label="工務一課"></optgroup>'));
-                                break;
-                            case '8412':
-                                select.append($('<optgroup label="工務二課"></optgroup>'));
-                                break;
-                            case '8413':
-                                select.append($('<optgroup label="工務三課-中華院區工務組"></optgroup>'));
-                                break;
-                            case '8414':
-                                select.append($('<optgroup label="工務三課-教研工務組"></optgroup>'));
-                                break;
-                            case '8430':
-                                select.append($('<optgroup label="營建部"></optgroup>'));
-                                break;
-                        }
-                        displayTrigger = item.dptId;
-                    }
-                    select.append($('<option></option>').text(item.fullName).val(item.id));
-                }
-                i++;
-            });
-        }
-    });
 }

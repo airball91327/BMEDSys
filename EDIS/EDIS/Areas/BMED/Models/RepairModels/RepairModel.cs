@@ -26,11 +26,11 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string DptId { get; set; }
         [NotMapped]
         public string DptName { get; set; }
-        [NotMapped]
-        [DataType(DataType.EmailAddress)]
-        [Required]
-        [Display(Name = "電子信箱")]
-        public string Email { get; set; }
+        //[NotMapped]
+        //[DataType(DataType.EmailAddress)]
+        //[Required]
+        //[Display(Name = "電子信箱")]
+        //public string Email { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "分機")]
         public string Ext { get; set; }
@@ -44,7 +44,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required]
         [Display(Name = "維修別")]
         public string RepType { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
         [Display(Name = "儀器名稱")]
@@ -55,14 +55,14 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public int Amt { get; set; }
         [Display(Name = "送修儀器配件")]
         public string PlantDoc { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "請修地點")] //放置地點
         public string PlaceLoc { get; set; }
         [Display(Name = "申請日期")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime ApplyDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "故障描述")]
         public string TroubleDes { get; set; }
         [Required]
@@ -78,7 +78,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public int CheckerId { get; set; }
         [Display(Name = "結案驗收人")]
         public string CheckerName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "設備類別")]
         public string PlantClass { get; set; }
     }

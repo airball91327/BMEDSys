@@ -707,7 +707,7 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public JsonResult GetAssetName(string assetNo)
         {
-            var asset = _context.BMEDAssets.Where(a => a.AssetNo == assetNo).FirstOrDefault();        
+            var asset = _context.BMEDAssets.Where(a => a.AssetNo == assetNo).FirstOrDefault();   
             if (asset == null)
             {
                 return Json("查無資料");
