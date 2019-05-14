@@ -14,6 +14,7 @@ else
 {
     <table class="table">
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.DocType)
             </th>
@@ -45,12 +46,24 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Days)
             </th>
-            <th></th>
         </tr>
 
         @foreach (var item in Model)
         {
             <tr>
+                <td width="100px">
+                    @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User))
+                    {
+                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId })
+                        @Html.Raw(" |")
+                    }
+                    @Html.ActionLink("預覽", "Views", "Repair", new { Area = "BMED", id = item.DocId }) |
+                    @Html.ActionLink("列印", "Print", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" }) |
+                    @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
+                    {
+                        @Html.ActionLink("廢除", "Delete", "Repair", new { Area = "BMED", id = item.DocId })
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DocType)
                 </td>
@@ -87,20 +100,6 @@ else
                     @if (item.Flg != "2")
                     {
                         @Html.DisplayFor(modelItem => item.Days)
-                    }
-                </td>
-
-                <td width="100px">
-                    @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User))
-                    {
-                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId })
-                        @Html.Raw("|")
-                    }
-                    @Html.ActionLink("預覽", "Views", "Repair", new { Area = "BMED", id = item.DocId }) |
-                    @Html.ActionLink("列印", "Print", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" }) |
-                    @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
-                    {
-                        @Html.ActionLink("廢除", "Delete", "Repair", new { Area = "BMED", id = item.DocId })
                     }
                 </td>
             </tr>

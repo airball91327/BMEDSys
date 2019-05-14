@@ -144,6 +144,7 @@ namespace EDIS.Areas.BMED.Controllers
             return ViewComponent("BMEDRepEmpList", new { id = docId, viewType = "Edit" });
         }
 
+        [HttpPost]
         public ActionResult Delete(string id, string uName)
         {
             var uid = _context.AppUsers.Where(u => u.UserName == uName).FirstOrDefault().Id;

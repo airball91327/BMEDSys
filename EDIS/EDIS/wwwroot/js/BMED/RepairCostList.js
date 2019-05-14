@@ -8,7 +8,7 @@ $(function () {
             var tr = $(this).parents('tr');
             var seq = $(this).parents('tr').children();
             $.ajax({
-                url: "../../BMED/RepairCost/Delete",
+                url: "../../RepairCost/Delete",
                 type: "POST",
                 data: { docid: id, seqno: seq.get(0).innerText.trim() },
                 async: true,

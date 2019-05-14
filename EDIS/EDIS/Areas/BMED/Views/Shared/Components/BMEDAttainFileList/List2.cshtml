@@ -28,11 +28,11 @@
                 <td>@Html.DisplayFor(modelItem => item.Title)</td>
                 @if (item.DocType == "2")
                 {
-                    <td><a href='@Url.Content("~/Files/")@item.FileLink' target="_blank" style="color:deepskyblue">下載</a></td>
+                    <td><a href='@Url.Content("~/Files/BMED/")@item.FileLink' target="_blank" style="color:deepskyblue">下載</a></td>
                 }
                 else
                 {
-                    <td><a href='@Url.Content("~/Files/")@item.FileLink' target="_blank" style="color:deepskyblue">下載</a></td>
+                    <td><a href='@Url.Content("~/Files/BMED/")@item.FileLink' target="_blank" style="color:deepskyblue">下載</a></td>
                 }
                 <td>@Html.DisplayFor(modelItem => item.UserName)</td>
             </tr>

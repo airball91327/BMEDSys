@@ -43,13 +43,13 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public ActionResult List(string docid = null, string doctyp = null)
         {
-            return ViewComponent("AttainFileList", new { id = docid, typ = doctyp, viewType="Edit" });
+            return ViewComponent("BMEDAttainFileList", new { id = docid, typ = doctyp, viewType="Edit" });
         }
 
         [HttpPost]
         public ActionResult List3(string docid = null, string doctyp = null)
         {
-            return ViewComponent("AttainFileList3", new { id = docid, typ = doctyp });
+            return ViewComponent("BMEDAttainFileList3", new { id = docid, typ = doctyp });
         }
 
         [HttpPost]
@@ -263,22 +263,6 @@ namespace EDIS.Areas.BMED.Controllers
             };
         }
 
-        // GET: AttainFile/Edit/5
-        public async Task<IActionResult> Edit(string id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var attainFileModel = await _context.BMEDAttainFiles.SingleOrDefaultAsync(m => m.DocType == id);
-            if (attainFileModel == null)
-            {
-                return NotFound();
-            }
-            return View(attainFileModel);
-        }
-
         public ActionResult Delete(string id = null, int seq = 0, string typ = null)
         {
             string WebRootPath = _hostingEnvironment.WebRootPath;
@@ -310,7 +294,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<AttainFileModel> af = _context.BMEDAttainFiles.Where(f => f.DocId == id)
                                                                .Where(f => f.DocType == typ).ToList();
 
-            return ViewComponent("AttainFileList", new { id = id, typ = typ, viewType = "Edit" });
+            return ViewComponent("BMEDAttainFileList", new { id = id, typ = typ, viewType = "Edit" });
         }
 
         /* For Create View's scale.*/
@@ -345,7 +329,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<AttainFileModel> af = _context.BMEDAttainFiles.Where(f => f.DocId == id)
                                                                .Where(f => f.DocType == typ).ToList();
 
-            return ViewComponent("AttainFileList3", new { id = id, typ = typ });
+            return ViewComponent("BMEDAttainFileList3", new { id = id, typ = typ });
         }
 
         private bool AttainFileModelExists(string id)

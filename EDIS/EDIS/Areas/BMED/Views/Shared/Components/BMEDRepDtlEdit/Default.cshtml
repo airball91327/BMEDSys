@@ -62,9 +62,6 @@
                 <label asp-for="AssetNo" class="control-title"></label>
                 <input asp-for="AssetNo" class="form-control" />
                 <span asp-validation-for="AssetNo" class="text-danger"></span>
-                <button type="button" class="btn btn-default assetNoControl" id="assetsEditBtn" data-toggle="modal" data-target="#modalASSETS">
-                    多筆財編輸入
-                </button>
             </div>
         </div>
         @if (Model.AssetNo != null)

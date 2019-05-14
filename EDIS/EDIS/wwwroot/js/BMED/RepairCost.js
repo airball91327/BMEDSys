@@ -9,6 +9,7 @@
 
 var onFailed = function (data) {
     alert(data.responseText);
+    $.Toast.hideToast();
 };
 
 /* When stockType is "has stock", after save the details, print the details. */
@@ -82,6 +83,7 @@ $(function () {
         var item = $(this).val();
         if (item === "2") {             // 點選"發票"
             $('#btnQtyStok').hide();
+            $("#SignNo").val('');
             $("#pnlSIGN").hide();
             $("#pnlACCDATE").show();
             $("#CVendor").show();
@@ -89,6 +91,7 @@ $(function () {
             $('label[for="AccountDate"]').text("發票日期");
         }
         else if (item === "3") {        // 點選"簽單"
+            $("#TicketDtl_TicketDtlNo").val('');
             $("#pnlTICKET").hide();
             $("#pnlACCDATE").show();
             $("#pnlSIGN").show();
@@ -126,7 +129,7 @@ $(function () {
     /* Get ticket seq. */
     $("#btnGETSEQ").click(function () {
         $.ajax({
-            url: '../../BMED/Ticket/GetTicketSeq',
+            url: '../../Ticket/GetTicketSeq',
             type: "POST",
             async: true,
             success: function (data) {

@@ -4,7 +4,7 @@
         // Refresh the emp table.
         var id = $("#DocId").val();
         $.ajax({
-            url: "../../BMED/RepairEmp/GetEmpList",
+            url: "../../RepairEmp/GetEmpList",
             type: "GET",
             data: { 'docId': id },
             async: true,
@@ -28,7 +28,7 @@ $(function () {
             var tr = $(this).parents('tr');
             var seq = $(this).parents('tr').children();
             $.ajax({
-                url: "../../BMED/RepairEmp/Delete",
+                url: "../../RepairEmp/Delete",
                 type: "POST",
                 data: { 'id': id, 'uName': seq.get(0).innerText.trim() },
                 async: true,
