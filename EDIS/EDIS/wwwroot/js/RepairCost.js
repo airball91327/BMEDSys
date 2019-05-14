@@ -1,14 +1,16 @@
-﻿function showMsgAndPrint() {
+﻿function showMsgAndPrint(data) {
     alert("儲存成功!");
-    var stockType = $('input:radio[name="StockType"]:checked').val();
-    /* If stock type is 庫存, print before submit. */
-    if (stockType == 0) {
-        window.printStockDtl();
-    }
+    
+    //var stockType = $('input:radio[name="StockType"]:checked').val();
+    ///* If stock type is 庫存, print before submit. */
+    //if (stockType == 0) {
+    //    window.printStockDtl();
+    //}
 }
 
 var onFailed = function (data) {
     alert(data.responseText);
+    $.Toast.hideToast();
 };
 
 /* When stockType is "has stock", after save the details, print the details. */
@@ -82,6 +84,7 @@ $(function () {
         var item = $(this).val();
         if (item === "2") {             // 點選"發票"
             $('#btnQtyStok').hide();
+            $("#SignNo").val('');
             $("#pnlSIGN").hide();
             $("#pnlACCDATE").show();
             $("#CVendor").show();
@@ -89,6 +92,7 @@ $(function () {
             $('label[for="AccountDate"]').text("發票日期");
         }
         else if (item === "3") {        // 點選"簽單"
+            $("#TicketDtl_TicketDtlNo").val('');
             $("#pnlTICKET").hide();
             $("#pnlACCDATE").show();
             $("#pnlSIGN").show();

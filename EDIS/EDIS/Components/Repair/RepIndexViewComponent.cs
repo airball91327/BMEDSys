@@ -27,7 +27,8 @@ namespace EDIS.Components.Repair
             ViewData["FLOWTYPE"] = new SelectList(FlowlistItem, "Value", "Text", "待簽核");
 
             /* 成本中心 & 申請部門的下拉選單資料 */
-            var departments = _context.Departments.ToList();
+            var dptList = new[] { "K", "P", "C"};   //本院部門
+            var departments = _context.Departments.Where(d => dptList.Contains(d.Loc)).ToList();
             List<SelectListItem> listItem = new List<SelectListItem>();
             foreach(var item in departments)
             {
@@ -53,7 +54,15 @@ namespace EDIS.Components.Repair
             }
             ViewData["DealStatus"] = new SelectList(listItem2, "Value", "Text");
 
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["IsCharged"] = new SelectList(listItem3, "Value", "Text");
+
             QryRepListData data = new QryRepListData();
+            /* Set Default search value. */
+            data.qtyDateType = "申請日";
 
             return View(data);
         }

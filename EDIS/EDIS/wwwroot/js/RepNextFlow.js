@@ -1,11 +1,31 @@
 ﻿function flowmsg(data) {
+    var homeHref = document.getElementById("homeBtn").href;
     $("#btnGO").attr("disabled", false);
     if (!data.success) {
         alert(data.error);
+
+        if (window.opener == null) {
+            location.replace(homeHref);
+        }
+        else {
+            window.opener.location = "javascript:ReSubmit();";//This will call ReSubmit() function on parent window.
+            window.close();
+        }  
     }
     else {
         alert("送出成功!");
-        location.replace("../../Home");
+
+        /* window.close(), 當前非彈出視窗在最新版本的chrome和firefox裡不能關閉，而在IE中是可以關閉的 
+         * 非彈出視窗，即是指（opener=null 及 非window.open()開啟的視窗,比如URL直接輸入的瀏覽器窗體， 或由其它程式呼叫產生的瀏覽器視窗）
+         */
+        if (window.opener == null) {
+            location.replace(homeHref);
+        }
+        else {
+            window.opener.location = "javascript:ReSubmit();";//This will call ReSubmit() function on parent window.
+            //opener.location.reload();//This will refresh parent window.
+            window.close();
+        }  
     }
 }
 
@@ -16,6 +36,7 @@ function presend() {
 
 var onFailed = function (data) {
     alert(data.responseText);
+    $.Toast.hideToast();
     $('#imgLOADING_Flow').hide();
 };
 
@@ -167,12 +188,18 @@ $(function () {
             $("#FlowCls option").each(function () {
                 if ($(this).val() === "結案") {
                     $(this).prop('disabled', false);
+                    $(this).show();
                 }
             });
             if ($("#Cls").val() === "驗收人") {
                 $("#FlowCls option").each(function () {
+                    if ($(this).is(":selected")) {
+                        $('#FlowCls option[value=""]').prop('selected', true);
+                        $('#FlowUid').val("");
+                    }
                     if ($(this).val() !== "結案") {
                         $(this).prop('disabled', true);
+                        $(this).hide();
                     }
                 });
             }
@@ -184,11 +211,38 @@ $(function () {
                         $('#FlowCls option[value=""]').prop('selected', true);
                     }
                     $(this).prop('disabled', true);
+                    $(this).hide();
                 }
                 else if ($("#Cls").val() === "驗收人") {
                     $(this).prop('disabled', false);
+                    $(this).show();
                 }
             });
         }
     });
+
+    $("#nextFlowForm").submit(function () {
+        var result;
+        $.ajax({
+            url: '../../RepairFlow/CheckDealStatus',
+            type: "POST",
+            dataType: "json",
+            data: {
+                docId: $('#DocId').val(),
+            },
+            async: false,
+            success: function (data) {
+                result = data;
+            }
+        });
+        if (result == true) {
+            var r = confirm("處理狀態為【未處理】，確定送出?");
+            if (r == true) {
+                return true;
+            } else {
+                return false;
+            }   
+        }
+    });
+
 });

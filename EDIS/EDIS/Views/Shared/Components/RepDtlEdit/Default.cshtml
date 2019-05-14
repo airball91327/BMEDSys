@@ -5,8 +5,13 @@
     ViewData["Title"] = "Edit";
 }
 
-<form asp-action="Edit" asp-controller="RepairDtl" data-ajax="true"
-      data-ajax-method="POST" data-ajax-loading="imgLOADING2" data-ajax-success="showmsg2">
+<form asp-action="Edit" asp-controller="RepairDtl" data-ajax="true" data-ajax-method="POST" 
+    data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+    data-ajax-loading="imgLOADING2" data-ajax-success="showmsg2">
 
     <div class="container">
         @Html.HiddenFor(model => model.DocId)
@@ -50,6 +55,7 @@
                 <label asp-for="InOut" class="control-title"></label>
                 @Html.RadioButtonFor(model => model.InOut, "內修")內修
                 @Html.RadioButtonFor(model => model.InOut, "外修")外修
+                @Html.RadioButtonFor(model => model.InOut, "內外修")內外修
             </div>
         </div>
         <div class="row assetNoControl">
@@ -107,7 +113,7 @@
             <div style="padding-left: 115px">
                 <input type="submit" value="儲存" class="btn btn-default" />
                 <img id="imgLOADING2" src="~/Images/opc-ajax-loader.gif" style="display: none" />
-                <input type="button" class="btn btn-primary" id="printDtlBtn" value="列印" />
+                @*<input type="button" class="btn btn-primary" id="printDtlBtn" value="列印" />*@
             </div>
         </div>
     </div>

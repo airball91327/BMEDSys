@@ -49,6 +49,7 @@ namespace EDIS.Controllers
         [TempData]
         public string ErrorMessage { get; set; }
 
+        [NoCache]
         [HttpGet]
         [AllowAnonymous]
         public async Task<IActionResult> Login(int? docId, string dealType, string returnUrl = null)
@@ -139,8 +140,7 @@ namespace EDIS.Controllers
                         var signInId = _context.AppUsers.Where(a => a.UserName == model.UserName).First().Id.ToString();
                         var user = new ApplicationUser { Id = signInId, UserName = model.UserName };
 
-                        /* "ExpiresUtc", 設定登入cookie的有效時間，如無特別設定，預設為1小時；"IsPersistent"設定是否維持登入 */
-                        await _signInManager.SignInAsync(user, new AuthenticationProperties { ExpiresUtc = DateTime.UtcNow.AddHours(1), IsPersistent = true });
+                        await _signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = true });
 
                         /* If login from mail. */
                         if (MailDocId != "")
