@@ -12,7 +12,7 @@ namespace EDIS.Areas.BMED.Components.AttainFile
 {
     public class BMEDAttainFileUploadViewComponent : ViewComponent
     {
-        public async Task<IViewComponentResult> InvokeAsync(string doctype, string docid)
+        public async Task<IViewComponentResult> InvokeAsync(string doctype, string docid, string viewType)
         {
             AttainFileModel attainFile = new AttainFileModel();
             attainFile.DocType = doctype;
@@ -21,6 +21,10 @@ namespace EDIS.Areas.BMED.Components.AttainFile
             attainFile.IsPublic = "N";
             attainFile.FileLink = "default";
 
+            if(viewType == "AjaxView")
+            {
+                return View("AjaxView", attainFile);
+            }
             return View(attainFile);
         }
     }

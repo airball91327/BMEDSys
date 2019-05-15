@@ -402,7 +402,7 @@ namespace EDIS.Areas.BMED.Controllers
                     {
                         list = new List<SelectListItem>();
                         li = new SelectListItem();
-                        li.Text = r.UserName;
+                        li.Text = _context.AppUsers.Where(ur => ur.UserName == r.UserName).FirstOrDefault().FullName;
                         li.Value = r.UserId.ToString();
                         list.Add(li);
                     }

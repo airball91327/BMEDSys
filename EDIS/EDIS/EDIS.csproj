@@ -64,6 +64,9 @@
     <Content Update="Areas\BMED\Views\Repair\Views.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\BMEDRepCostPrintList\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Vendor\QryVendor.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

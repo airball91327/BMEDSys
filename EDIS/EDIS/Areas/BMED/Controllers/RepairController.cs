@@ -823,7 +823,7 @@ namespace EDIS.Areas.BMED.Controllers
                 vm.Docid = DocId;
                 vm.UserId = repair.UserId;
                 vm.UserName = repair.UserName;
-                vm.UserAccount = _context.AppUsers.Find(repair.UserId).UserName;
+                vm.UserFullName = _context.AppUsers.Find(repair.UserId).FullName;
                 vm.AccDpt = repair.AccDpt;
                 vm.ApplyDate = repair.ApplyDate;
                 vm.AssetNo = repair.AssetNo;

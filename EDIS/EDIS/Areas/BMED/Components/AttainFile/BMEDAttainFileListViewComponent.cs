@@ -38,9 +38,13 @@ namespace EDIS.Areas.BMED.Components.AttainFile
                     a.UserName = u.FullName;
             }
 
-            if (viewType.Contains("Edit"))
+            if (viewType == "Edit")
             {
                 return View(af);
+            }
+            else if (viewType == "AjaxView")
+            {
+                return View("AjaxView", af);
             }
             return View("List2", af);
         }

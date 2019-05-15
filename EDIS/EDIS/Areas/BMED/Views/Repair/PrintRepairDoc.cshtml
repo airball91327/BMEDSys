@@ -1,4 +1,4 @@
-﻿@model EDIS.Models.RepairModels.RepairPrintVModel
+﻿@model EDIS.Areas.BMED.Models.RepairModels.RepairPrintVModel
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -99,7 +99,7 @@
                                 申請人員
                             </td>
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                @Html.DisplayFor(model => model.UserName)
+                                @Html.DisplayFor(model => model.UserFullName)
                             </td>
                             <td class="style5"
                                 style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000"
@@ -228,8 +228,7 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                @await Component.InvokeAsync("RepCostPrintList", new { docid = Model.Docid })
-                                @*@Html.Action("PrintList", "RepairCosts", new { id = Model.Docid })*@
+                                @await Component.InvokeAsync("BMEDRepCostPrintList", new { docid = Model.Docid })
                             </td>
                         </tr>
                         <tr>

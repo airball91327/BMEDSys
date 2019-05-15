@@ -46,10 +46,11 @@ namespace EDIS.Areas.BMED.Controllers
             return ViewComponent("BMEDAttainFileList", new { id = docid, typ = doctyp, viewType="Edit" });
         }
 
+        // Called by Ajax Upload method.
         [HttpPost]
         public ActionResult List3(string docid = null, string doctyp = null)
         {
-            return ViewComponent("BMEDAttainFileList3", new { id = docid, typ = doctyp });
+            return ViewComponent("BMEDAttainFileList", new { id = docid, typ = doctyp, viewType = "AjaxView" });
         }
 
         [HttpPost]
@@ -159,6 +160,7 @@ namespace EDIS.Areas.BMED.Controllers
             //};
         }
 
+        // Called by Ajax Upload method.
         [HttpPost]
         public async Task<IActionResult> Upload3(AttainFileModel attainFile)
         {
