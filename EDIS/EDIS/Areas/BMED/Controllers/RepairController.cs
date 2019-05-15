@@ -443,8 +443,8 @@ namespace EDIS.Areas.BMED.Controllers
             var dpt = _dptRepo.FindById(ur.DptId);
             repair.DocId = GetID2();
             repair.UserId = ur.Id;
-            repair.UserName = ur.UserName;
-            repair.UserFullName = ur.FullName;
+            repair.UserName = ur.FullName;
+            repair.UserAccount = ur.UserName;
             repair.DptId = ur.DptId;
             repair.DptName = dpt.Name_C;
             repair.AccDpt = ur.DptId;
@@ -792,7 +792,7 @@ namespace EDIS.Areas.BMED.Controllers
             repair.DptName = _context.Departments.Find(repair.DptId).Name_C;
             repair.AccDptName = _context.Departments.Find(repair.AccDpt).Name_C;
             repair.EngName = _context.AppUsers.Find(repair.EngId).FullName;
-            repair.UserFullName = _context.AppUsers.Find(repair.UserId).UserName;
+            repair.UserAccount = _context.AppUsers.Find(repair.UserId).UserName;
 
             if (repair == null)
             {
@@ -823,7 +823,7 @@ namespace EDIS.Areas.BMED.Controllers
                 vm.Docid = DocId;
                 vm.UserId = repair.UserId;
                 vm.UserName = repair.UserName;
-                vm.UserFullName = _context.AppUsers.Find(repair.UserId).FullName;
+                vm.UserAccount = _context.AppUsers.Find(repair.UserId).UserName;
                 vm.AccDpt = repair.AccDpt;
                 vm.ApplyDate = repair.ApplyDate;
                 vm.AssetNo = repair.AssetNo;

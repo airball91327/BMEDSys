@@ -19,8 +19,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "申請人姓名")]
         public string UserName { get; set; }
         [NotMapped]
-        [Display(Name = "申請人姓名")]
-        public string UserFullName { get; set; }
+        [Display(Name = "申請人帳號")]
+        public string UserAccount { get; set; }
         [Required]
         [Display(Name = "所屬部門")]
         public string DptId { get; set; }
