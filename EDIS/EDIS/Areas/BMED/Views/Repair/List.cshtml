@@ -54,7 +54,7 @@ else
                 <td width="100px">
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User))
                     {
-                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId })
+                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
                         @Html.Raw(" |")
                     }
                     @Html.ActionLink("預覽", "Views", "Repair", new { Area = "BMED", id = item.DocId }) |

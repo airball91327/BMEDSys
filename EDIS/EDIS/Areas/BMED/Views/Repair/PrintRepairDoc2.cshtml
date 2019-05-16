@@ -1,5 +1,7 @@
 ﻿@model EDIS.Areas.BMED.Models.RepairModels.RepairPrintVModel
-
+@{
+    Layout = "_Layout";
+}
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -49,10 +51,10 @@
                                 &nbsp; 請&nbsp; 修&nbsp; 單
                             </td>
                             @*<td colspan="2" align="center" style="border-right-style: solid;border-bottom-style: solid;border-right-width: 1px;  border-bottom-width: 1px; border-right-color: #000000" ; border-bottom-color: #000000">
-                            <div>
-                                @Html.GenerateQrCode(Model.Docid, "", 50, 50, 0)
-                            </div>
-                        </td>*@
+                                    <div>
+                                        @Html.GenerateQrCode(Model.Docid, "", 50, 50, 0)
+                                    </div>
+                                </td>*@
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000; text-align: center"
                                 width="70">
                                 表單編號
@@ -329,10 +331,10 @@
                                 &nbsp; 請&nbsp; 修&nbsp; 單
                             </td>
                             @*<td colspan="2" align="center" style="border-right-style: solid;border-bottom-style: solid;border-right-width: 1px;  border-bottom-width: 1px; border-right-color: #000000" ; border-bottom-color: #000000">
-                            <div>
-                                @Html.GenerateQrCode(Model.Docid, "", 50, 50, 0)
-                            </div>
-                        </td>*@
+                                    <div>
+                                        @Html.GenerateQrCode(Model.Docid, "", 50, 50, 0)
+                                    </div>
+                                </td>*@
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000; text-align: center"
                                 width="70">
                                 表單編號

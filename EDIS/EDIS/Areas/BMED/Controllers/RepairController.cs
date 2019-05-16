@@ -1329,7 +1329,7 @@ namespace EDIS.Areas.BMED.Controllers
 
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index", "Home", new { Area = "" });
         }
     }
 }
