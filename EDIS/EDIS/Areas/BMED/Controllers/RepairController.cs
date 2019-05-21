@@ -225,6 +225,7 @@ namespace EDIS.Areas.BMED.Controllers
                            FlowCls = j.flow.Cls,
                            FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                            EndDate = j.repdtl.EndDate,
+                           CloseDate = j.repdtl.CloseDate,
                            IsCharged = j.repdtl.IsCharged,
                            repdata = j.repair
                        }));
@@ -302,6 +303,7 @@ namespace EDIS.Areas.BMED.Controllers
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
+                        CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
                         repdata = j.repair
                     }));
@@ -373,6 +375,7 @@ namespace EDIS.Areas.BMED.Controllers
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
+                        CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
                         repdata = j.repair
                     }));
@@ -399,10 +402,14 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
 
-            /* Search date by DateType.(EndDate) */
+            /* Search date by DateType. */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)
             {
                 if (qtyDateType == "結案日")
+                {
+                    rv = rv.Where(v => v.CloseDate >= applyDateFrom && v.CloseDate <= applyDateTo).ToList();
+                }
+                else if (qtyDateType == "完工日")
                 {
                     rv = rv.Where(v => v.EndDate >= applyDateFrom && v.EndDate <= applyDateTo).ToList();
                 }
@@ -412,6 +419,10 @@ namespace EDIS.Areas.BMED.Controllers
             if (rv.Count() != 0)
             {
                 if (qtyDateType == "結案日")
+                {
+                    rv = rv.OrderByDescending(r => r.CloseDate).ThenByDescending(r => r.DocId).ToList();
+                }
+                else if (qtyDateType == "完工日")
                 {
                     rv = rv.OrderByDescending(r => r.EndDate).ThenByDescending(r => r.DocId).ToList();
                 }
@@ -1052,6 +1063,7 @@ namespace EDIS.Areas.BMED.Controllers
                            FlowCls = j.flow.Cls,
                            FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                            EndDate = j.repdtl.EndDate,
+                           CloseDate = j.repdtl.CloseDate,
                            IsCharged = j.repdtl.IsCharged,
                            repdata = j.repair
                        }));
@@ -1129,6 +1141,7 @@ namespace EDIS.Areas.BMED.Controllers
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
+                        CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
                         repdata = j.repair
                     }));
@@ -1200,6 +1213,7 @@ namespace EDIS.Areas.BMED.Controllers
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
+                        CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
                         repdata = j.repair
                     }));
@@ -1226,10 +1240,14 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
 
-            /* Search date by DateType.(EndDate) */
+            /* Search date by DateType. */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)
             {
                 if (qtyDateType == "結案日")
+                {
+                    rv = rv.Where(v => v.CloseDate >= applyDateFrom && v.CloseDate <= applyDateTo).ToList();
+                }
+                else if (qtyDateType == "完工日")
                 {
                     rv = rv.Where(v => v.EndDate >= applyDateFrom && v.EndDate <= applyDateTo).ToList();
                 }
@@ -1239,6 +1257,10 @@ namespace EDIS.Areas.BMED.Controllers
             if (rv.Count() != 0)
             {
                 if (qtyDateType == "結案日")
+                {
+                    rv = rv.OrderByDescending(r => r.CloseDate).ThenByDescending(r => r.DocId).ToList();
+                }
+                else if (qtyDateType == "完工日")
                 {
                     rv = rv.OrderByDescending(r => r.EndDate).ThenByDescending(r => r.DocId).ToList();
                 }
@@ -1275,6 +1297,7 @@ namespace EDIS.Areas.BMED.Controllers
                     c.DealDes,
                     c.DealState,
                     c.EndDate,
+                    c.CloseDate,
                     c.Cost,
                     c.Days,
                     c.FlowCls
@@ -1294,10 +1317,11 @@ namespace EDIS.Areas.BMED.Controllers
                 ws.Cell(1, 8).Value = "故障描述";
                 ws.Cell(1, 9).Value = "處理描述";
                 ws.Cell(1, 10).Value = "處理狀態";
-                ws.Cell(1, 11).Value = "結案日期";
-                ws.Cell(1, 12).Value = "費用";
-                ws.Cell(1, 13).Value = "天數";
-                ws.Cell(1, 14).Value = "關卡";
+                ws.Cell(1, 11).Value = "完工日期";
+                ws.Cell(1, 12).Value = "結案日期";
+                ws.Cell(1, 13).Value = "費用";
+                ws.Cell(1, 14).Value = "天數";
+                ws.Cell(1, 15).Value = "關卡";
 
                 //如果是要塞入Query後的資料該資料一定要變成是data.AsEnumerable()
                 ws.Cell(2, 1).InsertData(data);

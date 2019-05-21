@@ -1,4 +1,4 @@
-﻿@model EDIS.Areas.BMED.Models.RepairModels.QryRepListData
+﻿@model EDIS.Areas.BMED.Models.KeepModels.QryKeepListData
 @using EDIS.Models.Identity
 
 @inject CustomUserManager UserManager
@@ -24,17 +24,17 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.BMEDcombobox').combobox();
+        $('.BMEDKeepCombobox').combobox();
         /* Only first visit the page, will submit the form. */
         var count = 0;
         $('.nav-tabs a[href="#menu1"]').on('shown.bs.tab', function (event) {
             if (count == 0) {
-                $("#BMEDrepSearchForm").submit();
+                $("#BMEDkeepSearchForm").submit();
                 count++;
             };
         });
 
-        $("#BMEDexportExcelBtn").click(function () {
+        $("#BMEDkeepExportExcelBtn").click(function () {
             var DocId = $("#BMEDqtyDOCID").val();
             var AssetNo = $("#BMEDqtyASSETNO").val();
             var AccDpt = $("#BMEDqtyACCDPT").val();
@@ -52,7 +52,7 @@
             }
 
             $.ajax({
-                url: "@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })",
+                url: "@Url.Action("ExportToExcel", "Keep", new { Area = "BMED" })",
                 data: {
                     qtyDocId: DocId,
                     qtyAssetNo: AssetNo,
@@ -69,7 +69,7 @@
                 },
                 success: function (response, textStatus, jqXHR) {
 
-                    window.location.href = '@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
+                    window.location.href = '@Url.Action("ExportToExcel", "Keep", new { Area = "BMED" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
                         + '&qtyAccDpt=' + AccDpt + '&qtyAssetName=' + AssetName + '&qtyFlowType=' + FlowType + '&qtyDptId=' + DptId
                         + '&Date1=' + Date1 + '&Date2=' + Date2 + '&DealStatus=' + DealStatus + '&IsCharged=' + IsCharged
                         + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc;
@@ -81,12 +81,12 @@
         });
     });
     function ReSubmit() {
-        $("#BMEDrepSearchForm").submit();
+        $("#BMEDkeepSearchForm").submit();
     }
 </script>
 
-<form asp-controller="Repair" asp-action="Index" asp-area="BMED" data-ajax="true"
-      data-ajax-update="#BMEDpnlREPLIST" data-ajax-method="POST" id="BMEDrepSearchForm"
+<form asp-controller="Keep" asp-action="Index" asp-area="BMED" data-ajax="true"
+      data-ajax-update="#BMEDpnlKEEPLIST" data-ajax-method="POST" id="BMEDkeepSearchForm"
       data-ajax-begin="$.Toast.showToast({
       'title':'查詢中，請稍待...',
       'icon':'loading',
@@ -109,7 +109,7 @@
                 </div>
                 <div class="form-group">
                     <label for="qtyACCDPT" class="control-title">成本中心</label>
-                    <select asp-for="BMEDqtyACCDPT" asp-items="@ViewData["BMEDAccDpt"] as SelectList" class="form-control BMEDcombobox">
+                    <select asp-for="BMEDqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -123,12 +123,11 @@
                 </div>
                 <div class="form-group">
                     <label for="qtyFLOWTYPE" class="control-title">流程狀態</label>
-                    <select asp-for="BMEDqtyFLOWTYPE" asp-items="@ViewData["BMEDFlowType"] as SelectList" class="form-control-s">
-                    </select>
+                    <select asp-for="BMEDqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
                 </div>
                 <div class="form-group">
                     <label for="qtyDPTID" class="control-title">申請部門</label>
-                    <select asp-for="BMEDqtyDPTID" asp-items="@ViewData["BMEDApplyDpt"] as SelectList" class="form-control BMEDcombobox">
+                    <select asp-for="BMEDqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -138,14 +137,10 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyDealStatus" class="control-title">處理狀態</label>
-                    <select asp-for="BMEDqtyDealStatus" asp-items="@ViewData["BMEDDealStatus"] as SelectList" class="form-control">
+                    <select asp-for="BMEDqtyDealStatus" asp-items="@ViewData["BMEDKeepDealStatus"] as SelectList" class="form-control">
                         <option value="">請選擇</option>
                     </select>
                 </div>
-                <label for="qtyIsCharged" class="control-title">[有][無]費用</label>
-                <select asp-for="BMEDqtyIsCharged" asp-items="@ViewData["BMEDIsCharged"] as SelectList" class="form-control-s">
-                    <option value="">請選擇</option>
-                </select>
                 @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
                 {
                     <div class="form-group">
@@ -160,8 +155,7 @@
                 <div class="form-group">
                     <label for="qtyApplyDateFrom" class="control-title">日期查詢</label>
                     <span>
-                        <select asp-for="BMEDqtyDateType" asp-items="@ViewData["BMEDDateType"] as SelectList" class="form-control-s">
-                        </select>
+                        <select asp-for="BMEDqtyDateType" asp-items="@ViewData["BMEDKeepDateType"] as SelectList" class="form-control-s"></select>
                     </span>
                     <input asp-for="BMEDqtyApplyDateFrom" class="form-control" />
                     <span> ~ </span>
@@ -178,7 +172,7 @@
                 </div>
                 <div class="form-group">
                     <div>
-                        <input type="button" class="btn btn-primary" id="BMEDexportExcelBtn" value="匯出Excel" />
+                        <input type="button" class="btn btn-primary" id="BMEDkeepExportExcelBtn" value="匯出Excel" />
                     </div>
                 </div>
             </div>
@@ -186,4 +180,4 @@
     </div>
 </form>
 
-<div id="BMEDpnlREPLIST"></div>
+<div id="BMEDpnlKEEPLIST"></div>
