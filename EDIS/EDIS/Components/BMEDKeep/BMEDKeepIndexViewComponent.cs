@@ -56,10 +56,10 @@ namespace EDIS.Components.BMEDKeep
 
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
-            listItem4.Add(new SelectListItem { Text = "申請日", Value = "申請日" });
+            listItem4.Add(new SelectListItem { Text = "送單日", Value = "送單日" });
             listItem4.Add(new SelectListItem { Text = "完工日", Value = "完工日" });
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
-            ViewData["BMEDKeepDateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
+            ViewData["BMEDKeepDateType"] = new SelectList(listItem4, "Value", "Text", "送單日");
 
             QryRepListData data = new QryRepListData();
 

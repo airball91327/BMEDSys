@@ -27,7 +27,7 @@
         $('.BMEDKeepCombobox').combobox();
         /* Only first visit the page, will submit the form. */
         var count = 0;
-        $('.nav-tabs a[href="#menu1"]').on('shown.bs.tab', function (event) {
+        $('.nav-tabs a[href="#menu2"]').on('shown.bs.tab', function (event) {
             if (count == 0) {
                 $("#BMEDkeepSearchForm").submit();
                 count++;
@@ -118,7 +118,7 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyASSETNAME" class="control-title">設備名稱<br />(關鍵字)</label>
+                    <label for="qtyASSETNAME" class="control-title">儀器名稱<br />(關鍵字)</label>
                     <input asp-for="BMEDqtyASSETNAME" class="form-control" />
                 </div>
                 <div class="form-group">
