@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\Files\BMED\Keep\108050008_1.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.94.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.9" />
@@ -108,6 +112,7 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Views\RepairDtl\Components\" />
+    <Folder Include="wwwroot\Files\BMED\Keep\" />
     <Folder Include="wwwroot\Files\BMED\Repair\" />
     <Folder Include="wwwroot\Files\Repair\" />
   </ItemGroup>

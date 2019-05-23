@@ -56,12 +56,13 @@ namespace EDIS.Areas.BMED.Controllers
             r.DocId = GetID();
             r.UserId = ur.Id;
             r.UserName = ur.FullName;
+            r.UserAccount = ur.UserName;
             r.SentDate = DateTime.Now;
             r.DptId = d == null ? "" : d.DptId;
             r.Company = d == null ? "" : d.Name_C;
             r.AccDpt = d == null ? "" : d.DptId;
             r.AccDptName = d == null ? "" : d.Name_C;
-            r.Contact = ur.Ext ?? ur.Mobile ?? "";
+            r.Ext = ur.Ext == null ? "" : ur.Ext;
             //
             _context.BMEDKeeps.Add(r);
             _context.SaveChanges();
@@ -354,101 +355,191 @@ namespace EDIS.Areas.BMED.Controllers
                         {
                             keep = r,
                             flow = f
-                        }).Join(db.Assets, r => r.keep.AssetNo, a => a.AssetNo,
-                (r, a) => new
-                {
-                    keep = r.keep,
-                    asset = a,
-                    flow = r.flow
-                })
-                .Join(db.KeepDtls, m => m.keep.DocId, d => d.DocId,
-                (m, d) => new
-                {
-                    keep = m.keep,
-                    flow = m.flow,
-                    asset = m.asset,
-                    keepdtl = d
-                })
-                .Join(db.Departments, j => j.keep.AccDpt, d => d.DptId,
-                    (j, d) => new
-                    {
-                        keep = j.keep,
-                        flow = j.flow,
-                        asset = j.asset,
-                        keepdtl = j.keepdtl,
-                        dpt = d
-                    }).ToList()
-                    .ForEach(j => kv.Add(new KeepListVModel
-                    {
-                        DocType = "保養",
-                        DocId = j.keep.DocId,
-                        AssetNo = j.keep.AssetNo,
-                        AssetName = j.keep.AssetName,
-                        Brand = j.asset.Brand,
-                        Type = j.asset.Type,
-                        PlaceLoc = j.keep.PlaceLoc,
-                        ApplyDpt = j.keep.DptId,
-                        AccDpt = j.keep.AccDpt,
-                        AccDptName = j.dpt.Name_C,
-                        Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : db.KeepResults.Find(j.keepdtl.Result).Title,
-                        InOut = j.keepdtl.InOut == "0" ? "自行" :
-                        j.keepdtl.InOut == "1" ? "委外" :
-                        j.keepdtl.InOut == "2" ? "租賃" :
-                        j.keepdtl.InOut == "3" ? "保固" : "",
-                        Memo = j.keepdtl.Memo,
-                        Cost = j.keepdtl.Cost,
-                        Days = DateTime.Now.Subtract(j.keep.SentDate.GetValueOrDefault()).Days,
-                        Flg = j.flow.Status,
-                        FlowUid = j.flow.UserId,
-                        FlowCls = j.flow.Cls,
-                        Src = j.keep.Src,
-                        SentDate = j.keep.SentDate
-                    }));
-                    break;
-                case "已結案":
-                    List<KeepFlow> kf = db.KeepFlows.Where(f => f.Status == "2").ToList();
-                    if (Roles.IsUserInRole("Admin") || Roles.IsUserInRole("Manager"))
-                    {
-                        if (Roles.IsUserInRole("Manager"))
+                        }).Join(_context.BMEDAssets, r => r.keep.AssetNo, a => a.AssetNo,
+                        (r, a) => new
                         {
-                            kf = kf.Join(db.Keeps.Where(r => r.AccDpt == usr.DptId),
-                                f => f.DocId, r => r.DocId, (f, r) => f).ToList();
+                            keep = r.keep,
+                            asset = a,
+                            flow = r.flow
+                        })
+                        .Join(_context.BMEDKeepDtls, m => m.keep.DocId, d => d.DocId,
+                        (m, d) => new
+                        {
+                            keep = m.keep,
+                            flow = m.flow,
+                            asset = m.asset,
+                            keepdtl = d
+                        })
+                        .Join(_context.Departments, j => j.keep.AccDpt, d => d.DptId,
+                        (j, d) => new
+                        {
+                            keep = j.keep,
+                            flow = j.flow,
+                            asset = j.asset,
+                            keepdtl = j.keepdtl,
+                            dpt = d
+                        }).ToList()
+                        .ForEach(j => kv.Add(new KeepListVModel
+                        {
+                            DocType = "醫工保養",
+                            DocId = j.keep.DocId,
+                            AssetNo = j.keep.AssetNo,
+                            AssetName = j.keep.AssetName,
+                            Brand = j.asset.Brand,
+                            Type = j.asset.Type,
+                            PlaceLoc = j.keep.PlaceLoc,
+                            ApplyDpt = j.keep.DptId,
+                            AccDpt = j.keep.AccDpt,
+                            AccDptName = j.dpt.Name_C,
+                            Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : _context.BMEDKeepResults.Find(j.keepdtl.Result).Title,
+                            InOut = j.keepdtl.InOut == "0" ? "自行" :
+                            j.keepdtl.InOut == "1" ? "委外" :
+                            j.keepdtl.InOut == "2" ? "租賃" :
+                            j.keepdtl.InOut == "3" ? "保固" : "",
+                            Memo = j.keepdtl.Memo,
+                            Cost = j.keepdtl.Cost,
+                            Days = DateTime.Now.Subtract(j.keep.SentDate.GetValueOrDefault()).Days,
+                            Flg = j.flow.Status,
+                            FlowUid = j.flow.UserId,
+                            FlowCls = j.flow.Cls,
+                            Src = j.keep.Src,
+                            SentDate = j.keep.SentDate
+                        }));
+                        break;
+                case "已結案":
+                    List<KeepFlowModel> kf = _context.BMEDKeepFlows.Where(f => f.Status == "2").ToList();
+
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "Manager")
+                                                            || userManager.IsInRole(User, "MedEngineer"))
+                    {
+                        if (userManager.IsInRole(User, "Manager"))
+                        {
+                            kf = kf.Join(_context.BMEDRepairs.Where(r => r.AccDpt == ur.DptId),
+                            f => f.DocId, r => r.DocId, (f, r) => f).ToList();
+                        }
+                        /* If no other search values, search the docs belong the login engineer. */
+                        if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == false)
+                        {
+                            kf = kf.Join(_context.BMEDRepairFlows.Where(f2 => f2.UserId == ur.Id),
+                            f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
+                        }
+                    }
+                    else /* If normal user, search the docs belong himself. */
+                    {
+                        kf = kf.Join(_context.BMEDRepairFlows.Where(f2 => f2.UserId == ur.Id),
+                        f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
+                    }
+                    //
+                    kf.Select(f => new
+                      {
+                          f.DocId,
+                          f.UserId,
+                          f.Cls,
+                          f.Status
+                      }).Distinct()
+                      .Join(rps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
+                      (f, k) => new
+                      {
+                          keep = k,
+                          flow = f
+                      }).Join(_context.BMEDAssets, r => r.keep.AssetNo, a => a.AssetNo,
+                      (r, a) => new
+                      {
+                          keep = r.keep,
+                          asset = a,
+                          flow = r.flow
+                      })
+                      .Join(_context.BMEDKeepDtls, m => m.keep.DocId, d => d.DocId,
+                      (m, d) => new
+                      {
+                          keep = m.keep,
+                          flow = m.flow,
+                          asset = m.asset,
+                          keepdtl = d
+                      })
+                      .Join(_context.Departments, j => j.keep.AccDpt, d => d.DptId,
+                      (j, d) => new
+                      {
+                          keep = j.keep,
+                          flow = j.flow,
+                          asset = j.asset,
+                          keepdtl = j.keepdtl,
+                          dpt = d
+                      }).ToList()
+                      .ForEach(j => kv.Add(new KeepListVModel
+                      {
+                          DocType = "醫工保養",
+                          DocId = j.keep.DocId,
+                          AssetNo = j.keep.AssetNo,
+                          AssetName = j.keep.AssetName,
+                          Brand = j.asset.Brand,
+                          Type = j.asset.Type,
+                          PlaceLoc = j.keep.PlaceLoc,
+                          ApplyDpt = j.keep.DptId,
+                          AccDpt = j.keep.AccDpt,
+                          AccDptName = j.dpt.Name_C,
+                          Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : _context.BMEDKeepResults.Find(j.keepdtl.Result).Title,
+                          InOut = j.keepdtl.InOut == "0" ? "自行" :
+                          j.keepdtl.InOut == "1" ? "委外" :
+                          j.keepdtl.InOut == "2" ? "租賃" :
+                          j.keepdtl.InOut == "3" ? "保固" : "",
+                          Memo = j.keepdtl.Memo,
+                          Cost = j.keepdtl.Cost,
+                          Days = DateTime.Now.Subtract(j.keep.SentDate.GetValueOrDefault()).Days,
+                          Flg = j.flow.Status,
+                          FlowUid = j.flow.UserId,
+                          FlowCls = j.flow.Cls,
+                          Src = j.keep.Src,
+                          SentDate = j.keep.SentDate
+                      }));
+                      break;
+                case "待簽核":
+                    /* Get all dealing repair docs. */
+                    var keepFlows = _context.BMEDKeepFlows.Join(rps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
+                    (f, k) => new
+                    {
+                        keep = k,
+                        flow = f
+                    }).ToList();
+
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedEngineer"))
+                    {
+                        /* If has other search values, search all RepairDocs which flowCls is in engineer. */
+                        /* Else return the docs belong the login engineer.  */
+                        if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == true)
+                        {
+                            keepFlows = keepFlows.Where(f => f.flow.Status == "?" && f.flow.Cls.Contains("工程師")).ToList();
+                        }
+                        else
+                        {
+                            keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                                                             (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                                                              _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
                         }
                     }
                     else
                     {
-                        kf = kf.Join(db.KeepFlows.Where(f2 => f2.UserId == WebSecurity.CurrentUserId),
-                             f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
+                        keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                                                         (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                                                          _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
                     }
-                    //
-                    kf.Select(f => new
+
+                    keepFlows.Join(_context.BMEDAssets, r => r.keep.AssetNo, a => a.AssetNo,
+                    (r, a) => new
                     {
-                        f.DocId,
-                        f.UserId,
-                        f.Cls,
-                        f.Status
-                    }).Distinct()
-                .Join(rps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
-                (f, k) => new
-                {
-                    keep = k,
-                    flow = f
-                }).Join(db.Assets, r => r.keep.AssetNo, a => a.AssetNo,
-                (r, a) => new
-                {
-                    keep = r.keep,
-                    asset = a,
-                    flow = r.flow
-                })
-                .Join(db.KeepDtls, m => m.keep.DocId, d => d.DocId,
-                (m, d) => new
-                {
-                    keep = m.keep,
-                    flow = m.flow,
-                    asset = m.asset,
-                    keepdtl = d
-                })
-                .Join(db.Departments, j => j.keep.AccDpt, d => d.DptId,
+                        keep = r.keep,
+                        asset = a,
+                        flow = r.flow
+                    })
+                    .Join(_context.BMEDKeepDtls, m => m.keep.DocId, d => d.DocId,
+                    (m, d) => new
+                    {
+                        keep = m.keep,
+                        flow = m.flow,
+                        asset = m.asset,
+                        keepdtl = d
+                    })
+                    .Join(_context.Departments, j => j.keep.AccDpt, d => d.DptId,
                     (j, d) => new
                     {
                         keep = j.keep,
@@ -459,7 +550,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }).ToList()
                     .ForEach(j => kv.Add(new KeepListVModel
                     {
-                        DocType = "保養",
+                        DocType = "醫工保養",
                         DocId = j.keep.DocId,
                         AssetNo = j.keep.AssetNo,
                         AssetName = j.keep.AssetName,
@@ -469,65 +560,7 @@ namespace EDIS.Areas.BMED.Controllers
                         ApplyDpt = j.keep.DptId,
                         AccDpt = j.keep.AccDpt,
                         AccDptName = j.dpt.Name_C,
-                        Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : db.KeepResults.Find(j.keepdtl.Result).Title,
-                        InOut = j.keepdtl.InOut == "0" ? "自行" :
-                        j.keepdtl.InOut == "1" ? "委外" :
-                        j.keepdtl.InOut == "2" ? "租賃" :
-                        j.keepdtl.InOut == "3" ? "保固" : "",
-                        Memo = j.keepdtl.Memo,
-                        Cost = j.keepdtl.Cost,
-                        Days = DateTime.Now.Subtract(j.keep.SentDate.GetValueOrDefault()).Days,
-                        Flg = j.flow.Status,
-                        FlowUid = j.flow.UserId,
-                        FlowCls = j.flow.Cls,
-                        Src = j.keep.Src,
-                        SentDate = j.keep.SentDate
-                    }));
-                    break;
-                case "待簽核":
-                    rps.Join(db.KeepFlows.Where(f => f.Status == "?" && f.UserId == WebSecurity.CurrentUserId),
-                r => r.DocId, f => f.DocId,
-                (r, f) => new
-                {
-                    keep = r,
-                    flow = f
-                }).Join(db.Assets, r => r.keep.AssetNo, a => a.AssetNo,
-                (r, a) => new
-                {
-                    keep = r.keep,
-                    asset = a,
-                    flow = r.flow
-                })
-                .Join(db.KeepDtls, m => m.keep.DocId, d => d.DocId,
-                (m, d) => new
-                {
-                    keep = m.keep,
-                    flow = m.flow,
-                    asset = m.asset,
-                    keepdtl = d
-                })
-                .Join(db.Departments, j => j.keep.AccDpt, d => d.DptId,
-                    (j, d) => new
-                    {
-                        keep = j.keep,
-                        flow = j.flow,
-                        asset = j.asset,
-                        keepdtl = j.keepdtl,
-                        dpt = d
-                    }).ToList()
-                    .ForEach(j => kv.Add(new KeepListVModel
-                    {
-                        DocType = "保養",
-                        DocId = j.keep.DocId,
-                        AssetNo = j.keep.AssetNo,
-                        AssetName = j.keep.AssetName,
-                        Brand = j.asset.Brand,
-                        Type = j.asset.Type,
-                        PlaceLoc = j.keep.PlaceLoc,
-                        ApplyDpt = j.keep.DptId,
-                        AccDpt = j.keep.AccDpt,
-                        AccDptName = j.dpt.Name_C,
-                        Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : db.KeepResults.Find(j.keepdtl.Result).Title,
+                        Result = (j.keepdtl.Result == null || j.keepdtl.Result == 0) ? "" : _context.BMEDKeepResults.Find(j.keepdtl.Result).Title,
                         InOut = j.keepdtl.InOut == "0" ? "自行" :
                         j.keepdtl.InOut == "1" ? "委外" :
                         j.keepdtl.InOut == "2" ? "租賃" :
@@ -585,7 +618,26 @@ namespace EDIS.Areas.BMED.Controllers
             //    rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
             //}
 
-            return View("List", rv);
+            return View("List", kv);
+        }
+
+        public JsonResult QueryAssets(string QueryStr)
+        {
+            /* Search assets by assetNo or Cname. */
+            var assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
+                                                        a.Cname.Contains(QueryStr)).ToList();
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (assets.Count() != 0)
+            {
+                assets.ForEach(asset => {
+                       list.Add(new SelectListItem
+                       {
+                           Text = asset.Cname + "(" + asset.AssetNo + ")",
+                           Value = asset.AssetNo.ToString()
+                       });
+                });
+            }
+            return Json(list);
         }
 
     }

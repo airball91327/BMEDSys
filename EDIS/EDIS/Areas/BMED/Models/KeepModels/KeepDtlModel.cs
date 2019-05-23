@@ -25,7 +25,7 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Display(Name = "保養工時")]
         public decimal? Hours { get; set; }
         [Display(Name = "保養費用")]
-        [DisplayFormat(DataFormatString = "{0:0}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal? Cost { get; set; }
         [Display(Name = "完工日期")]
         public Nullable<DateTime> EndDate { get; set; }

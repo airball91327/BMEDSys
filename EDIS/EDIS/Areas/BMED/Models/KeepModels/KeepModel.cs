@@ -15,8 +15,13 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public string DocId { get; set; }
         [Display(Name = "申請人代號")]
         public int UserId { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "申請人姓名")]
         public string UserName { get; set; }
+        [NotMapped]
+        [Display(Name = "申請人帳號")]
+        public string UserAccount { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "所屬部門")]
         public string DptId { get; set; }
         [Display(Name = "所屬單位")]
@@ -26,16 +31,23 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Required]
         [Display(Name = "電子信箱")]
         public string Email { get; set; }
-        [Display(Name = "聯絡方式")]
-        public string Contact { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
+        [Display(Name = "分機")]
+        public string Ext { get; set; }
+        [Display(Name = "MVPN")]
+        public string Mvpn { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "成本中心")]
         public string AccDpt { get; set; }
         [NotMapped]
         public string AccDptName { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "保養週期")]
         public int Cycle { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "儀器名稱")]
         public string AssetName { get; set; }
         [Display(Name = "放置地點")]

@@ -28,13 +28,13 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public string Unite { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "單價")]
-        [DisplayFormat(DataFormatString = "{0:0}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal Price { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "數量")]
         public int Qty { get; set; }
         [Display(Name = "總金額")]
-        [DisplayFormat(DataFormatString = "{0:0}")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal TotalCost { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "費用別")]

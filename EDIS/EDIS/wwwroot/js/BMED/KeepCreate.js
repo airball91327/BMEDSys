@@ -39,10 +39,6 @@ $(function () {
             success: function (data) {
                 $('#EngId').val(data.engId);
                 $('#EngName').val(data.fullName);
-                //var select = $('#EngId');
-                //$('option', select).remove();
-                //select.addItems(data);
-                //console.log(data + ";" + select.val()); // ForDebug
             }
         });
     });
@@ -56,7 +52,6 @@ $(function () {
             dataType: "json",
             data: { dptId: DptId },
             success: function (data) {
-                //console.log(data);
                 if (data == "") {
                     $("#DptNameErrorMsg").html("查無部門!");
                 }
@@ -67,6 +62,7 @@ $(function () {
             }
         });       
     });
+
     /* While user change AccDpt, search the AccDptName. */
     $("#AccDpt").change(function () {
         var AccDptId = $(this).val();
@@ -76,7 +72,6 @@ $(function () {
             dataType: "json",
             data: { dptId: AccDptId },
             success: function (data) {
-                //console.log(data);
                 if (data == "") {
                     $("#AccDptNameErrorMsg").html("查無部門!");
                 }
@@ -88,80 +83,46 @@ $(function () {
         });    
     });
 
-    /* If user select "本單位" */
-    $("input[type=radio][name=LocType]").change(function () {
-        if (this.value == '本單位') {
-
-            $("#AccDpt").attr("readonly", "readonly");
-            $("#AccDptName").attr("readonly", "readonly");
-            /* Get AccDptId and Name. */
-            $("#AccDpt").val($("#DptId").val());
-            $.ajax({
-                url: '../Repair/GetDptName',
-                type: "POST",
-                dataType: "json",
-                data: { dptId: $("#DptId").val() },
-                success: function (data) {
-                    if (data == "") {
-                        $("#AccDptNameErrorMsg").html("查無部門!");
-                    }
-                    else {
-                        $("#AccDptNameErrorMsg").html("");
-                    }
-                    $("#AccDptName").val(data);
-                }
-            });
-        }
-        else {
-            $("#AccDpt").removeAttr("readonly");
-            $("#AccDptName").removeAttr("readonly");
-        }
-    });
-
-    /* If user select "增設", show Mgr dropdown for user to select. */
-    $("#DptMgr").hide();    //Default setting.
-    $("input[type=radio][name=RepType]").change(function () {
-        if (this.value == '增設') {
-            $("#DptMgr").show();
-        }
-        else {
-            $("#DptMgr").hide();
-        }
-    });
-
     /* Get managers by query string. */
-    $("#MgrQryBtn").click(function () {
-        var queryStr = $("#DptMgrQry").val();
+    $("#AssetQryBtn").click(function () {
+        var queryStr = $("#AssetQry").val();
         $.ajax({
-            url: '../Repair/QueryUsers',
+            url: '../Keep/QueryAssets',
             type: "GET",
             data: { QueryStr: queryStr },
             success: function (data) {
-                var select = $('#DptMgrId');
+                console.log(data);
+                var select = $('#AssetNo');
                 $('option', select).remove();
-                select.addItems(data);
+                if (data.length == 0) {
+                    $("#AssetNoErrorMsg").html("查無資料!");
+                }
+                else if (data.length == 1) {
+                    select.addItems(data);
+                    $('#AssetNo').trigger("change");
+                    $("#AssetNoErrorMsg").html("");
+                }
+                else {
+                    select.append($('<option selected="selected" disabled="disabled"></option>').text("請選擇").val(""));
+                    select.addItems(data);
+                    $("#AssetNoErrorMsg").html("");
+                }
             }
         });
     });
-    $("#CheckerQryBtn").click(function () {
-        var queryStr = $("#CheckerQry").val();
-        $.ajax({
-            url: '../Repair/QueryUsers',
-            type: "GET",
-            data: { QueryStr: queryStr },
-            success: function (data) {
-                var select = $('#CheckerId');
-                $('option', select).remove();
-                select.addItems(data);
-            }
-        });
+
+    $("#AssetNo").change(function () {
+        var assetName = $('#AssetNo option:selected').text().split("(", 1);
+        $("#AssetName").val(assetName);
     });
+
+    /* Refresh upload list. */
     $('#modalFILES').on('hidden.bs.modal', function () {
         var docid = $("#DocId").val();
         $.ajax({
             url: '../AttainFile/List3',
             type: "POST",
-            data: { docid: docid, doctyp: "1" },
+            data: { docid: docid, doctyp: "2" },
             success: function (data) {
                 $("#pnlFILES").html(data);
             }
@@ -174,12 +135,11 @@ function onSuccess() {
     alert("已送出");
 
     var DocId = $("#DocId").val();
-    var repType = $('input:radio[name="RepType"]:checked').val();
     /* Print confirm before submit. */
-    var r = confirm("是否列印?");
-    if (r == true) {
-        window.printRepairDoc(DocId);
-    }
+    //var r = confirm("是否列印?");
+    //if (r == true) {
+    //    window.printKeepDoc(DocId);
+    //}
 
     location.href = '../../Home/Index';
 }
@@ -200,18 +160,18 @@ function getAssetName() {
                 $("#AssetNameErrorMsg").html("");
             }
             $("#AssetName").val(data.cname);
-            $("#assetAccDate").val(data.accDate);
+            //$("#assetAccDate").val(data.accDate);
         }
     });  
 }
 
 
-function printRepairDoc(DocId) {
+function printKeepDoc(DocId) {
     
     var printContent = "";
     /* Get print page. */
     $.ajax({
-        url: '../Repair/PrintRepairDoc',
+        url: '../Keep/PrintKeepDoc',
         type: "GET",
         async: false,
         data: { docId: DocId, printType : 1 },
