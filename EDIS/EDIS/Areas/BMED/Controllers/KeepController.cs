@@ -189,7 +189,7 @@ namespace EDIS.Areas.BMED.Controllers
                     string body = "";
                     u = _context.AppUsers.Find(ur.Id);
                     mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
-                    u = _context.AppUsers.Find(kp.KeepEngId);
+                    //u = _context.AppUsers.Find(kp.KeepEngId);
                     mail.to = new System.Net.Mail.MailAddress(u.Email); //u.Email
                     mail.message.Subject = "醫療儀器管理資訊系統[保養案]：儀器名稱： " + keep.AssetName;
                     body += "<p>申請人：" + keep.UserName + "</p>";
@@ -248,20 +248,18 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(QryRepListData qdata)
+        public IActionResult Index(QryKeepListData qdata)
         {
-            string docid = qdata.BMEDqtyDOCID;
-            string ano = qdata.BMEDqtyASSETNO;
-            string acc = qdata.BMEDqtyACCDPT;
-            string aname = qdata.BMEDqtyASSETNAME;
-            string ftype = qdata.BMEDqtyFLOWTYPE;
-            string dptid = qdata.BMEDqtyDPTID;
-            string qtyDate1 = qdata.BMEDqtyApplyDateFrom;
-            string qtyDate2 = qdata.BMEDqtyApplyDateTo;
-            //string qtyDealStatus = qdata.BMEDqtyDealStatus;
-            //string qtyIsCharged = qdata.BMEDqtyIsCharged;
-            string qtyDateType = qdata.BMEDqtyDateType;
-            bool searchAllDoc = qdata.BMEDqtySearchAllDoc;
+            string docid = qdata.BMEDKqtyDOCID;
+            string ano = qdata.BMEDKqtyASSETNO;
+            string acc = qdata.BMEDKqtyACCDPT;
+            string aname = qdata.BMEDKqtyASSETNAME;
+            string ftype = qdata.BMEDKqtyFLOWTYPE;
+            string dptid = qdata.BMEDKqtyDPTID;
+            string qtyDate1 = qdata.BMEDKqtyApplyDateFrom;
+            string qtyDate2 = qdata.BMEDKqtyApplyDateTo;
+            string qtyDateType = qdata.BMEDKqtyDateType;
+            bool searchAllDoc = qdata.BMEDKqtySearchAllDoc;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;

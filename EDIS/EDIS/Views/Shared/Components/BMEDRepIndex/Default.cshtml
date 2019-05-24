@@ -82,6 +82,14 @@
     });
     function ReSubmit() {
         $("#BMEDrepSearchForm").submit();
+        /* Refresh repair count. */
+        $.ajax({
+            url: '../BMED/Repair/GetRepairCounts',
+            type: "GET",
+            success: function (data) {
+                $("#BMEDrepCount").html(data);
+            }
+        });
     }
 </script>
 

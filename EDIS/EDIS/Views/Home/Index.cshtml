@@ -5,9 +5,9 @@
 
 <h4>簽核列表</h4>
 <ul class="nav nav-tabs">
-    <li class="active"><a data-toggle="tab" href="#home">請修 <span class="badge">@Model.RepairCount</span></a></li>
-    <li><a data-toggle="tab" href="#menu1">醫工請修 <span class="badge">@ViewData["BMEDRepairCount"]</span></a></li>
-    <li><a data-toggle="tab" href="#menu2">醫工保養 <span class="badge">@*@ViewData["BMEDKeepCount"]*@</span></a></li>
+    <li class="active"><a data-toggle="tab" href="#home">請修 <span class="badge" id="repairCount">@Model.RepairCount</span></a></li>
+    <li><a data-toggle="tab" href="#menu1">醫工請修 <span class="badge" id="BMEDrepCount">@Model.BMEDrepCount</span></a></li>
+    <li><a data-toggle="tab" href="#menu2">醫工保養 <span class="badge" id="BMEDkeepCount">@Model.BMEDkeepCount</span></a></li>
 
 </ul>
 <div class="tab-content">
@@ -23,7 +23,7 @@
     </div>
     <div id="menu2" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDKeepIndex")*@
+            @await Component.InvokeAsync("BMEDKeepIndex")
         </div>
     </div>
 

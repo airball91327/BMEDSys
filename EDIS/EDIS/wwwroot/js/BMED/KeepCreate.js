@@ -83,7 +83,7 @@ $(function () {
         });    
     });
 
-    /* Get managers by query string. */
+    /* Get Assets by query string. */
     $("#AssetQryBtn").click(function () {
         var queryStr = $("#AssetQry").val();
         $.ajax({

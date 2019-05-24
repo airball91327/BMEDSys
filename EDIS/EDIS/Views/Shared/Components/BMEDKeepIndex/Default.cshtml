@@ -35,19 +35,19 @@
         });
 
         $("#BMEDkeepExportExcelBtn").click(function () {
-            var DocId = $("#BMEDqtyDOCID").val();
-            var AssetNo = $("#BMEDqtyASSETNO").val();
-            var AccDpt = $("#BMEDqtyACCDPT").val();
-            var AssetName = $("#BMEDqtyASSETNAME").val();
-            var FlowType = $("#BMEDqtyFLOWTYPE").val();
-            var DptId = $("#BMEDqtyDPTID").val();;
-            var Date1 = $("#BMEDqtyApplyDateFrom").val();
-            var Date2 = $("#BMEDqtyApplyDateTo").val();
-            var DealStatus = $("#BMEDqtyDealStatus").val();
-            var IsCharged = $("#BMEDqtyIsCharged").val();
-            var DateType = $("#BMEDqtyDateType").val();
+            var DocId = $("#BMEDKqtyDOCID").val();
+            var AssetNo = $("#BMEDKqtyASSETNO").val();
+            var AccDpt = $("#BMEDKqtyACCDPT").val();
+            var AssetName = $("#BMEDKqtyASSETNAME").val();
+            var FlowType = $("#BMEDKqtyFLOWTYPE").val();
+            var DptId = $("#BMEDKqtyDPTID").val();;
+            var Date1 = $("#BMEDKqtyApplyDateFrom").val();
+            var Date2 = $("#BMEDKqtyApplyDateTo").val();
+            var DealStatus = $("#BMEDKqtyDealStatus").val();
+            var IsCharged = $("#BMEDKqtyIsCharged").val();
+            var DateType = $("#BMEDKqtyDateType").val();
             var SearchAllDoc = false;
-            if ($("#BMEDqtySearchAllDoc").is(':checked') == true) {
+            if ($("#BMEDKqtySearchAllDoc").is(':checked') == true) {
                 SearchAllDoc = true;
             }
 
@@ -101,15 +101,15 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyDOCID" class="control-title">表單編號</label>
-                    <input asp-for="BMEDqtyDOCID" class="form-control" />
+                    <input asp-for="BMEDKqtyDOCID" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label for="qtyASSETNO" class="control-title">財產編號</label>
-                    <input asp-for="BMEDqtyASSETNO" class="form-control-s" />
+                    <input asp-for="BMEDKqtyASSETNO" class="form-control-s" />
                 </div>
                 <div class="form-group">
                     <label for="qtyACCDPT" class="control-title">成本中心</label>
-                    <select asp-for="BMEDqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control BMEDKeepCombobox">
+                    <select asp-for="BMEDKqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -119,35 +119,18 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label for="qtyASSETNAME" class="control-title">儀器名稱<br />(關鍵字)</label>
-                    <input asp-for="BMEDqtyASSETNAME" class="form-control" />
+                    <input asp-for="BMEDKqtyASSETNAME" class="form-control" />
                 </div>
                 <div class="form-group">
                     <label for="qtyFLOWTYPE" class="control-title">流程狀態</label>
-                    <select asp-for="BMEDqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
+                    <select asp-for="BMEDKqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
                 </div>
                 <div class="form-group">
                     <label for="qtyDPTID" class="control-title">申請部門</label>
-                    <select asp-for="BMEDqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control BMEDKeepCombobox">
+                    <select asp-for="BMEDKqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label for="qtyDealStatus" class="control-title">處理狀態</label>
-                    <select asp-for="BMEDqtyDealStatus" asp-items="@ViewData["BMEDKeepDealStatus"] as SelectList" class="form-control">
-                        <option value="">請選擇</option>
-                    </select>
-                </div>
-                @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
-                {
-                    <div class="form-group">
-                        <label class="control-title">查詢其他<br />工程師案件</label>
-                        <input type="checkbox" asp-for="BMEDqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
-                    </div>
-                }
             </div>
         </div>
         <div class="row">
@@ -155,11 +138,11 @@
                 <div class="form-group">
                     <label for="qtyApplyDateFrom" class="control-title">日期查詢</label>
                     <span>
-                        <select asp-for="BMEDqtyDateType" asp-items="@ViewData["BMEDKeepDateType"] as SelectList" class="form-control-s"></select>
+                        <select asp-for="BMEDKqtyDateType" asp-items="@ViewData["BMEDKeepDateType"] as SelectList" class="form-control-s"></select>
                     </span>
-                    <input asp-for="BMEDqtyApplyDateFrom" class="form-control" />
+                    <input asp-for="BMEDKqtyApplyDateFrom" class="form-control" />
                     <span> ~ </span>
-                    <input asp-for="BMEDqtyApplyDateTo" class="form-control" />
+                    <input asp-for="BMEDKqtyApplyDateTo" class="form-control" />
                 </div>
             </div>
         </div>

@@ -89,10 +89,13 @@
             <div class=form-inline>
                 <div class="form-group">
                     <label asp-for="AssetNo" class="control-title"></label>
-                    <input asp-for="AssetNo" class="form-control" />
-                    <input type="button" value="讀取" class="btn btn-default" onclick="getAssetName()" />
-                    <span style="color:red" id="AssetNameErrorMsg"></span>
+                    <input type="text" placeholder="輸入財編或關鍵字查詢" class="form-control" id="AssetQry" />
+                    <button type="button" class="btn btn-default" id="AssetQryBtn">查詢</button>
+                    <select asp-for="AssetNo" class="form-control" id="AssetNo">
+                        <option disabled selected>無</option>
+                    </select>
                     <span asp-validation-for="AssetNo" class="text-danger"></span>
+                    <span style="color:red" id="AssetNoErrorMsg"></span>
                 </div>
             </div>
         </div>
@@ -102,10 +105,6 @@
                     <label asp-for="AssetName" class="control-title"></label>
                     <input asp-for="AssetName" class="form-control" required />
                     <span asp-validation-for="AssetName" class="text-danger"></span>
-                    <span id="rowAssetAccDate">
-                        <label>立帳日</label>
-                        <input id="assetAccDate" class="form-control" readonly />
-                    </span>
                 </div>
             </div>
         </div>

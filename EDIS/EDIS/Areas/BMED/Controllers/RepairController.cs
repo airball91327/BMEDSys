@@ -778,7 +778,16 @@ namespace EDIS.Areas.BMED.Controllers
                 return Json(eng);
             }
         }
-        
+
+        public JsonResult GetRepairCounts()
+        {
+            /* Get user details. */
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            var repairCount = _context.BMEDRepairFlows.Where(f => f.Status == "?")
+                                                      .Where(f => f.UserId == ur.Id).Count();
+            return Json(repairCount);
+        }
+
         public JsonResult QueryUsers(string QueryStr)
         {
             /* Search user by fullname or username. */
@@ -790,6 +799,25 @@ namespace EDIS.Areas.BMED.Controllers
                 users.ForEach(ur => {
                     list.Add(new SelectListItem { Text = ur.FullName + "(" + ur.UserName + ")",
                                                   Value = ur.Id.ToString() });
+                });
+            }
+            return Json(list);
+        }
+
+        public JsonResult QueryAssets(string QueryStr)
+        {
+            /* Search assets by assetNo or Cname. */
+            var assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
+                                                        a.Cname.Contains(QueryStr)).ToList();
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (assets.Count() != 0)
+            {
+                assets.ForEach(asset => {
+                    list.Add(new SelectListItem
+                    {
+                        Text = asset.Cname + "(" + asset.AssetNo + ")",
+                        Value = asset.AssetNo.ToString()
+                    });
                 });
             }
             return Json(list);

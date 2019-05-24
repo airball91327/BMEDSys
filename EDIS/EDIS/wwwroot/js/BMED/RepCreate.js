@@ -143,6 +143,38 @@ $(function () {
             }
         });
     });
+    /* Get Assets by query string. */
+    $("#AssetQryBtn").click(function () {
+        var queryStr = $("#AssetQry").val();
+        $.ajax({
+            url: '../Repair/QueryAssets',
+            type: "GET",
+            data: { QueryStr: queryStr },
+            success: function (data) {
+                console.log(data);
+                var select = $('#AssetNo');
+                $('option', select).remove();
+                if (data.length == 0) {
+                    $("#AssetNoErrorMsg").html("查無資料!");
+                }
+                else if (data.length == 1) {
+                    select.addItems(data);
+                    $('#AssetNo').trigger("change");
+                    $("#AssetNoErrorMsg").html("");
+                }
+                else {
+                    select.append($('<option selected="selected" disabled="disabled"></option>').text("請選擇").val(""));
+                    select.addItems(data);
+                    $("#AssetNoErrorMsg").html("");
+                }
+            }
+        });
+    });
+    $("#AssetNo").change(function () {
+        var assetName = $('#AssetNo option:selected').text().split("(", 1);
+        $("#AssetName").val(assetName);
+    });
+
     $("#CheckerQryBtn").click(function () {
         var queryStr = $("#CheckerQry").val();
         $.ajax({

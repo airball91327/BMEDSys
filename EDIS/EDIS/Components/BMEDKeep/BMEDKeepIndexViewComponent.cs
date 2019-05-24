@@ -1,5 +1,5 @@
 ﻿using EDIS.Areas.BMED.Data;
-using EDIS.Areas.BMED.Models.RepairModels;
+using EDIS.Areas.BMED.Models.KeepModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -61,7 +61,7 @@ namespace EDIS.Components.BMEDKeep
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["BMEDKeepDateType"] = new SelectList(listItem4, "Value", "Text", "送單日");
 
-            QryRepListData data = new QryRepListData();
+            QryKeepListData data = new QryKeepListData();
 
             return View(data);
         }
