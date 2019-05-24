@@ -84,7 +84,7 @@
         $("#BMEDrepSearchForm").submit();
         /* Refresh repair count. */
         $.ajax({
-            url: '../BMED/Repair/GetRepairCounts',
+            url: '@Url.Action("GetRepairCounts", "Repair", new { Area = "BMED" })',
             type: "GET",
             success: function (data) {
                 $("#BMEDrepCount").html(data);

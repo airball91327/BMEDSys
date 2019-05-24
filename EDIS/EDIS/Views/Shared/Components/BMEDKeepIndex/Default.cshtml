@@ -82,6 +82,14 @@
     });
     function ReSubmit() {
         $("#BMEDkeepSearchForm").submit();
+        /* Refresh keep count. */
+        $.ajax({
+            url: '@Url.Action("GetKeepCounts", "Keep", new { Area = "BMED" })',
+            type: "GET",
+            success: function (data) {
+                $("#BMEDkeepCount").html(data);
+            }
+        });
     }
 </script>
 

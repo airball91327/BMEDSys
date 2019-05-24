@@ -78,7 +78,7 @@
         $("#repSearchForm").submit();
         /* Refresh repair count. */
         $.ajax({
-            url: '../Repair/GetRepairCounts',
+            url: '@Url.Action("GetRepairCounts", "Repair", new { Area = "" })',
             type: "GET",
             success: function (data) {
                 $("#repairCount").html(data);
