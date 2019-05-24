@@ -97,7 +97,7 @@ namespace EDIS.Areas.BMED.Controllers
 
         // POST: BMED/Keep/Create
         [HttpPost]
-        public ActionResult Create(KeepModel keep)
+        public IActionResult Create(KeepModel keep)
         {
             AppUserModel ur = _context.AppUsers.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
@@ -247,6 +247,7 @@ namespace EDIS.Areas.BMED.Controllers
             return did;
         }
 
+        // POST: BMED/Keep/Index
         [HttpPost]
         public IActionResult Index(QryKeepListData qdata)
         {
@@ -619,6 +620,7 @@ namespace EDIS.Areas.BMED.Controllers
             return View("List", kv);
         }
 
+        // GET: BMED/Keep/QueryAssets
         public JsonResult QueryAssets(string QueryStr)
         {
             /* Search assets by assetNo or Cname. */
@@ -636,6 +638,34 @@ namespace EDIS.Areas.BMED.Controllers
                 });
             }
             return Json(list);
+        }
+
+        public IActionResult Edit(string id, int page)
+        {
+            AppUserModel ur = _context.AppUsers.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            ViewData["Page"] = page;
+            if (!string.IsNullOrEmpty(id))
+            {
+                KeepModel keep = _context.BMEDKeeps.Find(id);
+                if (keep == null)
+                {
+                    return StatusCode(404);
+                }
+                if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedManager"))
+                {
+                    return View(keep);
+                }
+                KeepFlowModel rf = _context.BMEDKeepFlows.Where(f => f.DocId == id && f.Status == "?").FirstOrDefault();
+                if (rf != null)
+                {
+                    if (rf.UserId != ur.Id)
+                    {
+                        return RedirectToAction("Index", "Home", new { Area = "" });
+                    }
+                }
+                return View(keep);
+            }
+            return StatusCode(404);
         }
 
     }
