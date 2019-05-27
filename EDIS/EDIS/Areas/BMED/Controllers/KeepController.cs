@@ -640,6 +640,7 @@ namespace EDIS.Areas.BMED.Controllers
             return Json(list);
         }
 
+        // GET: BMED/Keep/Edit
         public IActionResult Edit(string id, int page)
         {
             AppUserModel ur = _context.AppUsers.Where(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
@@ -666,6 +667,16 @@ namespace EDIS.Areas.BMED.Controllers
                 return View(keep);
             }
             return StatusCode(404);
+        }
+
+        // GET: BMED/Keep/GetKeepCounts
+        public JsonResult GetKeepCounts()
+        {
+            /* Get user details. */
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            var keepCount = _context.BMEDKeepFlows.Where(f => f.Status == "?")
+                                                  .Where(f => f.UserId == ur.Id).Count();
+            return Json(keepCount);
         }
 
     }
