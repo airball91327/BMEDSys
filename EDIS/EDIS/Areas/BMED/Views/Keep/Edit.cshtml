@@ -67,37 +67,37 @@
 <div class="tab-content">
     <div id="keep" class="tab-pane fade in active">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepDetail2", new { id = Model.DocId })*@
+            @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
         </div>
     </div>
     <div id="keepdtl" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepDtlEdit", new { id = Model.DocId })*@
+            @await Component.InvokeAsync("BMEDKeepDtlEdit", new { id = Model.DocId })
         </div>
     </div>
     <div id="keeprecord" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepDtlEdit", new { id = Model.DocId })*@
+            @await Component.InvokeAsync("BMEDKeepRecordEdit", new { id = Model.DocId })
         </div>
     </div>
     <div id="keepemp" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepEmpEdit", new { DocId = Model.DocId })*@
+            @*@await Component.InvokeAsync("BMEDKeepEmpEdit", new { DocId = Model.DocId })*@
         </div>
     </div>
     <div id="keepcost" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepCostEdit", new { id = Model.DocId })*@
+            @*@await Component.InvokeAsync("BMEDKeepCostEdit", new { id = Model.DocId })*@
         </div>
     </div>
     <div id="flowlist" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepNextFlow", new { id = Model.DocId })*@
+            @*@await Component.InvokeAsync("BMEDKeepFlowList", new { id = Model.DocId })*@
         </div>
     </div>
     <div id="repairflow" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDRepNextFlow", new { id = Model.DocId })*@
+            @*@await Component.InvokeAsync("BMEDKeepNextFlow", new { id = Model.DocId })*@
         </div>
     </div>
 </div>

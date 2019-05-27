@@ -47,8 +47,10 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [DataType(DataType.Date)]
         [Display(Name = "完工日期")]
         public DateTime? EndDate { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "完帳日期")]
         public DateTime? CloseDate { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "關帳日期")]
         public DateTime? ShutDate { get; set; }
         [NotMapped]

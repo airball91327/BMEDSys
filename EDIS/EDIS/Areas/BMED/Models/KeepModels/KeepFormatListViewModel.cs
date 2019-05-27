@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EDIS.Areas.BMED.Models.KeepModels
 {
-    public class KeepFormatListViewModel
+    public class KeepFormatListVModel
     {
         [Display(Name = "表單編號")]
         public string Docid { get; set; }

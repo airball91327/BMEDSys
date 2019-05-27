@@ -27,10 +27,13 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Display(Name = "保養費用")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal? Cost { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "完工日期")]
         public Nullable<DateTime> EndDate { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "完帳日期")]
         public Nullable<DateTime> CloseDate { get; set; }
+        [DataType(DataType.Date)]
         [Display(Name = "關帳日期")]
         public Nullable<DateTime> ShutDate { get; set; }
     }
