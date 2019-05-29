@@ -22,7 +22,7 @@
             location.replace(homeHref);
         }
         else {
-            window.opener.location = "javascript:ReSubmit();";//This will call ReSubmit() function on parent window.
+            window.opener.location = "javascript:BMEDRepReSubmit();";//This will call ReSubmit() function on parent window.
             //opener.location.reload();//This will refresh parent window.
             window.close();
         }
