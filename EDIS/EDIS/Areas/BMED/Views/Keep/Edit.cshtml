@@ -82,12 +82,12 @@
     </div>
     <div id="keepemp" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDKeepEmpEdit", new { DocId = Model.DocId })*@
+            @await Component.InvokeAsync("BMEDKeepEmpEdit", new { DocId = Model.DocId })
         </div>
     </div>
     <div id="keepcost" class="tab-pane fade">
         <div>
-            @*@await Component.InvokeAsync("BMEDKeepCostEdit", new { id = Model.DocId })*@
+            @await Component.InvokeAsync("BMEDKeepCostEdit", new { id = Model.DocId })
         </div>
     </div>
     <div id="flowlist" class="tab-pane fade">
@@ -95,7 +95,7 @@
             @*@await Component.InvokeAsync("BMEDKeepFlowList", new { id = Model.DocId })*@
         </div>
     </div>
-    <div id="repairflow" class="tab-pane fade">
+    <div id="keepflow" class="tab-pane fade">
         <div>
             @*@await Component.InvokeAsync("BMEDKeepNextFlow", new { id = Model.DocId })*@
         </div>

@@ -569,7 +569,7 @@ namespace EDIS.Areas.BMED.Controllers
                     mailToUser = _context.AppUsers.Find(flow.UserId);
                     mail.to = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
                     //mail.cc = new System.Net.Mail.MailAddress("344027@cch.org.tw");
-                    mail.message.Subject = "工務智能請修系統[請修案]：設備名稱： " + repair.AssetName;
+                    mail.message.Subject = "工務智能請修系統[醫工請修案]：設備名稱： " + repair.AssetName;
                     body += "<p>表單編號：" + repair.DocId + "</p>";
                     body += "<p>申請日期：" + repair.ApplyDate.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + repair.UserName + "</p>";
