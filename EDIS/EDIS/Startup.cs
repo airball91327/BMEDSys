@@ -21,6 +21,7 @@ using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using EDIS.Fliters;
 
 namespace EDIS
 {
@@ -89,7 +90,11 @@ namespace EDIS
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddMvc();
+            //services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add<MyErrorHandlerFilter>();
+            });
 
         }
 
