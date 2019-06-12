@@ -21,11 +21,11 @@
             <div class="form-inline">
                 <label asp-for="StockType" class="control-title"></label>
                 <div class="radio">
-                        <label>
-                            <input type="radio" name="StockType" id="StockType1" value="0">
-                            庫存
-                        </label>
-                    </div>
+                    <label>
+                        <input type="radio" name="StockType" id="StockType1" value="0">
+                        庫存
+                    </label>
+                </div>
                 <div class="radio">
                     <label>
                         <input type="radio" name="StockType" id="StockType2" value="2" checked>
@@ -78,6 +78,10 @@
                     <input asp-for="Unite" class="form-control-s" />
                     <span asp-validation-for="Unite" class="text-danger"></span>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
                 <div class="form-group">
                     <label asp-for="Price" class="control-title"></label>
                     <input asp-for="Price" class="form-control-s" />

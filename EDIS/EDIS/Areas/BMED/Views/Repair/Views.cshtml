@@ -33,7 +33,7 @@
     {
         <li role="presentation"><a href="#repaircost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
     }
-    <li role="presentation"><a href="#repairflow" data-toggle="tab" style="padding-left:20px">簽核作業</a></li>
+    <li role="presentation"><a href="#repflowlist" data-toggle="tab" style="padding-left:20px">流程紀錄</a></li>
 </ul>
 <hr />
 <div class="tab-content">
@@ -57,7 +57,7 @@
             @await Component.InvokeAsync("BMEDRepCostList", new { id = Model.DocId, viewType = "Views" })
         </div>
     </div>
-    <div id="repairflow" class="tab-pane fade">
+    <div id="repflowlist" class="tab-pane fade">
         <div>
             @await Component.InvokeAsync("BMEDRepFlowList", new { id = Model.DocId })
         </div>

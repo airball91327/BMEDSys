@@ -57,8 +57,7 @@ namespace EDIS.Areas.BMED.Controllers
                     var CheckRepairCost = _context.BMEDKeepCosts.Where(c => c.DocId == assign.DocId).FirstOrDefault();
                     if (CheckRepairCost == null)
                     {
-                        string msg = "尚未輸入費用明細!!";
-                        return BadRequest(msg);
+                        throw new Exception("尚未輸入費用明細!!");
                     }
                 }
             }

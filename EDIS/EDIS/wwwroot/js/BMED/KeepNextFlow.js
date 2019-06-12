@@ -3,14 +3,6 @@
     $("#btnGO").attr("disabled", false);
     if (!data.success) {
         alert(data.error);
-
-        if (window.opener === null) {
-            location.replace(homeHref);
-        }
-        else {
-            window.opener.location = "javascript:BMEDKeepReSubmit();";//This will call ReSubmit() function on parent window.
-            window.close();
-        }
     }
     else {
         alert("送出成功!");

@@ -669,6 +669,17 @@ namespace EDIS.Areas.BMED.Controllers
             return StatusCode(404);
         }
 
+        // GET: BMED/Keep/Views
+        public IActionResult Views(string id)
+        {
+            KeepModel keep = _context.BMEDKeeps.Find(id);
+            if (keep == null)
+            {
+                return StatusCode(404);
+            }
+            return View(keep);
+        }
+
         // GET: BMED/Keep/GetKeepCounts
         public JsonResult GetKeepCounts()
         {
