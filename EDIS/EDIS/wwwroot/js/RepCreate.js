@@ -19,6 +19,7 @@ $(function () {
 
     SetEngsDropDown();
 
+    /* Prevent submit for pressing Enter. */
     $('input').keypress(function (e) {
         code = e.keyCode ? e.keyCode : e.which; // in case of browser compatibility
         if (code == 13) {
@@ -220,7 +221,7 @@ $(function () {
                 }
                 $("#AccDptName").val(data);  
             }
-        });    
+        });
         GetAccDptLocation(AccDptId);
     });
 

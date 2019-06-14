@@ -58,7 +58,7 @@ $(document).ready(function () {
         }
         else if ($(this).val() == 4 ) {
             $("#DealDes").attr("required", "required");
-            $("#EndDate").removeAttr("required");
+            $("#EndDate").attr("required", "required");
             $(".assetNoControl").show();
 
             if ($('input:radio[name="HasAssetNo"]:checked').val() == 'Y') {

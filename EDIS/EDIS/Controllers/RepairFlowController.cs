@@ -271,7 +271,7 @@ namespace EDIS.Controllers
                         string body = "";
                         AppUserModel u;
                         RepairModel repair = _context.Repairs.Find(assign.DocId);
-                        if (repair.Building != null)
+                        if(repair.Building != null)
                         {
                             repair.BuildingName = _context.Buildings.Where(b => b.BuildingId == Convert.ToInt32(repair.Building)).FirstOrDefault().BuildingName;
                             repair.FloorName = _context.Floors.Where(f => f.BuildingId == Convert.ToInt32(repair.Building) && f.FloorId == repair.Floor).FirstOrDefault().FloorName;
@@ -381,7 +381,7 @@ namespace EDIS.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -396,7 +396,7 @@ namespace EDIS.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -408,7 +408,7 @@ namespace EDIS.Controllers
                     if (!string.IsNullOrEmpty(u.DptId))
                     {
                         li = new SelectListItem();
-                        li.Text = u.FullName;
+                        li.Text = u.FullName + "(" + u.UserName + ")";
                         li.Value = u.Id.ToString();
                         list.Add(li);
                     }
@@ -422,7 +422,7 @@ namespace EDIS.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -437,7 +437,7 @@ namespace EDIS.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -467,7 +467,7 @@ namespace EDIS.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -494,9 +494,7 @@ namespace EDIS.Controllers
                 case "驗收人":
                     if (_context.RepairEmps.Where(emp => emp.DocId == docid).Count() <= 0)
                     {
-                        //throw new Exception("沒有維修工程師紀錄!!");
-                        string msg = "沒有維修工程師紀錄!!";
-                        return BadRequest(msg);
+                        throw new Exception("沒有維修工程師紀錄!!");
                     }
                     if (r != null)
                     {
@@ -516,7 +514,7 @@ namespace EDIS.Controllers
                         var checker = _context.AppUsers.Find(r.CheckerId);
                         list = new List<SelectListItem>();
                         li = new SelectListItem();
-                        li.Text = checker.FullName;
+                        li.Text = checker.FullName + "(" + checker.UserName + ")";
                         li.Value = checker.Id.ToString();
                         list.Add(li);
 
@@ -526,7 +524,7 @@ namespace EDIS.Controllers
                             if(l.Id != r.UserId)
                             {
                                 li = new SelectListItem();
-                                li.Text = l.FullName;
+                                li.Text = l.FullName + "(" + l.UserName + ")";
                                 li.Value = l.Id.ToString();
                                 list.Add(li);
                             }
@@ -545,7 +543,7 @@ namespace EDIS.Controllers
                     /* 負責工程師 */
                     var engTemp = _context.AppUsers.Find(r.EngId);
                     li = new SelectListItem();
-                    li.Text = engTemp.FullName;
+                    li.Text = engTemp.FullName + "(" + engTemp.UserName + ")";
                     li.Value = engTemp.Id.ToString();
                     list.Add(li);
                     /* 其他工程師 */
@@ -555,7 +553,7 @@ namespace EDIS.Controllers
                         if (u != null && l != repEngId)
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -567,7 +565,7 @@ namespace EDIS.Controllers
                     if (!string.IsNullOrEmpty(u.DptId))
                     {
                         li = new SelectListItem();
-                        li.Text = u.FullName;
+                        li.Text = u.FullName + "(" + u.UserName + ")";
                         li.Value = u.Id.ToString();
                         list.Add(li);
                     }
@@ -578,7 +576,7 @@ namespace EDIS.Controllers
                     if (!string.IsNullOrEmpty(u.DptId))
                     {
                         li = new SelectListItem();
-                        li.Text = u.FullName;
+                        li.Text = u.FullName + "(" + u.UserName + ")";
                         li.Value = u.Id.ToString();
                         list.Add(li);
                     }

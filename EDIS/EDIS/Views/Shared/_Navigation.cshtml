@@ -83,6 +83,15 @@
                     </li>
                 }
             }
+            @{
+                if (UserManager.IsInRole(User, "RepMgr") == true || UserManager.IsInRole(User, "RepToDo") == true ||
+                    UserManager.IsInRole(User, "RepDirector") == true || UserManager.IsInRole(User, "Admin") == true)
+                {
+                    <li class="">
+                        <a href="@Url.Action("Index", "RepairReport", new { Area = "" })"><span class="nav-label">報表輸出</span></a>
+                    </li>
+                }
+            }
             @*<li class="">
             <a href="#"><span class="nav-label">工程設施</span><span class="fa arrow"></span></a>
             <ul class="nav nav-second-level collapse">
@@ -140,6 +149,14 @@
                         <ul class="nav nav-second-level collapse">
                             <li>
                                 <a href="@Url.Action("Index", "EngsInDepts", new { Area = "Admin" })">搜尋、編輯</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="">
+                        <a href="#"><span class="nav-label">請修單維護</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li>
+                                <a href="@Url.Action("EditRepFlow", "Repair", new { Area = "Admin" })">轉單功能</a>
                             </li>
                         </ul>
                     </li>
