@@ -690,5 +690,90 @@ namespace EDIS.Areas.BMED.Controllers
             return Json(keepCount);
         }
 
+        // GET: BMED/Keep/PrintKeepDoc/5
+        public IActionResult PrintKeepDoc(string DocId, int printType)
+        {
+            /* Get all print details according to the DocId. */
+            KeepModel keep = _context.BMEDKeeps.Find(DocId);
+            KeepDtlModel dtl = _context.BMEDKeepDtls.Find(DocId);
+            KeepEmpModel emp = _context.BMEDKeepEmps.Where(ep => ep.DocId == DocId).FirstOrDefault();
+
+            /* Get the last flow. */
+            string[] s = new string[] { "?", "2" };
+            KeepFlowModel flow = _context.BMEDKeepFlows.Where(f => f.DocId == DocId)
+                                                       .Where(f => s.Contains(f.Status)).FirstOrDefault();
+            KeepPrintVModel vm = new KeepPrintVModel();
+            if (keep == null)
+            {
+                return StatusCode(404);
+            }
+            else
+            {
+                vm.Docid = DocId;
+                vm.UserId = keep.UserId;
+                vm.UserName = keep.UserName;
+                vm.UserAccount = _context.AppUsers.Find(keep.UserId).UserName;
+                vm.AccDpt = keep.AccDpt;
+                vm.SentDate = keep.SentDate;
+                vm.AssetNo = keep.AssetNo;
+                vm.AssetNam = keep.AssetName;
+                vm.Company = _context.Departments.Find(keep.DptId).Name_C;
+                vm.Amt = 1;
+                vm.Cycle = keep.Cycle;
+                vm.Contact = keep.Ext;
+                vm.PlaceLoc = keep.PlaceLoc;
+
+                if (dtl != null)
+                {
+                    vm.Result = dtl.Result == null ? "" : _context.BMEDKeepResults.Find(dtl.Result).Title;
+                    vm.Memo = dtl.Memo;
+                    vm.EndDate = dtl.EndDate;
+                }
+                //
+                vm.AccDptNam = _context.Departments.Find(keep.AccDpt).Name_C;
+                vm.Hour = dtl.Hours == null ? 0 : dtl.Hours.Value;
+                vm.InOut = dtl.InOut == "0" ? "自行" :
+                        dtl.InOut == "1" ? "委外" :
+                        dtl.InOut == "2" ? "租賃" :
+                        dtl.InOut == "3" ? "保固" : "";
+                vm.EngName = emp == null ? "" : _context.AppUsers.Find(emp.UserId).FullName;
+
+                var engMgr = _context.BMEDKeepFlows.Where(r => r.DocId == DocId)
+                                                   .Where(r => r.Cls.Contains("醫工主管")).ToList();
+                if (engMgr.Count() != 0)
+                {
+                    engMgr = engMgr.GroupBy(e => e.UserId).Select(group => group.FirstOrDefault()).ToList();
+                    foreach (var item in engMgr)
+                    {
+                        vm.EngMgr += item == null ? "" : _context.AppUsers.Find(item.UserId).FullName + "  ";
+                    }
+                }
+
+                var engDirector = _context.BMEDKeepFlows.Where(r => r.DocId == DocId)
+                                                        .Where(r => r.Cls.Contains("醫工主任")).LastOrDefault();
+                vm.EngDirector = engDirector == null ? "" : _context.AppUsers.Find(engDirector.UserId).FullName;
+
+                if (flow != null)
+                {
+                    if (flow.Status == "2")
+                    {
+                        vm.CloseDate = flow.Rtt;
+                        AppUserModel u = _context.AppUsers.Find(flow.UserId);
+                        if (u != null)
+                        {
+                            vm.DelivEmp = u.UserName;
+                            vm.DelivEmpName = u.FullName;
+                        }
+                    }
+                }
+            }
+            //if (printType != 0)
+            //{
+            //    return View("PrintRepairDoc2", vm);
+            //}
+            return View(vm);
+        }
+
+
     }
 }

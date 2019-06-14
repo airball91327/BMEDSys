@@ -152,6 +152,10 @@ namespace EDIS.Areas.BMED.Controllers
             }
 
             TempData["SendMsg"] = "上傳成功";
+            if(attainFile.DocType == "2")
+            {
+                return RedirectToAction("Edit", "Keep", new { area = "BMED", id = attainFile.DocId });
+            }
             return RedirectToAction("Edit", "Repair", new { area = "BMED", id = attainFile.DocId });
 
             //return new JsonResult(attainFile)

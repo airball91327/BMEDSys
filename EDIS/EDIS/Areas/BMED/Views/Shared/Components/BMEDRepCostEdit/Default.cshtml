@@ -20,24 +20,24 @@
         <div class="row">
             <div class="form-inline">
                 <label asp-for="StockType" class="control-title"></label>
-                @*<div class="radio">
+                <div class="radio">
                     <label>
                         <input type="radio" name="StockType" id="StockType1" value="0">
                         庫存
                     </label>
-                </div>*@
+                </div>
                 <div class="radio">
                     <label>
                         <input type="radio" name="StockType" id="StockType2" value="2" checked>
                         發票
                     </label>
                 </div>
-                <div class="radio">
+                @*<div class="radio">
                     <label>
                         <input type="radio" name="StockType" id="StockType3" value="3">
                         簽單
                     </label>
-                </div>
+                </div>*@
             </div>
         </div>
         <div class="row">
@@ -57,7 +57,7 @@
                 <div class="form-group">
                     <label asp-for="PartName" class="control-title"></label>
                     <input asp-for="PartName" class="form-control" />
-                    @*<input type="button" value="選擇" class="btn btn-default" data-toggle="modal" data-target="#modalSTOCK" />*@
+                    <input type="button" value="選擇庫存品項" class="btn btn-default" data-toggle="modal" data-target="#modalSTOCK" id="btnQtyStock" />
                     <span style="color: #ff9c00;">*</span>
                     <span asp-validation-for="PartName" class="text-danger"></span>
                 </div>
@@ -151,7 +151,7 @@
 </div>
 
 <!-- 庫存品 Modal -->
-@*<div id="modalSTOCK" class="modal fade" role="dialog">
+<div id="modalSTOCK" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content" style="background-color: #1D3C4C">
             <div class="modal-header">
@@ -159,14 +159,14 @@
                 <h4 class="modal-title">選擇庫存品</h4>
             </div>
             <div class="modal-body">
-                @await Component.InvokeAsync("DeptStockIndex")
+                @await Component.InvokeAsync("BMEDDeptStockIndex")
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">關閉</button>
             </div>
         </div>
     </div>
-</div>*@
+</div>
 
 <!-- 廠商 Modal -->
 <div id="modalVENDOR" class="modal fade" role="dialog">

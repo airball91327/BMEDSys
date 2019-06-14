@@ -35,6 +35,9 @@
     <Content Update="Areas\Admin\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Keep\PrintKeepDoc.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\RepairSearch\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

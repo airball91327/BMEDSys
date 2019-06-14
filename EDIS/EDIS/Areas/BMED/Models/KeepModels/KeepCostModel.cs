@@ -44,7 +44,8 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Display(Name = "廠商名稱")]
         public string VendorName { get; set; }
         [Display(Name = "日期")]
-        public Nullable<DateTime> AccountDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime? AccountDate { get; set; }
         [Display(Name = "零用金支付")]
         public string IsPetty { get; set; }
         [Display(Name = "簽單號碼")]

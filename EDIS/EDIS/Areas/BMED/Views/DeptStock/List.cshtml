@@ -12,10 +12,12 @@
     function setStockValue(clickedBtn) {
         var $row = $(clickedBtn).parent()     // Moves up from <button> to <td>
                                 .parent();    // Moves up from <td> to <tr>
+        var partNo = $row.find("td:nth-child(1)").text().trim();
         var partName = $row.find("td:nth-child(2)").text().trim(); // Finds the 2nd <td> element
         var standard = $row.find("td:nth-child(7)").text().trim();
         var unite = $row.find("td:nth-child(3)").text().trim();
         var price = $row.find("td:nth-child(4)").text().trim();
+        $("#PartNo").val(partNo);
         $("#PartName").val(partName);
         $("#Standard").val(standard);
         $("#Unite").val(unite);
