@@ -379,13 +379,13 @@ namespace EDIS.Areas.BMED.Controllers
                         foreach (AppUserModel l in ul)
                         {
                             /* 申請人以外的成員 */
-                            if (l.Id != k.UserId)
-                            {
+                            //if (l.Id != k.UserId)
+                            //{
                                 li = new SelectListItem();
                                 li.Text = l.FullName;
                                 li.Value = l.Id.ToString();
                                 list.Add(li);
-                            }
+                            //}
                         }
                     }
                     break;
