@@ -413,19 +413,19 @@ namespace EDIS.Areas.BMED.Controllers
                     {
                         if (userManager.IsInRole(User, "Manager"))
                         {
-                            kf = kf.Join(_context.BMEDRepairs.Where(r => r.AccDpt == ur.DptId),
+                            kf = kf.Join(_context.BMEDKeeps.Where(r => r.AccDpt == ur.DptId),
                             f => f.DocId, r => r.DocId, (f, r) => f).ToList();
                         }
                         /* If no other search values, search the docs belong the login engineer. */
                         if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == false)
                         {
-                            kf = kf.Join(_context.BMEDRepairFlows.Where(f2 => f2.UserId == ur.Id),
+                            kf = kf.Join(_context.BMEDKeepFlows.Where(f2 => f2.UserId == ur.Id),
                             f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
                         }
                     }
                     else /* If normal user, search the docs belong himself. */
                     {
-                        kf = kf.Join(_context.BMEDRepairFlows.Where(f2 => f2.UserId == ur.Id),
+                        kf = kf.Join(_context.BMEDKeepFlows.Where(f2 => f2.UserId == ur.Id),
                         f => f.DocId, f2 => f2.DocId, (f, f2) => f).ToList();
                     }
                     //
