@@ -774,6 +774,38 @@ namespace EDIS.Areas.BMED.Controllers
             return View(vm);
         }
 
+        // GET: BMED/Keep/Delete/5
+        public IActionResult Delete(string id)
+        {
+            // Find document.
+            KeepModel keep = _context.BMEDKeeps.Find(id);
+            keep.DptName = _context.Departments.Find(keep.DptId).Name_C;
+            keep.AccDptName = _context.Departments.Find(keep.AccDpt).Name_C;
+            keep.UserAccount = _context.AppUsers.Find(keep.UserId).UserName;
+
+            if (keep == null)
+            {
+                return StatusCode(404);
+            }
+            return View(keep);
+        }
+
+        // POST: BMED/Keep/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(string id)
+        {
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            KeepFlowModel keepflow = _context.BMEDKeepFlows.Where(f => f.DocId == id && f.Status == "?")
+                                                           .FirstOrDefault();
+            keepflow.Status = "3";
+            keepflow.Rtp = ur.Id;
+            keepflow.Rtt = DateTime.Now;
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home", new { Area = "" });
+        }
 
     }
 }

@@ -24,6 +24,8 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "所屬部門")]
         public string DptId { get; set; }
+        [NotMapped]
+        public string DptName { get; set; }
         [Display(Name = "所屬單位")]
         public string Company { get; set; }
         [NotMapped]
