@@ -402,7 +402,9 @@ namespace EDIS.Areas.BMED.Controllers
                             FlowUid = j.flow.UserId,
                             FlowCls = j.flow.Cls,
                             Src = j.keep.Src,
-                            SentDate = j.keep.SentDate
+                            SentDate = j.keep.SentDate,
+                            EndDate = j.keepdtl.EndDate,
+                            keepdata = j.keep
                         }));
                         break;
                 case "已結案":
@@ -489,7 +491,10 @@ namespace EDIS.Areas.BMED.Controllers
                           FlowUid = j.flow.UserId,
                           FlowCls = j.flow.Cls,
                           Src = j.keep.Src,
-                          SentDate = j.keep.SentDate
+                          SentDate = j.keep.SentDate,
+                          EndDate = j.keepdtl.EndDate,
+                          CloseDate = j.keepdtl.CloseDate.Value.Date,
+                          keepdata = j.keep
                       }));
                       break;
                 case "待簽核":
@@ -571,7 +576,9 @@ namespace EDIS.Areas.BMED.Controllers
                         FlowUid = j.flow.UserId,
                         FlowCls = j.flow.Cls,
                         Src = j.keep.Src,
-                        SentDate = j.keep.SentDate
+                        SentDate = j.keep.SentDate,
+                        EndDate = j.keepdtl.EndDate,
+                        keepdata = j.keep
                     }));
                     break;
             };

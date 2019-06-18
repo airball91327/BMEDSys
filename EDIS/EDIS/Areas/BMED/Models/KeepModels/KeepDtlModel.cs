@@ -29,12 +29,12 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public decimal? Cost { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "完工日期")]
-        public Nullable<DateTime> EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "完帳日期")]
-        public Nullable<DateTime> CloseDate { get; set; }
+        public DateTime? CloseDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "關帳日期")]
-        public Nullable<DateTime> ShutDate { get; set; }
+        public DateTime? ShutDate { get; set; }
     }
 }
