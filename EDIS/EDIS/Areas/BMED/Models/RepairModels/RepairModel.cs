@@ -76,6 +76,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required]
         [Display(Name = "驗收人代號")]
         public int CheckerId { get; set; }
+        [NotMapped]
         [Display(Name = "結案驗收人")]
         public string CheckerName { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]

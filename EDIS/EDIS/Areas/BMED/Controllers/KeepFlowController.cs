@@ -221,36 +221,20 @@ namespace EDIS.Areas.BMED.Controllers
 
             switch (cls)
             {
-                //case "維修工程師":
-                //    roleManager.GetUsersInRole("Engineer").ToList()
-                //        .ForEach(x =>
-                //        {
-                //            u = _context.AppUsers.Where(ur => ur.UserName == x).FirstOrDefault();
-                //            if (vendor != null && u != null)
-                //            {
-                //                if (u.VendorId != null)
-                //                {
-                //                    if (u.VendorId.ToString() == vendor)
-                //                    {
-                //                        li = new SelectListItem();
-                //                        li.Text = u.FullName;
-                //                        li.Value = u.Id.ToString();
-                //                        list.Add(li);
-                //                    }
-                //                }
-                //            }
-                //            else
-                //            {
-                //                if (u != null)
-                //                {
-                //                    li = new SelectListItem();
-                //                    li.Text = u.FullName;
-                //                    li.Value = u.Id.ToString();
-                //                    list.Add(li);
-                //                }
-                //            }
-                //        });
-                //    break;
+                case "維修工程師":
+                    roleManager.GetUsersInRole("Engineer").ToList()
+                        .ForEach(x =>
+                        {
+                            u = _context.AppUsers.Where(ur => ur.UserName == x).FirstOrDefault();
+                            if (u != null)
+                            {
+                                li = new SelectListItem();
+                                li.Text = u.FullName;
+                                li.Value = u.Id.ToString();
+                                list.Add(li);
+                            }
+                        });
+                    break;
                 case "醫工主管":
                     s = roleManager.GetUsersInRole("MedMgr").ToList();
                     list = new List<SelectListItem>();
@@ -369,23 +353,23 @@ namespace EDIS.Areas.BMED.Controllers
                             }
                         }
                         /* 驗收人 */
-                        //var checker = _context.AppUsers.Find(k.CheckerId);
+                        var checker = _context.AppUsers.Find(k.CheckerId);
                         list = new List<SelectListItem>();
-                        //li = new SelectListItem();
-                        //li.Text = checker.FullName;
-                        //li.Value = checker.Id.ToString();
-                        //list.Add(li);
+                        li = new SelectListItem();
+                        li.Text = checker.FullName;
+                        li.Value = checker.Id.ToString();
+                        list.Add(li);
 
                         foreach (AppUserModel l in ul)
                         {
                             /* 申請人以外的成員 */
-                            //if (l.Id != k.UserId)
-                            //{
+                            if (l.Id != k.UserId)
+                            {
                                 li = new SelectListItem();
                                 li.Text = l.FullName;
                                 li.Value = l.Id.ToString();
                                 list.Add(li);
-                            //}
+                            }
                         }
                     }
                     break;

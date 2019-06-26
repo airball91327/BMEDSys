@@ -39,6 +39,7 @@ namespace EDIS.Areas.BMED.Components.KeepFlow
             listItem.Add(new SelectListItem { Text = "申請人", Value = "申請人" });
             listItem.Add(new SelectListItem { Text = "驗收人", Value = "驗收人" });
             listItem.Add(new SelectListItem { Text = "單位主管", Value = "單位主管" });
+            listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
             listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
             listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
             listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });

@@ -138,6 +138,19 @@
             </div>
         </div>
         <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="CheckerId" class="control-title"></label>
+                    <input type="text" placeholder="輸入code或關鍵字查詢" class="form-control" id="CheckerQry" />
+                    <button type="button" class="btn btn-default" id="CheckerQryBtn">查詢</button>
+                    <select asp-for="CheckerId" asp-items="@ViewData["DptMembers"] as SelectList" class="form-control" id="CheckerId">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="CheckerId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
             <div style="padding-left: 115px">
                 <input type="submit" value="確定送出" class="btn btn-default" />
             </div>

@@ -45,7 +45,8 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "單位主管", Value = "單位主管" });
                 listItem.Add(new SelectListItem { Text = "單位主任", Value = "單位主任" });
                 listItem.Add(new SelectListItem { Text = "單位副院長", Value = "單位副院長" });
-                listItem.Add(new SelectListItem { Text = "醫工工程師", Value = "醫工工程師" });
+                listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
+                listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
                 listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
             }
@@ -54,7 +55,8 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "申請人", Value = "申請人" });
                 listItem.Add(new SelectListItem { Text = "驗收人", Value = "驗收人" });
                 listItem.Add(new SelectListItem { Text = "單位主管", Value = "單位主管" });
-                listItem.Add(new SelectListItem { Text = "醫工工程師", Value = "醫工工程師" });
+                listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
+                listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
                 listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
                 listItem.Add(new SelectListItem { Text = "醫工經辦", Value = "醫工經辦" });
@@ -89,10 +91,7 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
             listItem3.Add(new SelectListItem { Text = "", Value = "" });
             ViewData["FlowUid"] = new SelectList(listItem3, "Value", "Text", "");
 
-            assign.Hint = "單位請修→工務工程師→工務主管(若有費用)→單位驗收人→結案。";
-            ViewData["Hint2"] = "單位請修→單位主管(護理長)→單位主任→工務工程師 [若費用5000元以上：單位主管(護理長)→" +
-                "單位直屬副院長→工務工程師] →工務主管→工務工程師→工務主管→單位驗收人→結案";
-            ViewData["Hint3"] = "單位請修→工務工程師→工務主管→工務主任→列管/固資財產負責人(有財產編號時)→單位驗收人→結案";
+            assign.Hint = "使用者key單→設備工程師維護(若無費用user驗收結案,有費用夾帶報價資料給設備主管)→單位主管(相關單位主管核決)→設備工程師維護→使用者驗收結案";
 
             /* 於流程頁面顯示請修類型、及處理狀態*/
             string hintRepType = repair.RepType;

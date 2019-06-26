@@ -80,6 +80,19 @@ namespace EDIS.Areas.BMED.Controllers
                     });
                 });
             ViewData["AccDpt"] = AccDpt;
+
+            /* 擷取該使用者單位底下所有人員 */
+            var dptUsers = _context.AppUsers.Where(a => a.DptId == ur.DptId).ToList();
+            List<SelectListItem> dptMemberList = new List<SelectListItem>();
+            foreach (var item in dptUsers)
+            {
+                dptMemberList.Add(new SelectListItem
+                {
+                    Text = item.FullName,
+                    Value = item.Id.ToString()
+                });
+            }
+            ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
             //
             List<AssetModel> alist = null;
             if (ur.DptId != null)
@@ -125,6 +138,7 @@ namespace EDIS.Areas.BMED.Controllers
                     AssetModel at = _context.BMEDAssets.Find(keep.AssetNo);
                     //
                     keep.AssetName = _context.BMEDAssets.Find(keep.AssetNo).Cname;
+                    keep.EngId = kp.KeepEngId;
                     //keep.AccDpt = at.AccDpt;
                     keep.SentDate = DateTime.Now;
                     keep.Cycle = kp == null ? 0 : kp.Cycle.Value;
