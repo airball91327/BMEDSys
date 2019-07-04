@@ -19,16 +19,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Hint, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10" style="color: #00ff21; padding-top: 7px;">
-                請修流程：<br />
                 @Html.DisplayFor(model => model.Hint)
-                <div>
-                    增設流程：<br />
-                    @ViewData["Hint2"]
-                </div>
-                <div>
-                    列管/固資設備報廢流程：<br />
-                    @ViewData["Hint3"]
-                </div>
             </div>
         </div>
 

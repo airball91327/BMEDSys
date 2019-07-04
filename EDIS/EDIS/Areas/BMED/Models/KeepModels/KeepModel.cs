@@ -63,7 +63,7 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Display(Name = "驗收人代號")]
         public int CheckerId { get; set; }
         [NotMapped]
-        [Display(Name = "驗收人")]
+        [Display(Name = "結案驗收人")]
         public string CheckerName { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
