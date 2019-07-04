@@ -82,18 +82,6 @@ namespace EDIS.Areas.BMED.Controllers
                 });
             ViewData["AccDpt"] = AccDpt;
 
-            /* 擷取該使用者單位底下所有人員 */
-            var dptUsers = _context.AppUsers.Where(a => a.DptId == ur.DptId).ToList();
-            List<SelectListItem> dptMemberList = new List<SelectListItem>();
-            foreach (var item in dptUsers)
-            {
-                dptMemberList.Add(new SelectListItem
-                {
-                    Text = item.FullName,
-                    Value = item.Id.ToString()
-                });
-            }
-            ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
             //
             List<AssetModel> alist = null;
             if (ur.DptId != null)
