@@ -8,7 +8,7 @@
 
 <h2>新增</h2>
 
-<h4>保養單</h4>
+<h4>保養單 - 醫療儀器</h4>
 <hr />
 
 <div>
@@ -134,6 +134,19 @@
                     <label asp-for="PlaceLoc" class="control-title"></label>
                     <input asp-for="PlaceLoc" class="form-control" />
                     <span asp-validation-for="PlaceLoc" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="CheckerId" class="control-title"></label>
+                    <input type="text" placeholder="輸入code或關鍵字查詢" class="form-control" id="CheckerQry" />
+                    <button type="button" class="btn btn-default" id="CheckerQryBtn">查詢</button>
+                    <select asp-for="CheckerId" asp-items="@ViewData["DptMembers"] as SelectList" class="form-control" id="CheckerId">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="CheckerId" class="text-danger"></span>
                 </div>
             </div>
         </div>

@@ -3,6 +3,7 @@
 @inject CustomUserManager UserManager
 @inject CustomSignInManager SignInManager
 
+
 <nav class="navbar navbar-inverse navbar-fixed-top mobileNavBar">
     <div class="container">
         <div class="navbar-header">
@@ -30,8 +31,8 @@
 <nav class="navbar-default navbar-static-side" role="navigation" style="padding-top:0px; width:11%">
     <img src="~/images/logo.png" style="width:97%" />
     @*<div class="navbar-brand" style="padding-left:0px; ">
-        @Html.Partial("_LoginPartial")
-    </div>*@
+            @Html.Partial("_LoginPartial")
+        </div>*@
     <div class="sidebar-collapse">
         <ul class="nav" id="side-menu">
             <li class="nav-header">
@@ -54,129 +55,180 @@
                 <a href="@Url.Action("Index", "Home", new { Area = "" })"><span class="nav-label">個人首頁</span></a>
             </li>
             <li class="active">
-                <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
+                <a href="#"><span class="nav-label">工程設施</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse in">
-                    <li>
-                        <a href="@Url.Action("Create", "Repair", new { Area = "" })">請修單</a>
+                    <li class="active">
+                        <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse in">
+                            <li>
+                                <a href="@Url.Action("Create", "Repair", new { Area = "" })">請修單</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li>
-                        <a href="@Url.Action("Create", "Repair", new { Area = "BMED" })">醫工請修單</a>
+                    <li class="">
+                        <a href="@Url.Action("Index", "RepairSearch", new { Area = "" })"><span class="nav-label">全院請修單查詢</span></a>
                     </li>
-                    <li>
-                        <a href="@Url.Action("Create", "Keep", new { Area = "BMED" })">醫工保養單</a>
+                    <li class="">
+                        <a href="~/Files/Manual/UserManual.pptx" target="_blank"><span class="nav-label">說明手冊下載</span></a>
                     </li>
+                    @{
+                        if (UserManager.IsInRole(User, "RepEngineer") == true ||
+                            UserManager.IsInRole(User, "Admin") == true)
+                        {
+                            <li class="">
+                                <a href="@Url.Action("Index", "EngSubStaff", new { Area = "" })"><span class="nav-label">設定代理人</span></a>
+                            </li>
+                        }
+                    }
+                    @{
+                        if (UserManager.IsInRole(User, "RepMgr") == true || UserManager.IsInRole(User, "RepToDo") == true ||
+                            UserManager.IsInRole(User, "RepDirector") == true || UserManager.IsInRole(User, "Admin") == true)
+                        {
+                            <li class="">
+                                <a href="@Url.Action("Index", "RepairReport", new { Area = "" })"><span class="nav-label">報表輸出</span></a>
+                            </li>
+                        }
+                    }
+                    @{
+                        if (UserManager.IsInRole(User, "Admin"))
+                        {
+                            <li class="">
+                                <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level collapse">
 
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">建築維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Building", new { Area = "Admin" })">建築一覽</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("Create", "Building", new { Area = "Admin" })">建築新增</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">樓層維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Floor", new { Area = "Admin" })">樓層一覽</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">地點維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Place", new { Area = "Admin" })">地點一覽</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label" style="">外部帳號維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "ExternalUser", new { Area = "Admin" })">帳號一覽</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("Create", "ExternalUser", new { Area = "Admin" })">新增帳號</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">各區負責人維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "EngsInDepts", new { Area = "Admin" })">搜尋、編輯</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">請修單維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("EditRepFlow", "Repair", new { Area = "Admin" })">轉單功能</a>
+                                            </li>
+                                            <li>
+                                                <a href="@Url.Action("Index", "Repair", new { Area = "Admin" })">請修單編輯</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">財務</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Ticket", new { Area = "Admin" })">發票作業</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            @*<li class="">
+                                <a href="#"><span class="nav-label">庫存維護</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+                                    <li>
+                                        <a href="@Url.Action("Index", "DeptStockClass", new { Area = "Admin" })">庫存類別維護</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "DeptStockItem", new { Area = "Admin" })">庫存品項維護</a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Index", "DeptStock", new { Area = "Admin" })">庫存一覽</a>
+                                    </li>
+                                </ul>
+                            </li>*@
+                        }
+
+                        if (UserManager.IsInRole(User, "RepToDo"))
+                        {
+                            <li class="">
+                                <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level collapse">
+
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">請修單維護</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-third-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("EditRepFlow", "Repair", new { Area = "Admin" })">轉單功能</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">財務</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-second-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Ticket", new { Area = "Admin" })">發票作業</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </li>
+                        }
+
+                    }
                 </ul>
             </li>
-            <li class="">
-                <a href="@Url.Action("Index", "RepairSearch", new { Area = "" })"><span class="nav-label">全院請修單查詢</span></a>
-            </li>
-            <li class="">
-                <a href="~/Files/Manual/UserManual.pptx" target="_blank"><span class="nav-label">說明手冊下載</span></a>
-            </li>
-            @{
-                if (UserManager.IsInRole(User, "RepEngineer") == true ||
-                    UserManager.IsInRole(User, "Admin") == true)
-                {
-                    <li class="">
-                        <a href="@Url.Action("Index", "EngSubStaff", new { Area = "" })"><span class="nav-label">設定代理人</span></a>
-                    </li>
-                }
-            }
-            @{
-                if (UserManager.IsInRole(User, "RepMgr") == true || UserManager.IsInRole(User, "RepToDo") == true ||
-                    UserManager.IsInRole(User, "RepDirector") == true || UserManager.IsInRole(User, "Admin") == true)
-                {
-                    <li class="">
-                        <a href="@Url.Action("Index", "RepairReport", new { Area = "" })"><span class="nav-label">報表輸出</span></a>
-                    </li>
-                }
-            }
-            @*<li class="">
-            <a href="#"><span class="nav-label">工程設施</span><span class="fa arrow"></span></a>
-            <ul class="nav nav-second-level collapse">
-                <li>
-                    <a href="#">設備管理</a>
-                </li>
-                <li>
-                    <a href="#">設施管理</a>
-                </li>
-            </ul>
-        </li>*@
-            @{
-                if (UserManager.IsInRole(User, "Admin"))
-                {
-                    <li class="">
-                        <a href="#"><span class="nav-label">建築維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("Index", "Building", new { Area = "Admin" })">建築一覽</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Create", "Building", new { Area = "Admin" })">建築新增</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#"><span class="nav-label">樓層維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("Index", "Floor", new { Area = "Admin" })">樓層一覽</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#"><span class="nav-label">地點維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("Index", "Place", new { Area = "Admin" })">地點一覽</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#"><span class="nav-label">外部帳號維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("Index", "ExternalUser", new { Area = "Admin" })">帳號一覽</a>
-                            </li>
-                            <li>
-                                <a href="@Url.Action("Create", "ExternalUser", new { Area = "Admin" })">新增帳號</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#"><span class="nav-label">各區負責人維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("Index", "EngsInDepts", new { Area = "Admin" })">搜尋、編輯</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="">
-                        <a href="#"><span class="nav-label">請修單維護</span><span class="fa arrow"></span></a>
-                        <ul class="nav nav-second-level collapse">
-                            <li>
-                                <a href="@Url.Action("EditRepFlow", "Repair", new { Area = "Admin" })">轉單功能</a>
-                            </li>
-                        </ul>
-                    </li>
-                    @*<li class="">
-                    <a href="#"><span class="nav-label">庫存維護</span><span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level collapse">
-                        <li>
-                            <a href="@Url.Action("Index", "DeptStockClass", new { Area = "Admin" })">庫存類別維護</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Index", "DeptStockItem", new { Area = "Admin" })">庫存品項維護</a>
-                        </li>
-                        <li>
-                            <a href="@Url.Action("Index", "DeptStock", new { Area = "Admin" })">庫存一覽</a>
-                        </li>
-                    </ul>
-                </li>*@
 
-                }
-            }
+            <li class="">
+                <a href="#"><span class="nav-label">醫療儀器</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse">
+                    <li class="">
+                        <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li>
+                                <a href="@Url.Action("Create", "Repair", new { Area = "BMED" })">請修單</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Create", "Keep", new { Area = "BMED" })">保養單</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 </nav>

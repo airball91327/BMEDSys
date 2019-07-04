@@ -63,6 +63,7 @@ namespace EDIS.Areas.BMED.Controllers
             r.AccDpt = d == null ? "" : d.DptId;
             r.AccDptName = d == null ? "" : d.Name_C;
             r.Ext = ur.Ext == null ? "" : ur.Ext;
+            r.CheckerId = ur.Id;
             //
             _context.BMEDKeeps.Add(r);
             _context.SaveChanges();
@@ -91,6 +92,19 @@ namespace EDIS.Areas.BMED.Controllers
                 alist = _context.BMEDAssets.Where(at => at.AccDpt == s)
                                            .Where(at => at.DisposeKind != "報廢").ToList();
             }
+
+            /* 擷取該使用者單位底下所有人員 */
+            var dptUsers = _context.AppUsers.Where(a => a.DptId == ur.DptId).ToList();
+            List<SelectListItem> dptMemberList = new List<SelectListItem>();
+            foreach (var item in dptUsers)
+            {
+                dptMemberList.Add(new SelectListItem
+                {
+                    Text = item.FullName,
+                    Value = item.Id.ToString()
+                });
+            }
+            ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
 
             return View(r);
         }
@@ -743,7 +757,19 @@ namespace EDIS.Areas.BMED.Controllers
                         dtl.InOut == "1" ? "委外" :
                         dtl.InOut == "2" ? "租賃" :
                         dtl.InOut == "3" ? "保固" : "";
-                vm.EngName = emp == null ? "" : _context.AppUsers.Find(emp.UserId).FullName;
+                //vm.EngName = emp == null ? "" : _context.AppUsers.Find(emp.UserId).FullName;
+                var lastFlowEng = _context.BMEDKeepFlows.Where(rf => rf.DocId == DocId)
+                                                        .Where(rf => rf.Cls.Contains("工程師"))
+                                                        .OrderByDescending(rf => rf.StepId).FirstOrDefault();
+                AppUserModel EngTemp = _context.AppUsers.Find(lastFlowEng.UserId);
+                if (EngTemp != null)
+                {
+                    vm.EngName = EngTemp.FullName + "(" + EngTemp.UserName + ")";
+                }
+                else
+                {
+                    vm.EngName = "";
+                }
 
                 var engMgr = _context.BMEDKeepFlows.Where(r => r.DocId == DocId)
                                                    .Where(r => r.Cls.Contains("醫工主管")).ToList();

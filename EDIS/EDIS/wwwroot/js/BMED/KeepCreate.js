@@ -128,6 +128,21 @@ $(function () {
             }
         });
     });
+
+    /* Query user. */
+    $("#CheckerQryBtn").click(function () {
+        var queryStr = $("#CheckerQry").val();
+        $.ajax({
+            url: '../Repair/QueryUsers',
+            type: "GET",
+            data: { QueryStr: queryStr },
+            success: function (data) {
+                var select = $('#CheckerId');
+                $('option', select).remove();
+                select.addItems(data);
+            }
+        });
+    });
 });
 
 function onSuccess() {

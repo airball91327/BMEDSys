@@ -1,23 +1,13 @@
-﻿@model EDIS.Areas.BMED.Models.RepairModels.RepairModel
+﻿@model EDIS.Models.RepairModels.RepairModel
 
 @{
-    ViewBag.Title = "預覽請修";
+    ViewBag.Title = "預覽/請修單";
 }
-<div style="margin: 10pt">
-    @*@Html.Action("List", "AttainFiles", new { id = Model.DocId, typ = "1" })*@
-</div>
+
 <div>
-    @*<h3><span class="label label-default">請修資料</span></h3>*@
-    @Html.HiddenFor(model => model.DocId)
+    <h3>請修單明細</h3>
+    <hr />
     <dl class="dl-horizontal">
-        @*<dt>
-                @Html.DisplayNameFor(model => model.UserId)
-            </dt>
-
-            <dd>
-                @Html.DisplayFor(model => model.UserId)
-            </dd>*@
-
         <dt>
             @Html.DisplayNameFor(model => model.DocId)
         </dt>
@@ -39,7 +29,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.DptName)
+            @Html.DisplayFor(model => model.DptId)
         </dd>
 
         <dt>
@@ -51,6 +41,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.Mvpn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mvpn)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.AccDpt)
         </dt>
 
@@ -59,35 +57,28 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.RepType)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.RepType)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AssetNo)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AssetNo)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AssetName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AssetName)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.PlaceLoc)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.PlaceLoc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LocType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LocType)
+        </dd>
+
+        <dt>
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BuildingName)
+            @Html.DisplayFor(model => model.FloorName)
+            @Html.DisplayFor(model => model.AreaName)
         </dd>
 
         <dt>
@@ -107,7 +98,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CheckerName)
+            @Html.DisplayNameFor(model => model.CheckerId)
         </dt>
 
         <dd>
@@ -116,3 +107,6 @@
 
     </dl>
 </div>
+<p>
+    <a class="btn btn-primary" href="@Url.Action("Edit", "Repair", new { Area = "Admin", id = Model.DocId })">編輯</a>
+</p>

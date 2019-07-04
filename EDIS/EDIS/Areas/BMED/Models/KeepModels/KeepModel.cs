@@ -54,6 +54,17 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public string AssetName { get; set; }
         [Display(Name = "放置地點")]
         public string PlaceLoc { get; set; }
+        [Required]
+        [Display(Name = "負責工程師")]
+        public int EngId { get; set; }
+        [NotMapped]
+        public string EngName { get; set; }
+        [Required]
+        [Display(Name = "驗收人代號")]
+        public int CheckerId { get; set; }
+        [NotMapped]
+        [Display(Name = "驗收人")]
+        public string CheckerName { get; set; }
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         [Display(Name = "送單日期")]

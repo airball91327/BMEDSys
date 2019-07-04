@@ -315,7 +315,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -330,7 +330,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -371,7 +371,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (!string.IsNullOrEmpty(u.DptId))
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -407,8 +407,9 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     if (r != null)
                     {
-                        /* 與申請人同單位的成員(包括申請人) */
-                        List<AppUserModel> ul = _context.AppUsers.Where(f => f.DptId == r.DptId)
+                        /* 與驗收人同單位的成員(包括驗收人) */
+                        var checkerDptId = _context.AppUsers.Find(r.CheckerId).DptId;
+                        List<AppUserModel> ul = _context.AppUsers.Where(f => f.DptId == checkerDptId)
                                                                  .Where(f => f.Status == "Y").ToList();
                         if (asset != null)
                         {
@@ -422,7 +423,7 @@ namespace EDIS.Areas.BMED.Controllers
                         var checker = _context.AppUsers.Find(r.CheckerId);
                         list = new List<SelectListItem>();
                         li = new SelectListItem();
-                        li.Text = checker.FullName;
+                        li.Text = checker.FullName + "(" + checker.UserName + ")";
                         li.Value = checker.Id.ToString();
                         list.Add(li);
 
@@ -432,7 +433,7 @@ namespace EDIS.Areas.BMED.Controllers
                             if(l.Id != r.UserId)
                             {
                                 li = new SelectListItem();
-                                li.Text = l.FullName;
+                                li.Text = l.FullName + "(" + l.UserName + ")";
                                 li.Value = l.Id.ToString();
                                 list.Add(li);
                             }
@@ -449,7 +450,7 @@ namespace EDIS.Areas.BMED.Controllers
                     /* 負責工程師 */
                     var engTemp = _context.AppUsers.Find(r.EngId);
                     li = new SelectListItem();
-                    li.Text = engTemp.FullName;
+                    li.Text = engTemp.FullName + "(" + engTemp.UserName + ")";
                     li.Value = engTemp.Id.ToString();
                     list.Add(li);
                     /* 其他工程師 */
@@ -459,7 +460,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (u != null && l != repEngId)
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = u.FullName + "(" + u.UserName + ")";
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -471,7 +472,7 @@ namespace EDIS.Areas.BMED.Controllers
                     if (!string.IsNullOrEmpty(u.DptId))
                     {
                         li = new SelectListItem();
-                        li.Text = u.FullName;
+                        li.Text = u.FullName + "(" + u.UserName + ")";
                         li.Value = u.Id.ToString();
                         list.Add(li);
                     }
@@ -482,7 +483,7 @@ namespace EDIS.Areas.BMED.Controllers
                     if (!string.IsNullOrEmpty(u.DptId))
                     {
                         li = new SelectListItem();
-                        li.Text = u.FullName;
+                        li.Text = u.FullName + "(" + u.UserName + ")";
                         li.Value = u.Id.ToString();
                         list.Add(li);
                     }
