@@ -218,15 +218,44 @@
                     <li class="">
                         <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse">
+
                             <li>
                                 <a href="@Url.Action("Create", "Repair", new { Area = "BMED" })">請修單</a>
                             </li>
                             <li>
                                 <a href="@Url.Action("Create", "Keep", new { Area = "BMED" })">保養單</a>
                             </li>
-
                         </ul>
                     </li>
+
+                    @{
+                        if (UserManager.IsInRole(User, "Admin"))
+                        {
+                            <li class="">
+                                <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level collapse">
+
+                                    <li class="">
+                                        <a href="#"><span class="nav-label">保養格式管理</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "KeepFormat", new { Area = "BMED" })">保養格式一覽</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    @*<li class="">
+                                        <a href="#"><span class="nav-label">財務</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse">
+                                            <li>
+                                                <a href="@Url.Action("Index", "Ticket", new { Area = "BMED" })">發票作業</a>
+                                            </li>
+                                        </ul>
+                                    </li>*@
+
+                                </ul>
+                            </li>
+                        }
+                    }
                 </ul>
             </li>
         </ul>
