@@ -111,6 +111,7 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 return StatusCode(404);
             }
+            keepformat_dtl.KeepFormat = _context.BMEDKeepFormats.Find(id);
             return View(keepformat_dtl);
         }
 

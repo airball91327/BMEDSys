@@ -26,8 +26,8 @@
                     @Html.DisplayFor(modelItem => item.Descript)
                 </td>
                 <td>
-                    @Html.ActionLink("修改", "Edit", new { id = item.FormatId, sno = item.Sno }) |
-                    @Html.ActionLink("刪除", "Delete", new { id = item.FormatId, sno = item.Sno })
+                    @Html.ActionLink("修改", "Edit", "KeepFormatDtl", new { Area = "BMED", id = item.FormatId, sno = item.Sno }) |
+                    @Html.ActionLink("刪除", "Delete", "KeepFormatDtl", new { Area = "BMED", id = item.FormatId, sno = item.Sno })
                 </td>
             </tr>
         }
