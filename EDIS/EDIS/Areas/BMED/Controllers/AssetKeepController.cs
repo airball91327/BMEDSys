@@ -88,7 +88,7 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     listItem3.Add(new SelectListItem { Text = x.FormatId, Value = x.FormatId });
                 });
-            ViewData["FormatId"] = new SelectList(listItem3, "value", "Text");
+            ViewData["FormatId"] = new SelectList(listItem3, "Value", "Text", "");
             //
             if (id == null)
             {
