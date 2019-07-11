@@ -102,7 +102,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string upload { get; set; }
     }
 
-    [Table("BMEDDeviceClassCode")]
+    [Table("BMEDDeviceClassCodes")]
     public class DeviceClassCode
     {
         [Display(Name = "設備分類碼")]
