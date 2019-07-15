@@ -144,5 +144,237 @@ namespace EDIS.Areas.BMED.Controllers
             return PartialView("List", at2.ToPagedList(page, pageSize));
         }
 
+        // GET: BMED/Asset/List
+        public IActionResult List()
+        {
+            List<AssetModel> at = _context.BMEDAssets.ToList();
+            DepartmentModel d;
+            at.ForEach(a =>
+            {
+                a.DelivDptName = (d = _context.Departments.Find(a.DelivDpt)) == null ? "" : d.Name_C;
+            });
+
+            return PartialView(at);
+        }
+
+        // GET: BMED/Asset/Details/5
+        public IActionResult Details(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            if (asset == null)
+            {
+                return StatusCode(404);
+            }
+            if (asset.DelivUid != null)
+            {
+                asset.DelivEmp = "(" + asset.DelivUid + ") " + asset.DelivEmp;
+            }
+            asset.DelivDptName = _context.Departments.Find(asset.DelivDpt).Name_C;
+            asset.AccDptName = _context.Departments.Find(asset.AccDpt).Name_C;
+            asset.VendorName = asset.VendorId == null ? "" : _context.BMEDVendors.Find(asset.VendorId).VendorName;
+
+            return View(asset);
+        }
+
+        // GET: BMED/Asset/AssetView/5
+        public IActionResult AssetView(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            if (asset == null)
+            {
+                return StatusCode(404);
+            }
+            asset.DelivDptName = _context.Departments.Find(asset.DelivDpt).Name_C;
+            asset.AccDptName = _context.Departments.Find(asset.AccDpt).Name_C;
+
+            return PartialView(asset);
+        }
+
+        // GET: BMED/Asset/Create
+        public ActionResult Create()
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            _context.Departments.ToList().ForEach(d =>
+            {
+                listItem.Add(new SelectListItem { Text = d.Name_C, Value = d.DptId });
+            });
+            ViewData["DelivDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            listItem2.Add(new SelectListItem { Text = "", Value = "" });
+            ViewData["DelivUid"] = new SelectList(listItem2, "Value", "Text", "");
+
+            ViewData["AccDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "正常", Value = "正常" });
+            listItem3.Add(new SelectListItem { Text = "報廢", Value = "報廢" });
+            ViewData["DisposeKind"] = new SelectList(listItem3, "Value", "Text", "");
+            //
+            List<SelectListItem> listItem4 = new List<SelectListItem>();
+            _context.BMEDDeviceClassCodes.ToList()
+                .ForEach(d =>
+                {
+                    listItem4.Add(new SelectListItem { Text = d.M_name, Value = d.M_code });
+                });
+            ViewData["BmedNo"] = new SelectList(listItem4, "Value", "Text", "");
+
+            return View();
+        }
+
+        // POST: BMED/Asset/Create
+        [HttpPost]
+        public ActionResult Create(AssetModel asset)
+        {
+            if (ModelState.IsValid)
+            {
+                asset.AssetNo = asset.AssetNo.Trim();
+                if (_context.BMEDAssets.Find(asset.AssetNo) != null)
+                {
+                    throw new Exception("財產編號已經存在!!");
+                }
+                try
+                {
+                    asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Where(a => a.UserName == asset.DelivUid)
+                                                                                    .FirstOrDefault().FullName;
+                    _context.BMEDAssets.Add(asset);
+                    AssetKeepModel ak = new AssetKeepModel();
+                    ak.AssetNo = asset.AssetNo;
+                    _context.BMEDAssetKeeps.Add(ak);
+                    _context.SaveChanges();
+                }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
+
+                return new JsonResult(asset)
+                {
+                    Value = new { success = true, error = "", id = asset.AssetNo }
+                };
+            }
+            else
+            {
+                string msg = "";
+                foreach (var error in ViewData.ModelState.Values.SelectMany(modelState => modelState.Errors))
+                {
+                    msg += error.ErrorMessage + Environment.NewLine;
+                }
+                throw new Exception(msg);
+            }
+            //List<SelectListItem> listItem = new List<SelectListItem>();
+            //db.Departments.ToList().ForEach(d => {
+            //    listItem.Add(new SelectListItem { Text = d.Name_C, Value = d.DptId });
+            //});
+            //ViewData["DelivDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            //List<SelectListItem> listItem2 = new List<SelectListItem>();
+            //listItem2.Add(new SelectListItem { Text = "", Value = "" });
+            //ViewData["DelivUid"] = new SelectList(listItem2, "Value", "Text", "");
+
+            //ViewData["AccDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            //List<SelectListItem> listItem3 = new List<SelectListItem>();
+            //listItem3.Add(new SelectListItem { Text = "正常", Value = "正常" });
+            //listItem3.Add(new SelectListItem { Text = "報廢", Value = "報廢" });
+            //ViewData["DisposeKind"] = new SelectList(listItem3, "Value", "Text", "");
+
+            //return View(asset);
+        }
+
+        // GET: BMED/Asset/Edit/5
+        public ActionResult Edit(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            if (asset == null)
+            {
+                return StatusCode(404);
+            }
+            //
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            _context.Departments.ToList().ForEach(d =>
+            {
+                listItem.Add(new SelectListItem { Text = d.Name_C, Value = d.DptId });
+            });
+            ViewData["DelivDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            _context.AppUsers.Where(u => u.DptId == asset.DelivDpt).ToList().ForEach(u =>
+            {
+                listItem2.Add(new SelectListItem { Text = u.FullName, Value = u.Id.ToString() });
+            });
+            if (listItem2.Where(item => item.Value == asset.DelivUid.ToString()).Count() == 0)
+                listItem2.Add(new SelectListItem { Text = asset.DelivEmp, Value = asset.DelivUid.ToString() });
+            ViewData["DelivUid"] = new SelectList(listItem2, "Value", "Text", "");
+
+            ViewData["AccDpt"] = new SelectList(listItem, "Value", "Text", "");
+
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "正常", Value = "正常" });
+            listItem3.Add(new SelectListItem { Text = "報廢", Value = "報廢" });
+            ViewData["DisposeKind"] = new SelectList(listItem3, "Value", "Text", "");
+            //
+            List<SelectListItem> listItem4 = new List<SelectListItem>();
+            _context.BMEDDeviceClassCodes.ToList()
+                .ForEach(d =>
+                {
+                    listItem4.Add(new SelectListItem { Text = d.M_name, Value = d.M_code });
+                });
+            ViewData["BmedNo"] = new SelectList(listItem4, "Value", "Text", "");
+            //
+            if (asset.VendorId != null)
+            {
+                asset.VendorName = _context.BMEDVendors.Where(v => v.VendorId == asset.VendorId).FirstOrDefault().VendorName;
+            }
+
+            return View(asset);
+        }
+
+        // POST: BMED/Asset/Edit/5
+        [HttpPost]
+        public ActionResult Edit(AssetModel asset)
+        {
+            if (ModelState.IsValid)
+            {
+                asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Where(a => a.UserName == asset.DelivUid)
+                                                                                .FirstOrDefault().FullName;
+                _context.Entry(asset).State = EntityState.Modified;
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception(ex.Message);
+                }
+
+                return new JsonResult(asset)
+                {
+                    Value = new { success = true, error = "" }
+                };
+            }
+            else
+            {
+                string msg = "";
+                foreach (var error in ViewData.ModelState.Values.SelectMany(modelState => modelState.Errors))
+                {
+                    msg += error.ErrorMessage + Environment.NewLine;
+                }
+                throw new Exception(msg);
+            }
+        }
+
     }
 }

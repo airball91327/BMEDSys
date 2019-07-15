@@ -9,6 +9,16 @@
 
 <link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 
+<style>
+    /* Style the scale of checkbox. */
+    input[type=checkbox] {
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FireFox */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
+    }
+</style>
+
 <script type="text/javascript">
     $('a[name="del"]').click(function () {
         if (confirm("確定要刪除此記錄?")) {
@@ -64,7 +74,8 @@
     <div style="display: block; padding-bottom: 40px;">
         <div class="form-group">
             <div class="col-md-2">
-                @Html.ActionLink("新增設備", "Create", null, new { @class = "btn btn-default" })
+                <a class="btn btn-primary" href="@Url.Action("Create")">新增設備</a>
+                @*@Html.ActionLink("新增設備", "Create", null, new { @class = "btn btn-default" })*@
             </div>
             <div class="col-md-10 text-left">
                 <div class="form-inline">
