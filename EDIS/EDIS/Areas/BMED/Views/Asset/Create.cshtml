@@ -153,7 +153,7 @@
         <div class="form-group">
             <label asp-for="DisposeKind" class="control-label col-md-2"></label>
             <div class="col-md-10">
-                <select asp-for="DisposeKind" class="form-control">
+                <select asp-for="DisposeKind" asp-items="@ViewData["DisposeKind"] as SelectList" class="form-control">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="DisposeKind" class="text-danger"></span>
@@ -166,7 +166,7 @@
                 <div class="form-inline">
                     @Html.TextBox("DelivdptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
                     <input id="btnQtyDelivdpt" type="button" value="查詢" class="btn btn-default">
-                    <select asp-for="DelivDpt" class="form-control">
+                    <select asp-for="DelivDpt" asp-items="@ViewData["DelivDpt"] as SelectList" class="form-control">
                         <option disabled selected>請選擇</option>
                     </select>
                     <span asp-validation-for="DelivDpt" class="text-danger"></span>
@@ -202,7 +202,7 @@
                 <div class="form-inline">
                     @Html.TextBox("AccdptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
                     <input id="btnQtyAccdpt" type="button" value="查詢" class="btn btn-default">
-                    <select asp-for="AccDpt" class="form-control">
+                    <select asp-for="AccDpt" asp-items="@ViewData["AccDpt"] as SelectList" class="form-control">
                         <option disabled selected>請選擇</option>
                     </select>
                     <span asp-validation-for="AccDpt" class="text-danger"></span>
@@ -304,7 +304,7 @@
 </div>
 
 <div>
-    <a href="@Url.Content("~/BMED/Asset/Index")">回到資產列表</a>
+    <a href="@Url.Content("~/BMED/Asset/Index")" class="btn btn-primary">回到資產列表</a>
 </div>
 
 @section Scripts {

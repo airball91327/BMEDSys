@@ -18,7 +18,7 @@ $(function () {
         var s = $(this).val();
         $.ajax({
             contentType: "application/json; charset=utf-8",
-            url: '../AppUser/GetUsersInDpt',
+            url: '../../AppUser/GetUsersInDpt',
             type: "GET",
             data: "id=" + s,
             dataType: "json",
@@ -78,7 +78,7 @@ $(function () {
         else {
             $.ajax({
                 contentType: "application/json; charset=utf-8",
-                url: '../AppUser/GetUsersByKeyname',
+                url: '../../AppUser/GetUsersByKeyname',
                 type: "GET",
                 data: { id: "", keyname: keynam },
                 dataType: "json",

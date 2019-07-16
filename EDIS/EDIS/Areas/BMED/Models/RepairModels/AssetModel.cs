@@ -10,15 +10,15 @@ namespace EDIS.Areas.BMED.Models.RepairModels
     public class AssetModel
     {
         [Key]
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
         [Display(Name = "醫工碼")]
         public string BmedNo { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "設備類別")]
         public string AssetClass { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "中文名稱")]
         public string Cname { get; set; }
         [Display(Name = "英文名稱")]
@@ -52,23 +52,23 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [NotMapped]
         [Display(Name = "廠商名稱")]
         public string VendorName { get; set; }
-        [Required]
+        [Required(ErrorMessage ="必填寫項目")]
         [Display(Name = "處分性質")]
         public string DisposeKind { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "保管部門")]
         public string DelivDpt { get; set; }
         [NotMapped]
         [Display(Name = "保管部門名稱")]
         public string DelivDptName { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "保管人代號")]
-        public string DelivUid { get; set; }
+        public int? DelivUid { get; set; }
         [Display(Name = "保管人姓名")]
         public string DelivEmp { get; set; }
         [Display(Name = "存放地點")]
         public string LeaveSite { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "成本中心")]
         public string AccDpt { get; set; }
         [NotMapped]
@@ -108,7 +108,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "設備分類碼")]
         [Key]
         public string M_code { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫項目")]
         [Display(Name = "設備分類名稱")]
         public string M_name { get; set; }
     }

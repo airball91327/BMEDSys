@@ -80,7 +80,7 @@ namespace EDIS.Areas.BMED.Controllers
                 .SelectMany(p => p.Department.DefaultIfEmpty(),
                 (x, y) => new { Asset = x.Asset, Department = y })
                 .ToList()
-                .GroupJoin(_context.AppUsers, e => e.Asset.DelivUid, u => u.UserName,
+                .GroupJoin(_context.AppUsers, e => e.Asset.DelivUid, u => u.Id,
                 (e, u) => new { Asset = e, AppUser = u })
                 .SelectMany(p => p.AppUser.DefaultIfEmpty(),
                 (e, y) => new { Asset = e.Asset.Asset, Department = e.Asset.Department, AppUser = y })
@@ -171,7 +171,8 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (asset.DelivUid != null)
             {
-                asset.DelivEmp = "(" + asset.DelivUid + ") " + asset.DelivEmp;
+                var userName = _context.AppUsers.Find(asset.DelivUid).UserName;
+                asset.DelivEmp = "(" + userName + ") " + asset.DelivEmp;
             }
             asset.DelivDptName = _context.Departments.Find(asset.DelivDpt).Name_C;
             asset.AccDptName = _context.Departments.Find(asset.AccDpt).Name_C;
@@ -243,8 +244,7 @@ namespace EDIS.Areas.BMED.Controllers
                 }
                 try
                 {
-                    asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Where(a => a.UserName == asset.DelivUid)
-                                                                                    .FirstOrDefault().FullName;
+                    asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Find(asset.DelivUid).FullName;
                     _context.BMEDAssets.Add(asset);
                     AssetKeepModel ak = new AssetKeepModel();
                     ak.AssetNo = asset.AssetNo;
@@ -348,8 +348,7 @@ namespace EDIS.Areas.BMED.Controllers
         {
             if (ModelState.IsValid)
             {
-                asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Where(a => a.UserName == asset.DelivUid)
-                                                                                .FirstOrDefault().FullName;
+                asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Find(asset.DelivUid).FullName;
                 _context.Entry(asset).State = EntityState.Modified;
                 try
                 {
@@ -374,6 +373,22 @@ namespace EDIS.Areas.BMED.Controllers
                 }
                 throw new Exception(msg);
             }
+        }
+
+        // GET: BMED/Asset/Delete/5
+        public ActionResult Delete(string id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            AssetKeepModel ak = _context.BMEDAssetKeeps.Find(id);
+            _context.BMEDAssets.Remove(asset);
+            _context.BMEDAssetKeeps.Remove(ak);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index");
         }
 
     }

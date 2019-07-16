@@ -680,7 +680,12 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     did = Convert.ToString(yymmdd * 1000 + 1);
                     ds.DocId = did;
-                    _dsRepo.Create(ds);
+                    // 二次確認資料庫內沒該資料才新增。
+                    var dataIsExist = _dsRepo.Find(x => x.DocType == "醫工請修");
+                    if (dataIsExist.Count() == 0)
+                    {
+                        _dsRepo.Create(ds);
+                    }
                 }
             }
             catch (Exception e)
