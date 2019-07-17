@@ -127,5 +127,33 @@ namespace EDIS.Areas.BMED.Controllers
                 throw new Exception(msg);
             }
         }
+
+        // POST: BMED/AssetKeep/UpdEngineer/5
+        [HttpPost]
+        public ActionResult UpdEngineer(string id, string assets)
+        {
+            string[] s = assets.Split(new char[] { ';' });
+            AssetKeepModel assetKeep;
+            foreach (string ss in s)
+            {
+                assetKeep = _context.BMEDAssetKeeps.Find(ss);
+                if (assetKeep != null)
+                {
+                    AppUserModel u = _context.AppUsers.Find(Convert.ToInt32(id));
+                    if (u != null)
+                    {
+                        assetKeep.KeepEngId = u.Id;
+                        assetKeep.KeepEngName = u.FullName;
+                        _context.Entry(assetKeep).State = EntityState.Modified;
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            return new JsonResult(id)
+            {
+                Value = new { success = true, error = "" }
+            };
+        }
+
     }
 }

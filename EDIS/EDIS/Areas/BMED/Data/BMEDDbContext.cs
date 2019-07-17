@@ -38,7 +38,7 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<DeptStockModel> BMEDDeptStocks { get; set; }
         public DbSet<VendorModel> BMEDVendors { get; set; }
         //public DbSet<ExternalUserModel> ExternalUsers { get; set; }
-        public DbSet<EngsInAssetsModel> BMEDEngsInAssets { get; set; }
+        //public DbSet<EngsInAssetsModel> BMEDEngsInAssets { get; set; }
         //public DbSet<EngSubStaff> EngSubStaff { get; set; }
         //public DbSet<ScrapAssetModel> ScrapAssets { get; set; }
         public DbSet<KeepModel> BMEDKeeps { get; set; }
@@ -74,7 +74,7 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<DeptStockModel>().HasKey(c => new { c.StockId });
             builder.Entity<VendorModel>().HasKey(c => new { c.VendorId });
             //builder.Entity<ExternalUserModel>().HasKey(c => new { c.Id });
-            builder.Entity<EngsInAssetsModel>().HasKey(c => new { c.EngId, c.AssetNo });
+            //builder.Entity<EngsInAssetsModel>().HasKey(c => new { c.EngId, c.AssetNo });
             //builder.Entity<EngSubStaff>().HasKey(c => new { c.EngId });
             //builder.Entity<ScrapAssetModel>().HasKey(c => new { c.DocId, c.DeviceNo, c.AssetNo });
             builder.Entity<KeepModel>().HasKey(c => new { c.DocId });

@@ -378,27 +378,20 @@ namespace EDIS.Areas.BMED.Controllers
 
                     /* Get all engineers. */
                     s = roleManager.GetUsersInRole("MedEngineer").ToList();
-                    var keepEng = _context.BMEDEngsInAssets.Include(e => e.AppUsers)
-                                                           .Where(e => e.AssetNo == k.AssetNo).FirstOrDefault();
-                    string keepEngId = "";
-
-                    if(keepEng != null)
-                    {
-                        keepEngId = keepEng.AppUsers.UserName;
-                    }
+                    var keepEngId = _context.BMEDAssetKeeps.Find(k.AssetNo).KeepEngId;
+                    var keepEng = _context.AppUsers.Find(keepEngId);
 
                     list = new List<SelectListItem>();
                     /* 負責工程師 */
-                    var engTemp = _context.AppUsers.Find(keepEng.AppUsers.Id);
                     li = new SelectListItem();
-                    li.Text = engTemp.FullName + "(" + engTemp.UserName + ")";
-                    li.Value = engTemp.Id.ToString();
+                    li.Text = keepEng.FullName + "(" + keepEng.UserName + ")";
+                    li.Value = keepEng.Id.ToString();
                     list.Add(li);
                     /* 其他工程師 */
                     foreach (string l in s)
                     {
                         u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
-                        if (u != null && l != keepEngId)
+                        if (u != null && l != keepEng.UserName)
                         {
                             li = new SelectListItem();
                             li.Text = u.FullName + "(" + u.UserName + ")";

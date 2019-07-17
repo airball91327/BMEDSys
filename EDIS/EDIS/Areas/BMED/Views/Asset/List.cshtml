@@ -51,14 +51,21 @@
         var eng = $("#KeepEngId").val();
         if (s != "" && eng != "") {
             $.ajax({
-                url: '../AssetKeeps/UpdEngineer',
+                url: '../BMED/AssetKeep/UpdEngineer',
                 data: { id: eng, assets: s },
                 type: "POST",
+                beforeSend: $.Toast.showToast({
+                    'title': '作業進行中，請稍待...',
+                    'icon': 'loading',
+                    'duration': 0
+                }),
                 success: function (data) {
                     alert('移轉工程師完成!!');
+                    $.Toast.hideToast();
                 },
                 error: function (msg) {
                     alert(msg);
+                    $.Toast.hideToast();
                 }
             });
         }

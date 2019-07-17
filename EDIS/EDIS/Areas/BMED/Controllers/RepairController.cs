@@ -17,6 +17,7 @@ using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
 using System.IO;
 using EDIS.Models;
+using EDIS.Areas.BMED.Models.KeepModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -755,11 +756,11 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public JsonResult GetAssetEngId(string AssetNo)
         {
-            var engineers = _context.BMEDEngsInAssets.Include(e => e.AppUsers)
-                                                     .Where(e => e.AssetNo == AssetNo).ToList();
+            AssetKeepModel kp = _context.BMEDAssetKeeps.Find(AssetNo);
+            var engineer = _context.AppUsers.Find(kp.KeepEngId);
 
             /* 擷取預設負責工程師 */
-            if (engineers.Count() == 0)  //該部門無預設工程師
+            if (engineer == null)  //該部門無預設工程師
             {
                 var tempEng = _context.AppUsers.Where(a => a.UserName == "344027")
                                                .Select(a => new
@@ -772,12 +773,8 @@ namespace EDIS.Areas.BMED.Controllers
             }
             else
             {
-                var eng = engineers.Select(e => new
-                                   {
-                                       EngId = e.EngId,
-                                       UserName = e.UserName,
-                                       FullName = e.AppUsers.FullName
-                                   }).FirstOrDefault();
+                var eng = new { EngId = engineer.Id, UserName = engineer.UserName, FullName = engineer.FullName };
+
                 return Json(eng);
             }
         }
