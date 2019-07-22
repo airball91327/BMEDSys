@@ -42,7 +42,7 @@ namespace EDIS.Areas.BMED.Components.AssetKeep
                 {
                     return Content("無資料!");
                 }
-                assetKeep.KeepEngName = _context.AppUsers.Find(assetKeep.KeepEngId).FullName;
+                assetKeep.KeepEngName = assetKeep.KeepEngId == 0 ? "" : _context.AppUsers.Find(assetKeep.KeepEngId).FullName;
                 return View("Details", assetKeep);
             }
             else

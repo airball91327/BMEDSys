@@ -138,6 +138,7 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
             ViewData["KeepEngId"] = new SelectList(listItem, "Value", "Text", "");
+            ViewData["AssetEngId"] = new SelectList(listItem, "Value", "Text", "");
             //
             if (at2.ToPagedList(page, pageSize).Count <= 0)
                 return PartialView("List", at2.ToPagedList(1, pageSize));
@@ -227,6 +228,19 @@ namespace EDIS.Areas.BMED.Controllers
                     listItem4.Add(new SelectListItem { Text = d.M_name, Value = d.M_code });
                 });
             ViewData["BmedNo"] = new SelectList(listItem4, "Value", "Text", "");
+            //
+            // Get MedEngineers to set dropdownlist.
+            var s = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in s)
+            {
+                AppUserModel u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem { Text = u.FullName, Value = u.Id.ToString() });
+                }
+            }
+            ViewData["AssetEngId"] = new SelectList(listItem5, "Value", "Text", "");
 
             return View();
         }
@@ -245,6 +259,7 @@ namespace EDIS.Areas.BMED.Controllers
                 try
                 {
                     asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Find(asset.DelivUid).FullName;
+                    asset.AssetEngName = asset.AssetEngId == 0 ? "" : _context.AppUsers.Find(asset.AssetEngId).FullName;
                     _context.BMEDAssets.Add(asset);
                     AssetKeepModel ak = new AssetKeepModel();
                     ak.AssetNo = asset.AssetNo;
@@ -334,6 +349,19 @@ namespace EDIS.Areas.BMED.Controllers
                 });
             ViewData["BmedNo"] = new SelectList(listItem4, "Value", "Text", "");
             //
+            // Get MedEngineers to set dropdownlist.
+            var s = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in s)
+            {
+                AppUserModel u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem { Text = u.FullName, Value = u.Id.ToString() });
+                }
+            }
+            ViewData["AssetEngId"] = new SelectList(listItem5, "Value", "Text", "");
+            //
             if (asset.VendorId != null)
             {
                 asset.VendorName = _context.BMEDVendors.Where(v => v.VendorId == asset.VendorId).FirstOrDefault().VendorName;
@@ -349,6 +377,7 @@ namespace EDIS.Areas.BMED.Controllers
             if (ModelState.IsValid)
             {
                 asset.DelivEmp = asset.DelivUid == null ? "" : _context.AppUsers.Find(asset.DelivUid).FullName;
+                asset.AssetEngName = asset.AssetEngId == 0 ? "" : _context.AppUsers.Find(asset.AssetEngId).FullName;
                 _context.Entry(asset).State = EntityState.Modified;
                 try
                 {
@@ -391,5 +420,31 @@ namespace EDIS.Areas.BMED.Controllers
             return RedirectToAction("Index");
         }
 
+        // POST: BMED/Asset/UpdEngineer/5
+        [HttpPost]
+        public ActionResult UpdEngineer(string id, string assets)
+        {
+            string[] s = assets.Split(new char[] { ';' });
+            AssetModel asset;
+            foreach (string ss in s)
+            {
+                asset = _context.BMEDAssets.Find(ss);
+                if (asset != null)
+                {
+                    AppUserModel u = _context.AppUsers.Find(Convert.ToInt32(id));
+                    if (u != null)
+                    {
+                        asset.AssetEngId = u.Id;
+                        asset.AssetEngName = u.FullName;
+                        _context.Entry(asset).State = EntityState.Modified;
+                        _context.SaveChanges();
+                    }
+                }
+            }
+            return new JsonResult(id)
+            {
+                Value = new { success = true, error = "" }
+            };
+        }
     }
 }

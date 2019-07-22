@@ -67,6 +67,13 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="form-inline">
+                <label asp-for="NotExceptDevice" class="control-title"></label>
+                @Html.RadioButtonFor(model => model.NotExceptDevice, "Y") 是
+                @Html.RadioButtonFor(model => model.NotExceptDevice, "N") 否
+            </div>
+        </div>
 
         <div class="row">
             <div style="padding-left: 115px">

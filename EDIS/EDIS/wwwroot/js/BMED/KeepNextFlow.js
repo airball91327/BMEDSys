@@ -108,6 +108,9 @@ $(function () {
                             }
                             i++;
                         });
+                        if ($('#FlowCls').val() === "驗收人") {
+                            $("#searchUid").show();
+                        }
                     }
                 }
             });

@@ -52,6 +52,7 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<KeepResultModel> BMEDKeepResults { get; set; }
         public DbSet<AssetKeepModel> BMEDAssetKeeps { get; set; }
         public DbSet<DeviceClassCode> BMEDDeviceClassCodes { get; set; }
+        public DbSet<ExceptDeviceModel> ExceptDevice { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -88,6 +89,7 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<KeepResultModel>().HasKey(c => new { c.Id });
             builder.Entity<AssetKeepModel>().HasKey(c => new { c.AssetNo });
             builder.Entity<DeviceClassCode>().HasKey(c => new { c.M_code });
+            builder.Entity<ExceptDeviceModel>().HasKey(c => new { c.AssetNo });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

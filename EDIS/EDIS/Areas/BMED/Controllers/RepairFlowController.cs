@@ -180,7 +180,7 @@ namespace EDIS.Areas.BMED.Controllers
                     body += "<p>放置地點：" + repair.PlaceLoc + "</p>";
                     body += "<p>故障描述：" + repair.TroubleDes + "</p>";
                     body += "<p>處理描述：" + rd.DealDes + "</p>";
-                    //body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?DocId=" + repair.DocId + "&dealType=BMEDRepViews" + ">檢視案件</a></p>";
+                    body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?DocId=" + repair.DocId + "&dealType=BMEDRepViews" + ">檢視案件</a></p>";
                     body += "<br/>";
                     body += "<h3>此封信件為系統通知郵件，請勿回覆。</h3>";
                     body += "<br/>";
@@ -238,7 +238,7 @@ namespace EDIS.Areas.BMED.Controllers
                     body += "<p>故障描述：" + repair.TroubleDes + "</p>";
                     //body += "<p>請修地點：" + repair.PlaceLoc + " " + repair.BuildingName + " " + repair.FloorName + " " + repair.AreaName + "</p>";
                     body += "<p>放置地點：" + repair.PlaceLoc + "</p>";
-                    //body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?docId=" + repair.DocId + "&dealType=BMEDRepEdit" + ">處理案件</a></p>";
+                    body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?docId=" + repair.DocId + "&dealType=BMEDRepEdit" + ">處理案件</a></p>";
                     body += "<br/>";
                     body += "<h3>此封信件為系統通知郵件，請勿回覆。</h3>";
                     body += "<br/>";

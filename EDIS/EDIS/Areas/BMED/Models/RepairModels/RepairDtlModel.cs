@@ -44,6 +44,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "費用")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal Cost { get; set; }
+        [Display(Name = "是否為統包")]
+        public string NotExceptDevice { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "完工日期")]
         public DateTime? EndDate { get; set; }

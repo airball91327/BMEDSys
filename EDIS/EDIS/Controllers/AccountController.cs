@@ -16,6 +16,7 @@ using EDIS.Services;
 using EDIS.Models.Identity;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using EDIS.Areas.BMED.Data;
 using EDIS.Data;
 using System.Web;
 using System.Text;
@@ -31,19 +32,22 @@ namespace EDIS.Controllers
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _BMEDcontext;
 
         public AccountController(
             CustomUserManager userManager,
             CustomSignInManager signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            ApplicationDbContext context)
+            ApplicationDbContext context,
+            BMEDDbContext BMEDcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
             _context = context;
+            _BMEDcontext = BMEDcontext;
         }
 
         [TempData]
@@ -62,7 +66,7 @@ namespace EDIS.Controllers
                 /* If login from mail. */
                 if (MailDocId != "")
                 {
-                    if (MailType == "Edit")
+                    if (MailType == "Edit") //Edit Repair doc.
                     {
                         var editDoc = _context.RepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
                                                           .FirstOrDefault();
@@ -70,14 +74,60 @@ namespace EDIS.Controllers
                         /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
                         if (editDoc.Status == "?" && editDoc.UserId == userId)
                         {
-                            return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
+                            return RedirectToAction("Edit", "Repair", new { Area = "", id = MailDocId });
                         }
                         else
                         {
                             return RedirectToAction("Index", "Home");
                         }
                     }
-                    return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
+                    else if (MailType == "Views") //View Repair doc.
+                    {
+                        return RedirectToAction("Views", "Repair", new { Area = "", id = MailDocId });
+                    }
+                    else if (MailType == "BMEDRepEdit") //Edit BMED Repair Doc.
+                    {
+                        var editDoc = _BMEDcontext.BMEDRepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                                                                  .FirstOrDefault();
+                        int userId = _context.AppUsers.Where(a => a.UserName == User.Identity.Name).First().Id;
+                        /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
+                        if (editDoc.Status == "?" && editDoc.UserId == userId)
+                        {
+                            return RedirectToAction("Edit", "Repair", new { Area = "BMED", id = MailDocId });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    else if (MailType == "BMEDRepViews") //View BMED Repair doc.
+                    {
+                        return RedirectToAction("Views", "Repair", new { Area = "BMED", id = MailDocId });
+                    }
+                    else if (MailType == "BMEDKeepEdit") //Edit BMED Keep Doc.
+                    {
+                        var editDoc = _BMEDcontext.BMEDKeepFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                                                                .FirstOrDefault();
+                        int userId = _context.AppUsers.Where(a => a.UserName == User.Identity.Name).First().Id;
+                        /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
+                        if (editDoc.Status == "?" && editDoc.UserId == userId)
+                        {
+                            return RedirectToAction("Edit", "Keep", new { Area = "BMED", id = MailDocId });
+                        }
+                        else
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                    }
+                    else if (MailType == "BMEDKeepViews") //View BMED Keep doc.
+                    {
+                        return RedirectToAction("Views", "Keep", new { Area = "BMED", id = MailDocId });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+
                 }
                 else
                 {

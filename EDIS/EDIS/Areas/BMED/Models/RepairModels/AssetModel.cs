@@ -92,6 +92,10 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string Note { get; set; }
         [Display(Name = "採購評估單號")]
         public string Docid { get; set; } //採購評估單號
+        [Display(Name = "設備工程師")]
+        public int AssetEngId { get; set; }
+        [Display(Name = "工程師姓名")]
+        public string AssetEngName { get; set; }
 
         [Display(Name = "異動人員")]
         public int? Rtp { get; set; }

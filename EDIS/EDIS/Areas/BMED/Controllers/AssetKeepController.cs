@@ -49,7 +49,7 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 return StatusCode(404);
             }
-            assetKeep.KeepEngName = _context.AppUsers.Find(assetKeep.KeepEngId).FullName;
+            assetKeep.KeepEngName = assetKeep.KeepEngId == 0 ? "" : _context.AppUsers.Find(assetKeep.KeepEngId).FullName;
             return PartialView(assetKeep);
         }
 

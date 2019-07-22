@@ -531,6 +531,15 @@ namespace EDIS.Areas.BMED.Controllers
 
                     // Create Repair Details.
                     RepairDtlModel dtl = new RepairDtlModel();
+                    var notExceptDevice = _context.ExceptDevice.Find(repair.AssetNo);
+                    if (notExceptDevice == null)
+                    {
+                        dtl.NotExceptDevice = "N";
+                    }
+                    else
+                    {
+                        dtl.NotExceptDevice = "Y";
+                    }
                     dtl.DocId = repair.DocId;
                     dtl.DealState = 1;  // 處理狀態"未處理"
                     _repdtlRepo.Create(dtl);
@@ -555,7 +564,7 @@ namespace EDIS.Areas.BMED.Controllers
                     flow.UserId = repair.EngId;
                     flow.Status = "?";  // 狀態"未處理"
                     flow.Rtt = DateTime.Now;
-                    flow.Cls = "醫工工程師";
+                    flow.Cls = "設備工程師";
 
                     _repflowRepo.Create(flow);
 
@@ -577,7 +586,7 @@ namespace EDIS.Areas.BMED.Controllers
                     body += "<p>故障描述：" + repair.TroubleDes + "</p>";
                     //body += "<p>請修地點：" + repair.PlaceLoc + " " + repair.BuildingName + " " + repair.FloorName + " " + repair.AreaName + "</p>";
                     body += "<p>放置地點：" + repair.PlaceLoc + "</p>";
-                    //body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?docId=" + repair.DocId + "&dealType=BMEDRepEdit" + ">處理案件</a></p>";
+                    body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login'" + "?docId=" + repair.DocId + "&dealType=BMEDRepEdit" + ">處理案件</a></p>";
                     body += "<br/>";
                     body += "<h3>此封信件為系統通知郵件，請勿回覆。</h3>";
                     body += "<br/>";
@@ -756,8 +765,8 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public JsonResult GetAssetEngId(string AssetNo)
         {
-            AssetKeepModel kp = _context.BMEDAssetKeeps.Find(AssetNo);
-            var engineer = _context.AppUsers.Find(kp.KeepEngId);
+            AssetModel asset = _context.BMEDAssets.Find(AssetNo);
+            var engineer = _context.AppUsers.Find(asset.AssetEngId);
 
             /* 擷取預設負責工程師 */
             if (engineer == null)  //該部門無預設工程師

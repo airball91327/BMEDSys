@@ -42,6 +42,7 @@
         }
     });
 
+    /* Transfer Keep Engineers. */
     $("#btnTRANS").click(function () {
         var s = "";
         $("input[name='chkENG']:checked").each(function () {
@@ -52,6 +53,36 @@
         if (s != "" && eng != "") {
             $.ajax({
                 url: '../BMED/AssetKeep/UpdEngineer',
+                data: { id: eng, assets: s },
+                type: "POST",
+                beforeSend: $.Toast.showToast({
+                    'title': '作業進行中，請稍待...',
+                    'icon': 'loading',
+                    'duration': 0
+                }),
+                success: function (data) {
+                    alert('移轉工程師完成!!');
+                    $.Toast.hideToast();
+                },
+                error: function (msg) {
+                    alert(msg);
+                    $.Toast.hideToast();
+                }
+            });
+        }
+    });
+
+    /* Transfer Asset Engineers. */
+    $("#btnAssetTRANS").click(function () {
+        var s = "";
+        $("input[name='chkENG']:checked").each(function () {
+            s += $(this).parents("tr").children().get(2).innerText.trim();
+            s += ";";
+        });
+        var eng = $("#AssetEngId").val();
+        if (s != "" && eng != "") {
+            $.ajax({
+                url: '../BMED/Asset/UpdEngineer',
                 data: { id: eng, assets: s },
                 type: "POST",
                 beforeSend: $.Toast.showToast({
@@ -84,9 +115,16 @@
                 <a class="btn btn-primary" href="@Url.Action("Create")">新增設備</a>
                 @*@Html.ActionLink("新增設備", "Create", null, new { @class = "btn btn-default" })*@
             </div>
-            <div class="col-md-10 text-left">
+            <div class="col-md-5 text-left">
                 <div class="form-inline">
-                    @Html.Label("KeepEngId", "負責工程師", new { @class = "control-label" })
+                    @Html.Label("AssetEngId", "設備工程師", new { @class = "control-label" })
+                    @Html.DropDownList("AssetEngId", null, "請選擇", new { @class = "form-control" })
+                    <input class="btn btn-default" id="btnAssetTRANS" type="button" value="確定轉移" />
+                </div>
+            </div>
+            <div class="col-md-5 text-left">
+                <div class="form-inline">
+                    @Html.Label("KeepEngId", "保養工程師", new { @class = "control-label" })
                     @Html.DropDownList("KeepEngId", null, "請選擇", new { @class = "form-control" })
                     <input class="btn btn-default" id="btnTRANS" type="button" value="確定轉移" />
                 </div>
