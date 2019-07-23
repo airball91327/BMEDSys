@@ -53,6 +53,16 @@ namespace EDIS.Areas.BMED.Controllers
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
+            /* Change to UpperCase.*/
+            if (repairCost.TicketDtl.TicketDtlNo != null)
+            {
+                repairCost.TicketDtl.TicketDtlNo = repairCost.TicketDtl.TicketDtlNo.ToUpper();
+            }
+            if (repairCost.SignNo != null)
+            {
+                repairCost.SignNo = repairCost.SignNo.ToUpper();
+            }
+
             if (ModelState.IsValid)
             {
                 try

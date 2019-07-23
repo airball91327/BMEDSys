@@ -42,6 +42,16 @@ namespace EDIS.Areas.BMED.Controllers
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
+            /* Change to UpperCase.*/
+            if (keepCost.TicketDtl.TicketDtlNo != null)
+            {
+                keepCost.TicketDtl.TicketDtlNo = keepCost.TicketDtl.TicketDtlNo.ToUpper();
+            }
+            if (keepCost.SignNo != null)
+            {
+                keepCost.SignNo = keepCost.SignNo.ToUpper();
+            }
+
             if (ModelState.IsValid)
             {
                 try
