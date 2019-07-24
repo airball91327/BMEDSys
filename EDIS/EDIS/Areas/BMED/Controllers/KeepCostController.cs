@@ -103,7 +103,7 @@ namespace EDIS.Areas.BMED.Controllers
                         int i = _context.BMEDTicketDtls.Where(d => d.TicketDtlNo == keepCost.TicketDtl.TicketDtlNo)
                                                        .Select(d => d.SeqNo).DefaultIfEmpty().Max();
                         keepCost.TicketDtl.SeqNo = i + 1;
-                        keepCost.TicketDtl.ObjName = keepCost.VendorName;
+                        keepCost.TicketDtl.ObjName = keepCost.PartName;
                         keepCost.TicketDtl.Qty = keepCost.Qty;
                         keepCost.TicketDtl.Unite = keepCost.Unite;
                         keepCost.TicketDtl.Price = keepCost.Price;

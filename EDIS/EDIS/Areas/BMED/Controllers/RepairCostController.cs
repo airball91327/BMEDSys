@@ -114,7 +114,7 @@ namespace EDIS.Areas.BMED.Controllers
                         int i = _context.BMEDTicketDtls.Where(d => d.TicketDtlNo == repairCost.TicketDtl.TicketDtlNo)
                                                        .Select(d => d.SeqNo).DefaultIfEmpty().Max();
                         repairCost.TicketDtl.SeqNo = i + 1;
-                        repairCost.TicketDtl.ObjName = repairCost.VendorName;
+                        repairCost.TicketDtl.ObjName = repairCost.PartName;
                         repairCost.TicketDtl.Qty = repairCost.Qty;
                         repairCost.TicketDtl.Unite = repairCost.Unite;
                         repairCost.TicketDtl.Price = repairCost.Price;
