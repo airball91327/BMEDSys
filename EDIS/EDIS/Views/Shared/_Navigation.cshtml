@@ -72,7 +72,7 @@
                         <a href="~/Files/Manual/UserManual.pptx" target="_blank"><span class="nav-label">說明手冊下載</span></a>
                     </li>
                     @{
-                        if (UserManager.IsInRole(User, "RepEngineer") == true ||
+                        if (UserManager.IsInRole(User, "RepEngineer") == true || UserManager.IsInRole(User, "RepAdmin") == true ||
                             UserManager.IsInRole(User, "Admin") == true)
                         {
                             <li class="">
@@ -82,7 +82,8 @@
                     }
                     @{
                         if (UserManager.IsInRole(User, "RepMgr") == true || UserManager.IsInRole(User, "RepToDo") == true ||
-                            UserManager.IsInRole(User, "RepDirector") == true || UserManager.IsInRole(User, "Admin") == true)
+                            UserManager.IsInRole(User, "RepDirector") == true || UserManager.IsInRole(User, "Admin") == true ||
+                            UserManager.IsInRole(User, "RepAdmin") == true)
                         {
                             <li class="">
                                 <a href="@Url.Action("Index", "RepairReport", new { Area = "" })"><span class="nav-label">報表輸出</span></a>
@@ -90,7 +91,7 @@
                         }
                     }
                     @{
-                        if (UserManager.IsInRole(User, "Admin"))
+                        if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "RepAdmin"))
                         {
                             <li class="">
                                 <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>
@@ -229,7 +230,7 @@
                     </li>
 
                     @{
-                        if (UserManager.IsInRole(User, "Admin"))
+                        if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
                         {
                             <li class="">
                                 <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>

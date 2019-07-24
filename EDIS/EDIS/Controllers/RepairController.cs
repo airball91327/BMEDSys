@@ -260,8 +260,8 @@ namespace EDIS.Controllers
                     /* Get all closed repair docs. */
                     List<RepairFlowModel> rf = _context.RepairFlows.Where(f => f.Status == "2").ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "Manager")
-                                                            || userManager.IsInRole(User, "RepEngineer"))
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                        userManager.IsInRole(User, "Manager") || userManager.IsInRole(User, "RepEngineer"))
                     {
                         if (userManager.IsInRole(User, "Manager"))
                         {
@@ -356,7 +356,8 @@ namespace EDIS.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepEngineer"))
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                        userManager.IsInRole(User, "RepEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
                         /* Else return the docs belong the login engineer.  */
@@ -1399,8 +1400,8 @@ namespace EDIS.Controllers
                     /* Get all closed repair docs. */
                     List<RepairFlowModel> rf = _context.RepairFlows.Where(f => f.Status == "2").ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "Manager")
-                                                            || userManager.IsInRole(User, "RepEngineer"))
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                        userManager.IsInRole(User, "Manager") || userManager.IsInRole(User, "RepEngineer"))
                     {
                         if (userManager.IsInRole(User, "Manager"))
                         {
@@ -1482,7 +1483,8 @@ namespace EDIS.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepEngineer"))
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                        userManager.IsInRole(User, "RepEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
                         /* Else return the docs belong the login engineer.  */

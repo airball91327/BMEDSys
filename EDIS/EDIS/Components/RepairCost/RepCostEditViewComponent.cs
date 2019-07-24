@@ -49,7 +49,8 @@ namespace EDIS.Components.RepairCost
             {
                 /* Role => 工務經辦 or Admin */
                 if (userManager.IsInRole(this.UserClaimsPrincipal, "RepToDo") == true ||
-                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true)
+                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true ||
+                    userManager.IsInRole(this.UserClaimsPrincipal, "RepAdmin"))
                 {
                     return View(cost);
                 }
@@ -62,7 +63,8 @@ namespace EDIS.Components.RepairCost
                     return View(cost);
                 }
                 if (userManager.IsInRole(this.UserClaimsPrincipal, "RepToDo") == true ||
-                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true) /* 腳色 => 工務經辦 or Admin */
+                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true ||
+                    userManager.IsInRole(this.UserClaimsPrincipal, "RepAdmin")) /* 腳色 => 工務經辦 or Admin */
                 {
                     return View(cost);
                 }

@@ -93,7 +93,8 @@ namespace EDIS.Components.RepairDtl
             {
                 /* Role => 工務經辦 or Admin */
                 if (userManager.IsInRole(this.UserClaimsPrincipal, "RepToDo") == true ||
-                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true)
+                    userManager.IsInRole(this.UserClaimsPrincipal, "Admin") == true ||
+                    userManager.IsInRole(this.UserClaimsPrincipal, "RepAdmin"))
                 {
                     return View("Details", repairDtl);
                 }

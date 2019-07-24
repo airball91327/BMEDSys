@@ -103,7 +103,7 @@
     });
 </script>
 
-@if (UserManager.IsInRole(User, "Admin"))
+@if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
 {
     @*@Html.ActionLink("新增設備", "Create", null, new { @class = "btn btn-default" })
         <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modalFILES">
@@ -207,7 +207,7 @@
         </tr>
         @{
             var role = "";
-            if (UserManager.IsInRole(User, "Admin"))
+            if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
             {
                 role = "admin";
             }
