@@ -4,6 +4,12 @@
     ViewBag.Title = "列表/發票";
 }
 
+<script>
+    function ReSubmit() {
+        $("#ticketQtyForm").submit();
+    }
+</script>
+
 <style>
     .panel {
         background-color: inherit;
@@ -22,7 +28,7 @@
 
 <div class="panel panel-primary">
     <div class="panel-body">
-        <form asp-action="Index" asp-controller="Ticket" asp-area="Admin" data-ajax="true" data-ajax-method="POST"
+        <form asp-action="Index" asp-controller="Ticket" asp-area="Admin" data-ajax="true" data-ajax-method="POST" id="ticketQtyForm"
               data-ajax-update="#pnlTICKETLIST"
               data-ajax-begin="$.Toast.showToast({
               'title':'查詢中，請稍待...',
@@ -48,16 +54,14 @@
                         </div>
                     </div>
                 </div>
-                @*<div class="row">
+                <div class="row">
                     <div class="form-inline">
                         <div class="form-group">
-                            <label for="qtyApplyDateFrom" class="control-title">關帳日查詢</label>
-                            <input type="date" name="qtyApplyDateFrom" class="form-control" />
-                            <span> ~ </span>
-                            <input type="date" name="qtyApplyDateTo" class="form-control" />
+                            @Html.Label("qtyDOCID", "請修單號", htmlAttributes: new { @class = "control-title" })
+                            @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
                         </div>
                     </div>
-                </div>*@
+                </div>
                 <div class="row">
                     <div class="col-md-offset-1 col-md-11">
                         <input id="btnQTY" type="submit" value="查詢" class="btn btn-default" />

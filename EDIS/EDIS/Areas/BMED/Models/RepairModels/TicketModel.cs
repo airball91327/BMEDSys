@@ -39,6 +39,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime? CancelDate { get; set; }
+        [Display(Name = "交易代號")]
+        public string TradeCode { get; set; }
 
         public ICollection<TicketDtlModel> TicketDtls { get; set; }
     }
