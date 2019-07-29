@@ -60,8 +60,9 @@
         <div class="row">
             <div class="form-inline">
                 <label asp-for="AssetNo" class="control-title"></label>
-                <input asp-for="AssetNo" class="form-control" />
-                <span asp-validation-for="AssetNo" class="text-danger"></span>
+                @Html.DisplayFor(model => model.AssetNo)
+                @*<input asp-for="AssetNo" class="form-control" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>*@
             </div>
         </div>
         @if (Model.AssetNo != null)

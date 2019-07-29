@@ -879,8 +879,9 @@ namespace EDIS.Areas.BMED.Controllers
                 vm.AssetNam = repair.AssetName;
                 vm.Company = _context.Departments.Find(repair.DptId).Name_C;
                 vm.Contact = repair.Ext;
-                vm.MVPN = repair.Mvpn;         
+                vm.MVPN = repair.Mvpn;
                 //vm.PlantDoc = repair.PlantDoc;
+                vm.PlaceLoc = repair.PlaceLoc;
                 vm.RepType = repair.RepType;
                 vm.TroubleDes = repair.TroubleDes;
                 if (dtl != null)
