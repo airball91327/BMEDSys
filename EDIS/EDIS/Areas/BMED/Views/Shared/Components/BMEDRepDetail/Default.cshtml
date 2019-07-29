@@ -83,27 +83,42 @@
             }
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.NotInExceptDevice)
+        </dt>
+
+        <dd>
+            @if (@Model.NotInExceptDevice == "Y")
+            {
+                @Html.Raw("是")
+            }
+            else if (@Model.NotInExceptDevice == "N")
+            {
+                @Html.Raw("否")
+            }
+        </dd>
+
         @*<dt>
-                @Html.DisplayNameFor(model => model.CloseDate)
-            </dt>
+            @Html.DisplayNameFor(model => model.CloseDate)
+        </dt>
 
-            <dd>
-                @if (@Model.CloseDate != null)
-                {
-                    @Model.CloseDate.Value.ToString("yyyy/MM/dd");
-                }
-            </dd>
+        <dd>
+            @if (@Model.CloseDate != null)
+            {
+                @Model.CloseDate.Value.ToString("yyyy/MM/dd");
+            }
+        </dd>
 
-            <dt>
-                @Html.DisplayNameFor(model => model.ShutDate)
-            </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.ShutDate)
+        </dt>
 
-            <dd>
-                @if (@Model.ShutDate != null)
-                {
-                    @Model.ShutDate.Value.ToString("yyyy/MM/dd");
-                }
-            </dd>*@
+        <dd>
+            @if (@Model.ShutDate != null)
+            {
+                @Model.ShutDate.Value.ToString("yyyy/MM/dd");
+            }
+        </dd>*@
 
     </dl>
 </div>

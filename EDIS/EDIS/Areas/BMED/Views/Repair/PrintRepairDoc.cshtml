@@ -243,7 +243,10 @@
                                         </td>
                                         <td colspan="2" class="style3"
                                             style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                            @Model.DelivEmpName @Model.DelivEmp
+                                            @if (Model.DelivEmpName != "" && Model.DelivEmpName != null)
+                                            {
+                                                <span>@Model.DelivEmpName (@Model.DelivEmp)</span>
+                                            }
                                         </td>
                                         <td class="style4"
                                             style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">

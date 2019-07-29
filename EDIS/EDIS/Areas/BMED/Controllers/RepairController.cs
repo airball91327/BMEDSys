@@ -532,14 +532,17 @@ namespace EDIS.Areas.BMED.Controllers
 
                     // Create Repair Details.
                     RepairDtlModel dtl = new RepairDtlModel();
-                    var notExceptDevice = _context.ExceptDevice.Find(repair.AssetNo);
-                    if (notExceptDevice == null)
+                    var notInExceptDevice = _context.ExceptDevice.Find(repair.AssetNo);
+                    /* If can find data in ExceptDevice, the device is "not" 統包. 
+                     * It means if value is "Y", the device is 統包
+                     */
+                    if (notInExceptDevice == null)
                     {
-                        dtl.NotExceptDevice = "N";
+                        dtl.NotInExceptDevice = "Y";
                     }
                     else
                     {
-                        dtl.NotExceptDevice = "Y";
+                        dtl.NotInExceptDevice = "N";
                     }
                     dtl.DocId = repair.DocId;
                     dtl.DealState = 1;  // 處理狀態"未處理"
@@ -900,7 +903,7 @@ namespace EDIS.Areas.BMED.Controllers
                 AppUserModel EngTemp = _context.AppUsers.Find(lastFlowEng.UserId);       
                 if (EngTemp != null)
                 {
-                    vm.EngName = EngTemp.FullName + "(" + EngTemp.UserName + ")";
+                    vm.EngName = EngTemp.FullName + " (" + EngTemp.UserName + ")";
                 }
                 else
                 {

@@ -91,7 +91,7 @@ $(function () {
             type: "GET",
             data: { QueryStr: queryStr },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 var select = $('#AssetNo');
                 $('option', select).remove();
                 if (data.length == 0) {

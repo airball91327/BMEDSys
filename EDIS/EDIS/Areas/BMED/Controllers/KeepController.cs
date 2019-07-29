@@ -149,14 +149,17 @@ namespace EDIS.Areas.BMED.Controllers
 
                     //
                     KeepDtlModel dl = new KeepDtlModel();
-                    var notExceptDevice = _context.ExceptDevice.Find(keep.AssetNo);
-                    if (notExceptDevice == null)
+                    var notInExceptDevice = _context.ExceptDevice.Find(keep.AssetNo);
+                    /* If can find data in ExceptDevice, the device is "not" 統包. 
+                     * It means if value is "Y", the device is 統包
+                     */
+                    if (notInExceptDevice == null)
                     {
-                        dl.NotExceptDevice = "N";
+                        dl.NotInExceptDevice = "Y";
                     }
                     else
                     {
-                        dl.NotExceptDevice = "Y";
+                        dl.NotInExceptDevice = "N";
                     }
                     dl.DocId = keep.DocId;
                     switch (kp == null ? "自行" : kp.InOut)
@@ -777,7 +780,7 @@ namespace EDIS.Areas.BMED.Controllers
                 AppUserModel EngTemp = _context.AppUsers.Find(lastFlowEng.UserId);
                 if (EngTemp != null)
                 {
-                    vm.EngName = EngTemp.FullName + "(" + EngTemp.UserName + ")";
+                    vm.EngName = EngTemp.FullName + " (" + EngTemp.UserName + ")";
                 }
                 else
                 {
