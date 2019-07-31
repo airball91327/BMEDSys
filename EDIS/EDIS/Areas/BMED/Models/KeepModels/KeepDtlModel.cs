@@ -33,7 +33,7 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Display(Name = "完工日期")]
         public DateTime? EndDate { get; set; }
         [DataType(DataType.Date)]
-        [Display(Name = "完帳日期")]
+        [Display(Name = "結案日期")]
         public DateTime? CloseDate { get; set; }
         [DataType(DataType.Date)]
         [Display(Name = "關帳日期")]

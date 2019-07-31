@@ -228,7 +228,12 @@
                             </li>
                         </ul>
                     </li>
-
+                    <li class="">
+                        <a href="@Url.Action("RepIndex", "Search", new { Area = "BMED" })"><span class="nav-label">全院請修單查詢</span></a>
+                    </li>
+                    <li class="">
+                        <a href="@Url.Action("KeepIndex", "Search", new { Area = "BMED" })"><span class="nav-label">全院保養單查詢</span></a>
+                    </li>
                     @{
                         if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
                         {
@@ -253,13 +258,13 @@
                                         </ul>
                                     </li>
                                     @*<li class="">
-            <a href="#"><span class="nav-label">財務</span><span class="fa arrow"></span></a>
-            <ul class="nav nav-fourth-level collapse">
-                <li>
-                    <a href="@Url.Action("Index", "Ticket", new { Area = "BMED" })">發票作業</a>
-                </li>
-            </ul>
-        </li>*@
+                            <a href="#"><span class="nav-label">財務</span><span class="fa arrow"></span></a>
+                            <ul class="nav nav-fourth-level collapse">
+                                <li>
+                                    <a href="@Url.Action("Index", "Ticket", new { Area = "BMED" })">發票作業</a>
+                                </li>
+                            </ul>
+                        </li>*@
 
                                 </ul>
                             </li>
