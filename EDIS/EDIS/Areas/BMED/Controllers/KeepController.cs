@@ -143,7 +143,7 @@ namespace EDIS.Areas.BMED.Controllers
                     keep.EngId = kp.KeepEngId;
                     //keep.AccDpt = at.AccDpt;
                     keep.SentDate = DateTime.Now;
-                    keep.Cycle = kp == null ? 0 : kp.Cycle.Value;
+                    keep.Cycle = kp == null ? 0 : (kp.Cycle == null ? 0 : kp.Cycle.Value);
                     keep.Src = "M";
                     _context.Entry(keep).State = EntityState.Modified;
 
