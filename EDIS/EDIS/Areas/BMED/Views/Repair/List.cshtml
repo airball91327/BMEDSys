@@ -65,6 +65,11 @@ else
                             @Html.Raw(" |")
                         }
                     }
+                    else if (item.Flg == "?" && item.FlowCls.Contains("工程師") && UserManager.IsInRole(User, "MedEngineer")) //其他工程師案件
+                    {
+                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
+                        @Html.Raw(" |")
+                    }
                     @*@Html.ActionLink("預覽", "Views", "Repair", new { Area = "BMED", id = item.DocId }) |*@
                     @Html.ActionLink("列印", "PrintRepairDoc", "Repair", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" })
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
