@@ -65,7 +65,11 @@ else
                             @Html.Raw(" |")
                         }
                     }
-                    @*@Html.ActionLink("預覽", "Views", "Keep", new { Area = "BMED", id = item.DocId }) |*@
+                    else
+                    {
+                        @Html.ActionLink("預覽", "Views", "Keep", new { Area = "BMED", id = item.DocId })
+                        @Html.Raw(" |")
+                    }
                     @Html.ActionLink("列印", "PrintKeepDoc", "Keep", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" })
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
                     {
