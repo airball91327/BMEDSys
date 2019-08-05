@@ -41,6 +41,22 @@ $(function () {
                 $('#EngName').val(data.fullName);
             }
         });
+
+        /* Get Asset Deliver. */
+        $.ajax({
+            url: '../Repair/GetAssetDeliver',
+            type: "POST",
+            dataType: "json",
+            data: {
+                AssetNo: $('#AssetNo').val()
+            },
+            async: false,
+            success: function (data) {
+                var select = $('#CheckerId');
+                $('option', select).remove();
+                select.addItems(data);
+            }
+        });
     });
 
     /* While user change DptId, search the DptName. */

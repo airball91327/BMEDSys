@@ -792,6 +792,25 @@ namespace EDIS.Areas.BMED.Controllers
             }
         }
 
+        [HttpPost]
+        public JsonResult GetAssetDeliver(string AssetNo)
+        {
+            AssetModel asset = _context.BMEDAssets.Find(AssetNo);
+            AppUserModel u;
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            if (asset != null)
+            {
+                if (asset.DelivUid != null)
+                {
+                    u = _context.AppUsers.Find(asset.DelivUid);
+                    list.Add(new SelectListItem { Text = u.FullName + "(" + u.UserName + ")", Value = u.Id.ToString() });
+                }
+            }
+
+            return Json(list);
+        }
+
         public JsonResult GetRepairCounts()
         {
             /* Get user details. */
