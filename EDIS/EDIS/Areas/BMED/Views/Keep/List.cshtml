@@ -54,13 +54,22 @@ else
                 <td width="100px">
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User))
                     {
-                        @Html.ActionLink("編輯", "Edit", "Keep", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
-                        @Html.Raw(" |")
+                        if (item.FlowCls == "驗收人")
+                        {
+                            @Html.ActionLink("結案", "Edit", "Keep", new { Area = "BMED", id = item.DocId, page = 7 }, new { target = "_blank" })
+                            @Html.Raw(" |")
+                        }
+                        else
+                        {
+                            @Html.ActionLink("編輯", "Edit", "Keep", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
+                            @Html.Raw(" |")
+                        }
                     }
-                    @Html.ActionLink("預覽", "Views", "Keep", new { Area = "BMED", id = item.DocId }) |
-                    @Html.ActionLink("列印", "PrintKeepDoc", "Keep", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" }) |
+                    @*@Html.ActionLink("預覽", "Views", "Keep", new { Area = "BMED", id = item.DocId }) |*@
+                    @Html.ActionLink("列印", "PrintKeepDoc", "Keep", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" })
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
                     {
+                        @Html.Raw(" |")
                         @Html.ActionLink("廢除", "Delete", "Keep", new { Area = "BMED", id = item.DocId })
                     }
                 </td>

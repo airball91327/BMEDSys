@@ -70,7 +70,7 @@ else
                 <td width="100px">
                     @Html.ActionLink("預覽", "Views", "Keep", new { Area = "BMED", id = item.DocId })
                     @Html.Raw(" |")
-                    @Html.ActionLink("列印", "PrintKeepDoc", "Keep", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" }) |
+                    @Html.ActionLink("列印", "PrintKeepDoc", "Keep", new { Area = "BMED", DocId = item.DocId }, new { target = "_blank" })
                 </td>
                 @*<td>
                         @Html.DisplayFor(modelItem => item.DocType)
