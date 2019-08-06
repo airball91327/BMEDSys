@@ -329,16 +329,24 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                         else
                         {
-                            repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                                 (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                                  _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                            /* 個人或同部門結案案件 */
+                            //repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                            //                                     (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                            //                                      _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                            /* 個人案件 */
+                            repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                         }
                     }
                     else
                     {
-                        repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                             (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                               _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                        /* 個人或同部門結案案件 */
+                        //repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                        //                                     (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                        //                                       _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                        /* 個人案件 */
+                        repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                     }
 
                     repairFlows.Join(_context.BMEDRepairDtls, m => m.repair.DocId, d => d.DocId,

@@ -545,16 +545,24 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                         else
                         {
-                            keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                             (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                              _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                            /* 個人或同部門結案案件 */
+                            //keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                            //                                 (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                            //                                  _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                            /* 個人案件 */
+                            keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                         }
                     }
                     else
                     {
-                        keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                         (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                          _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                        /* 個人或同部門結案案件 */
+                        //keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                        //                                 (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                        //                                  _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                        /* 個人案件 */
+                        keepFlows = keepFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                     }
 
                     keepFlows.Join(_context.BMEDAssets, r => r.keep.AssetNo, a => a.AssetNo,

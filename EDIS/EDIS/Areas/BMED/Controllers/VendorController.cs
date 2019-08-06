@@ -154,7 +154,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<SelectListItem> items = new List<SelectListItem>();
             if (qryVendor.QryType == "關鍵字")
             {
-                _context.BMEDVendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord))
+                _context.BMEDVendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord.Trim()))
                         .ToList()
                         .ForEach(v => {
                             items.Add(new SelectListItem()

@@ -111,16 +111,16 @@ $(function () {
     });
 
     /* Default settings.*/
-    $("#UniteNo").attr("disabled", "disabled");
-    $("input[type=radio][name=QryType]").change(function () {
-        /* While select query type. */
-        if (this.value == '關鍵字') {
-            $("#KeyWord").removeAttr("disabled");
-            $("#UniteNo").attr("disabled", "disabled");
-        }
-        else if (this.value == '統一編號') {
-            $("#UniteNo").removeAttr("disabled");
-            $("#KeyWord").attr("disabled", "disabled");
-        }
-    });
+    //$("#UniteNo").attr("disabled", "disabled");
+    //$("input[type=radio][name=QryType]").change(function () {
+    //    /* While select query type. */
+    //    if (this.value == '關鍵字') {
+    //        $("#KeyWord").removeAttr("disabled");
+    //        $("#UniteNo").attr("disabled", "disabled");
+    //    }
+    //    else if (this.value == '統一編號') {
+    //        $("#UniteNo").removeAttr("disabled");
+    //        $("#KeyWord").attr("disabled", "disabled");
+    //    }
+    //});
 });
