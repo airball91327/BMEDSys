@@ -234,6 +234,17 @@
                     <li class="">
                         <a href="@Url.Action("KeepIndex", "Search", new { Area = "BMED" })"><span class="nav-label">全院保養單查詢</span></a>
                     </li>
+                    <li class="">
+                        <a href="#"><span class="nav-label">說明手冊下載</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse">
+                            <li>
+                                <a href="~/Files/Manual/BMED_Rep_UserManual.pptx" target="_blank"><span class="nav-label">一般版</span></a>
+                            </li>
+                            <li>
+                                <a href="~/Files/Manual/BMED_EngManual.pptx" target="_blank"><span class="nav-label">工程師版</span></a>
+                            </li>
+                        </ul>
+                    </li>
                     @{
                         if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
                         {
