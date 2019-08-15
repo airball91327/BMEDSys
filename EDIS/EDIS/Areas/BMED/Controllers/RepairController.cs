@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
-using EDIS.Areas.BMED.Models;
 using EDIS.Models.Identity;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Repositories;
 using EDIS.Repositories;
 using EDIS.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
 using System.IO;
 using EDIS.Models;
-using EDIS.Areas.BMED.Models.KeepModels;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -63,7 +60,7 @@ namespace EDIS.Areas.BMED.Controllers
 
         // GET: /<controller>/
         //Not Used
-        public ActionResult Index()
+        public IActionResult Index()
         {
             List<SelectListItem> FlowlistItem = new List<SelectListItem>();
             FlowlistItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
@@ -81,8 +78,9 @@ namespace EDIS.Areas.BMED.Controllers
             return View();
         }
 
+        // POST: BMED/Keep/Index
         [HttpPost]
-        public ActionResult Index(QryRepListData qdata)
+        public IActionResult Index(QryRepListData qdata)
         {
             string docid = qdata.BMEDqtyDOCID;
             string ano = qdata.BMEDqtyASSETNO;
@@ -454,7 +452,7 @@ namespace EDIS.Areas.BMED.Controllers
             return View("List", rv);
         }
         [Authorize]
-        public ActionResult Create()
+        public IActionResult Create()
         {
             var test = _context.BMEDRepairs.ToList();
             RepairModel repair = new RepairModel();
@@ -624,7 +622,7 @@ namespace EDIS.Areas.BMED.Controllers
             return BadRequest(msg);
         }
 
-        public ActionResult Edit(string id, int page)
+        public IActionResult Edit(string id, int page)
         {
             ViewData["Page"] = page;
             RepairModel repair = _context.BMEDRepairs.Find(id);
@@ -635,14 +633,14 @@ namespace EDIS.Areas.BMED.Controllers
             return View(repair);
         }
 
-        public ActionResult Detail()
+        public IActionResult Detail()
         {
             RepairModel repair = new RepairModel();
 
             return PartialView(repair);
         }
 
-        public ActionResult List()
+        public IActionResult List()
         {
             return PartialView();
         }
@@ -717,7 +715,7 @@ namespace EDIS.Areas.BMED.Controllers
             return did;
         }
 
-        public ActionResult Views(string id)
+        public IActionResult Views(string id)
         {
             RepairModel repair = _context.BMEDRepairs.Find(id);
             if (repair == null)
@@ -881,7 +879,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         // GET: Repairs/PrintRepairDoc/5
-        public ActionResult PrintRepairDoc(string DocId, int printType)
+        public IActionResult PrintRepairDoc(string DocId, int printType)
         {
             /* Get all print details according to the DocId. */
             RepairModel repair = _context.BMEDRepairs.Find(DocId);
@@ -991,9 +989,9 @@ namespace EDIS.Areas.BMED.Controllers
             return View(vm);
         }
 
-        public ActionResult ExportToExcel(string qtyDocId, string qtyAssetNo, string qtyAccDpt, string qtyAssetName,
-                                          string qtyFlowType, string qtyDptId, string Date1, string Date2,
-                                          string DealStatus, string IsCharged, string DateType, bool SearchAllDoc)
+        public IActionResult ExportToExcel(string qtyDocId, string qtyAssetNo, string qtyAccDpt, string qtyAssetName,
+                                           string qtyFlowType, string qtyDptId, string Date1, string Date2,
+                                           string DealStatus, string IsCharged, string DateType, bool SearchAllDoc)
         {
             string docid = qtyDocId;
             string ano = qtyAssetNo;
@@ -1412,7 +1410,7 @@ namespace EDIS.Areas.BMED.Controllers
         // POST: Repairs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
             RepairFlowModel repflow = _context.BMEDRepairFlows.Where(f => f.DocId == id && f.Status == "?")
@@ -1424,6 +1422,12 @@ namespace EDIS.Areas.BMED.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Home", new { Area = "" });
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+            base.Dispose(disposing);
         }
     }
 }

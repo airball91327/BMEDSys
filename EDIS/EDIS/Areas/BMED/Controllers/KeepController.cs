@@ -330,27 +330,27 @@ namespace EDIS.Areas.BMED.Controllers
             /* Get login user. */
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
-            var rps = _context.BMEDKeeps.ToList();
+            var kps = _context.BMEDKeeps.ToList();
             if (!string.IsNullOrEmpty(docid))
             {
                 docid = docid.Trim();
-                rps = rps.Where(v => v.DocId == docid).ToList();
+                kps = kps.Where(v => v.DocId == docid).ToList();
             }
             if (!string.IsNullOrEmpty(ano))
             {
-                rps = rps.Where(v => v.AssetNo == ano).ToList();
+                kps = kps.Where(v => v.AssetNo == ano).ToList();
             }
             if (!string.IsNullOrEmpty(dptid))
             {
-                rps = rps.Where(v => v.DptId == dptid).ToList();
+                kps = kps.Where(v => v.DptId == dptid).ToList();
             }
             if (!string.IsNullOrEmpty(acc))
             {
-                rps = rps.Where(v => v.AccDpt == acc).ToList();
+                kps = kps.Where(v => v.AccDpt == acc).ToList();
             }
             if (!string.IsNullOrEmpty(aname))
             {
-                rps = rps.Where(v => v.AssetName != null)
+                kps = kps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
             }
@@ -359,12 +359,12 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 if (qtyDateType == "送單日")
                 {
-                    rps = rps.Where(v => v.SentDate >= applyDateFrom && v.SentDate <= applyDateTo).ToList();
+                    kps = kps.Where(v => v.SentDate >= applyDateFrom && v.SentDate <= applyDateTo).ToList();
                 }
             }
 
             /* If no search result. */
-            if (rps.Count() == 0)
+            if (kps.Count() == 0)
             {
                 return View("List", kv);
             }
@@ -373,7 +373,7 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 /* 與登入者相關且流程不在該登入者身上的文件 */
                 case "流程中":
-                    rps.Join(_context.BMEDKeepFlows.Where(f2 => f2.UserId == ur.Id && f2.Status == "1")
+                    kps.Join(_context.BMEDKeepFlows.Where(f2 => f2.UserId == ur.Id && f2.Status == "1")
                        .Select(f => f.DocId).Distinct(),
                                r => r.DocId, f2 => f2, (r, f2) => r)
                        .Join(_context.BMEDKeepFlows.Where(f => f.Status == "?" && f.UserId != ur.Id),
@@ -466,7 +466,7 @@ namespace EDIS.Areas.BMED.Controllers
                           f.Cls,
                           f.Status
                       }).Distinct()
-                      .Join(rps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
+                      .Join(kps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
                       (f, k) => new
                       {
                           keep = k,
@@ -527,7 +527,7 @@ namespace EDIS.Areas.BMED.Controllers
                       break;
                 case "待簽核":
                     /* Get all dealing repair docs. */
-                    var keepFlows = _context.BMEDKeepFlows.Join(rps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
+                    var keepFlows = _context.BMEDKeepFlows.Join(kps.DefaultIfEmpty(), f => f.DocId, k => k.DocId,
                     (f, k) => new
                     {
                         keep = k,
@@ -864,5 +864,10 @@ namespace EDIS.Areas.BMED.Controllers
             return RedirectToAction("Index", "Home", new { Area = "" });
         }
 
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+            base.Dispose(disposing);
+        }
     }
 }
