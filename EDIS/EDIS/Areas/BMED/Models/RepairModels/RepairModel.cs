@@ -47,6 +47,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "儀器名稱")]
         public string AssetName { get; set; }
         [Required]

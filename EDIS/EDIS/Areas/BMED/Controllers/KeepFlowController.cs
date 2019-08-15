@@ -134,7 +134,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
                 else if (assign.FlowCls == "廢除")
                 {
@@ -190,7 +190,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
 
                 return new JsonResult(assign)
