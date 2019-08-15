@@ -155,6 +155,16 @@ namespace EDIS.Controllers
             {
                 docid = docid.Trim();
                 rps = rps.Where(v => v.DocId == docid).ToList();
+                //案件是否為廢除
+                if (rps.Count() > 0)
+                {
+                    var tempLastFlow = _context.RepairFlows.Where(f => f.DocId == rps.First().DocId)
+                                                          .OrderBy(f => f.StepId).LastOrDefault();
+                    if (tempLastFlow.Status == "3")
+                    {
+                        ViewData["IsDocDeleted"] = "Y";
+                    }
+                }
             }
             if (!string.IsNullOrEmpty(ano))
             {
@@ -450,7 +460,8 @@ namespace EDIS.Controllers
                         EndDate = j.repdtl.EndDate,
                         CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
-                        repdata = j.repair
+                        repdata = j.repair,
+                        ArriveDate = j.flow.Rtt
                     }));
                     break;
             };
@@ -521,9 +532,20 @@ namespace EDIS.Controllers
                 {
                     rv = rv.OrderByDescending(r => r.EndDate).ThenByDescending(r => r.DocId).ToList();
                 }
-                else
+                else if (qtyOrderType == "申請日")
                 {
                     rv = rv.OrderByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                }
+                else
+                {
+                    if (userManager.IsInRole(User, "RepEngineer") == true)
+                    {
+                        rv = rv.OrderByDescending(r => r.ArriveDate).ThenByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                    }
+                    else
+                    {
+                        rv = rv.OrderByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                    }
                 }
             }
 
@@ -730,7 +752,7 @@ namespace EDIS.Controllers
                     body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
 
                     return Ok(repair);
                 }
