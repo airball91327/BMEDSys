@@ -33,7 +33,7 @@ namespace EDIS.Areas.BMED.Controllers
         // GET: BMED/KeepFormat/Details/5
         public IActionResult Details(string id = null)
         {
-            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(HtmlEncoder.Default.Encode(id));
+            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(System.Net.WebUtility.HtmlDecode(id));
             if (keepformat == null)
             {
                 return StatusCode(404);
@@ -70,7 +70,7 @@ namespace EDIS.Areas.BMED.Controllers
         // GET: BMED/KeepFormat/Edit/5
         public IActionResult Edit(string id = null)
         {
-            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(HtmlEncoder.Default.Encode(id));
+            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(System.Net.WebUtility.HtmlDecode(id));
             if (keepformat == null)
             {
                 return StatusCode(404);
