@@ -3,116 +3,121 @@
 @{
     ViewBag.Title = "預覽請修";
 }
+<h4>申請資料</h4>
 <div style="margin: 10pt">
     @*@Html.Action("List", "AttainFiles", new { id = Model.DocId, typ = "1" })*@
 </div>
 <div>
     @*<h3><span class="label label-default">請修資料</span></h3>*@
     @Html.HiddenFor(model => model.DocId)
-    <dl class="dl-horizontal">
-        @*<dt>
-                @Html.DisplayNameFor(model => model.UserId)
-            </dt>
+    <div class="container">
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.DocId)
+                </dt>
 
-            <dd>
-                @Html.DisplayFor(model => model.UserId)
-            </dd>*@
+                <dd>
+                    @Html.DisplayFor(model => model.DocId)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DocId)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DocId)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.DptId)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.DptName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.DptId)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Ext)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.DptName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Ext)
+                </dd>
+            </dl>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Ext)
-        </dt>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AccDpt)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Ext)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.AccDpt)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AccDpt)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.RepType)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AccDpt)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.RepType)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.RepType)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.AssetNo)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.RepType)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.AssetNo)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AssetNo)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.AssetName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AssetNo)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.AssetName)
+                </dd>
+            </dl>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.AssetName)
-        </dt>
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.PlaceLoc)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.AssetName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.PlaceLoc)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.PlaceLoc)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.ApplyDate)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.PlaceLoc)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.ApplyDate)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.ApplyDate)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.TroubleDes)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ApplyDate)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.TroubleDes)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TroubleDes)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.CheckerName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.TroubleDes)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.CheckerName)
+                </dd>
+            </dl>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.CheckerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckerName)
-        </dd>
-
-    </dl>
+        </div>
+    </div>
 </div>

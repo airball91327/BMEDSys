@@ -108,15 +108,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="PlantClass" class="control-title"></label>
-                    <input asp-for="PlantClass" class="form-control"/>
-                    <span asp-validation-for="PlantClass" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
+        <input type="hidden" asp-for="PlantClass" value="醫療儀器" />
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
@@ -154,7 +146,7 @@
         </div>
         <div class="row">
             <div class="form-inline">
-                <label asp-for="PlaceLoc" class="control-title"></label>
+                <label class="control-title">費用歸屬</label>
                 <div class="radio">
                     <label>
                         <input type="radio" name="LocType" id="LocType1" value="本單位" checked>
@@ -227,7 +219,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        @*<div class="row">
             <div class=form-inline>
                 <div class="form-group">
                     <label asp-for="PrimaryEngId" class="control-title"></label>
@@ -237,7 +229,7 @@
                     <span asp-validation-for="PrimaryEngId" class="text-danger"></span>
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">

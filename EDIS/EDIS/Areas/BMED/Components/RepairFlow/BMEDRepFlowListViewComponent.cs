@@ -64,6 +64,17 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 });
             flows = flows.OrderBy(f => f.StepId).ToList();
 
+            foreach(var item in flows)
+            {
+                if (item.Status != "?")
+                {
+                    if (item.UserId != item.Rtp)
+                    {
+                        item.UserName += "(" + _context.AppUsers.Find(item.Rtp).FullName + "代替)";
+                    }
+                }
+            }
+
             return View(flows);
         }
     }

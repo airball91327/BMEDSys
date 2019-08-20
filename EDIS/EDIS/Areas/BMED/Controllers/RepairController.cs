@@ -781,13 +781,7 @@ namespace EDIS.Areas.BMED.Controllers
             /* 擷取預設負責工程師 */
             if (engineer == null)  //該部門無預設工程師
             {
-                var tempEng = _context.AppUsers.Where(a => a.UserName == "344027")
-                                               .Select(a => new
-                                               {
-                                                   EngId = a.Id,
-                                                   UserName = a.UserName,
-                                                   FullName = a.FullName
-                                               }).FirstOrDefault();
+                var tempEng = new { EngId = "0000", UserName = "0000", FullName = "簡榮俊" };
                 return Json(tempEng);
             }
             else

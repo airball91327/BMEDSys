@@ -57,7 +57,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "送修儀器配件")]
         public string PlantDoc { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
-        [Display(Name = "請修地點")] //放置地點
+        [Display(Name = "擺設地點")] //放置地點
         public string PlaceLoc { get; set; }
         [Display(Name = "申請日期")]
         [DataType(DataType.Date)]
