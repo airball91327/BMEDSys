@@ -63,9 +63,8 @@
         <div class="row">
             <div class="form-inline">
                 <label asp-for="AssetNo" class="control-title"></label>
-                @Html.DisplayFor(model => model.AssetNo)
-                @*<input asp-for="AssetNo" class="form-control" />
-                <span asp-validation-for="AssetNo" class="text-danger"></span>*@
+                <input asp-for="AssetNo" class="form-control" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>
             </div>
         </div>
         @if (Model.AssetNo != null)
@@ -73,15 +72,15 @@
             <div class="row">
                 <div class="form-inline">
                     <label asp-for="AssetName" class="control-title"></label>
-                    @Html.DisplayFor(model => model.AssetName)
+                    <span id="AssetName">@Html.DisplayFor(model => model.AssetName)</span>
                 </div>
             </div>
-            <div class="row">
+            @*<div class="row">
                 <div class="form-inline">
                     <label asp-for="AssetAccDate" class="control-title"></label>
                     @Html.DisplayFor(model => model.AssetAccDate)
                 </div>
-            </div>
+            </div>*@
         }
         @Html.HiddenFor(model => model.Hour)
         @Html.HiddenFor(model => model.Cost)

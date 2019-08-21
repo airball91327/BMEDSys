@@ -20,9 +20,25 @@ $(document).ready(function () {
     });
     $('#DealState').trigger("change");
 
+    $('#AssetNo').change(function () {
+        getAssetName();
+    });
 });
-//$(function () {
-//    $(".datefield").datepicker({
-//        format: "yyyy/mm/dd"
-//    });
-//});
+
+function getAssetName() {
+    var AssetNo = $("#AssetNo").val();
+    $.ajax({
+        url: '../../Repair/GetAssetName',
+        type: "POST",
+        dataType: "json",
+        data: { assetNo: AssetNo },
+        success: function (data) {
+            if (data == "查無資料") {
+                $("#AssetName").html('查無資料');
+            }
+            else {
+                $("#AssetName").html(data.cname);
+            }
+        }
+    });
+}

@@ -4,11 +4,7 @@
     ViewBag.Title = "預覽請修";
 }
 <h4>申請資料</h4>
-<div style="margin: 10pt">
-    @*@Html.Action("List", "AttainFiles", new { id = Model.DocId, typ = "1" })*@
-</div>
 <div>
-    @*<h3><span class="label label-default">請修資料</span></h3>*@
     @Html.HiddenFor(model => model.DocId)
     <div class="container">
         <div class="col-md-4">
@@ -44,11 +40,7 @@
                 <dd>
                     @Html.DisplayFor(model => model.Ext)
                 </dd>
-            </dl>
 
-        </div>
-        <div class="col-md-4">
-            <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.AccDpt)
                 </dt>
@@ -56,7 +48,11 @@
                 <dd>
                     @Html.DisplayFor(model => model.AccDpt)
                 </dd>
+            </dl>
 
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.RepType)
                 </dt>
@@ -80,11 +76,15 @@
                 <dd>
                     @Html.DisplayFor(model => model.AssetName)
                 </dd>
-            </dl>
 
-        </div>
-        <div class="col-md-4">
-            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.AssetAccDate)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.AssetAccDate)
+                </dd>
+
                 <dt>
                     @Html.DisplayNameFor(model => model.PlaceLoc)
                 </dt>
@@ -92,7 +92,11 @@
                 <dd>
                     @Html.DisplayFor(model => model.PlaceLoc)
                 </dd>
+            </dl>
 
+        </div>
+        <div class="col-md-4">
+            <dl class="dl-horizontal">
                 <dt>
                     @Html.DisplayNameFor(model => model.ApplyDate)
                 </dt>

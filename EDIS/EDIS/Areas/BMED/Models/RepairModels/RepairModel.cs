@@ -83,5 +83,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "設備類別")]
         public string PlantClass { get; set; }
+        [NotMapped]
+        [Display(Name = "立帳日")]
+        public string AssetAccDate { get; set; }
     }
 }

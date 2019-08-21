@@ -132,11 +132,11 @@ namespace EDIS.Areas.BMED.Controllers
                             repairCost.TicketDtl.Ticket = t;
                             _context.BMEDTickets.Add(t);
                         }
-                    _context.BMEDTicketDtls.Add(repairCost.TicketDtl);
-                }
+                        _context.BMEDTicketDtls.Add(repairCost.TicketDtl);
+                    }
                     else
                     {
-                        repairCost.AccountDate = DateTime.Now.Date;
+                        repairCost.AccountDate = repairCost.AccountDate == null ? DateTime.Now.Date : repairCost.AccountDate;
                         repairCost.TicketDtl = null;
                     }
                     repairCost.Rtp = ur.Id;

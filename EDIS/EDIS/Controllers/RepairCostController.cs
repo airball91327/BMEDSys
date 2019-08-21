@@ -132,11 +132,11 @@ namespace EDIS.Controllers
                             repairCost.TicketDtl.Ticket = t;
                             _context.Tickets.Add(t);
                         }
-                    _context.TicketDtls.Add(repairCost.TicketDtl);
-                }
+                        _context.TicketDtls.Add(repairCost.TicketDtl);
+                    }
                     else
                     {
-                        repairCost.AccountDate = DateTime.Now.Date;
+                        repairCost.AccountDate = repairCost.AccountDate == null ? DateTime.Now.Date : repairCost.AccountDate;
                         repairCost.TicketDtl = null;
                     }
                     repairCost.Rtp = ur.Id;
