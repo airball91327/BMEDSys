@@ -36,6 +36,17 @@ namespace EDIS.Areas.BMED.Components.RepairCost
             RepairCostModel cost = new RepairCostModel();
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
+            /* Check the device's contract. */
+            var repairDtl = _context.BMEDRepairDtls.Find(id);
+            if (repairDtl.NotInExceptDevice == "Y") //該案件為統包
+            {
+                ViewData["HideCost"] = "Y";
+            }
+            else
+            {
+                ViewData["HideCost"] = "N";
+            }
+
             int seqno = _context.BMEDRepairCosts.Where(c => c.DocId == id)
                                                 .Select(c => c.SeqNo).DefaultIfEmpty().Max();
             cost.DocId = id;

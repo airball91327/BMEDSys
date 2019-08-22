@@ -150,7 +150,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //
                     KeepDtlModel dl = new KeepDtlModel();
                     var notInExceptDevice = _context.ExceptDevice.Find(keep.AssetNo);
-                    /* If can find data in ExceptDevice, the device is "not" 統包. 
+                    /* If can find data in ExceptDevice table, the device is "not" 統包. 
                      * It means if value is "Y", the device is 統包
                      */
                     if (notInExceptDevice == null)

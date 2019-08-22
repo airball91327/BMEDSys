@@ -250,6 +250,21 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                     }
                     break;
+                case "設備主管":
+                    s = roleManager.GetUsersInRole("MedAssetMgr").ToList();
+                    list = new List<SelectListItem>();
+                    foreach (string l in s)
+                    {
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (!string.IsNullOrEmpty(u.DptId))
+                        {
+                            li = new SelectListItem();
+                            li.Text = u.FullName + "(" + u.UserName + ")";
+                            li.Value = u.Id.ToString();
+                            list.Add(li);
+                        }
+                    }
+                    break;
                 case "醫工主任":
                     s = roleManager.GetUsersInRole("MedDirector").ToList();
                     list = new List<SelectListItem>();

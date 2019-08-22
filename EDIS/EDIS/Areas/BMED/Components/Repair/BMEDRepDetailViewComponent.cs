@@ -31,6 +31,10 @@ namespace EDIS.Areas.BMED.Components.Repair
             RepairDtlModel repairDtl = _context.BMEDRepairDtls.Find(id);
             var ur = _userRepo.Find(us => us.UserName == this.User.Identity.Name).FirstOrDefault();
 
+            /* Get CheckerName from Repair table. */
+            var checkerId = _context.BMEDRepairs.Find(id).CheckerId;
+            repairDtl.CheckerName = checkerId == 0 ? "" : _context.AppUsers.Find(checkerId).FullName;
+
             repairDtl.DealStateTitle = _context.BMEDDealStatuses.Find(repairDtl.DealState).Title;
             if (repairDtl.FailFactor == 0)
             {

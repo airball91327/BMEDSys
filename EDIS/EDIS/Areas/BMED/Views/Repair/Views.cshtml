@@ -24,25 +24,19 @@
     @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "1", viewType = "Views" })
 </div>
 
+<div>
+    @await Component.InvokeAsync("BMEDRepDetail2", new { id = Model.DocId })
+</div>
+
 <ul class="nav nav-pills" style="font-size:120%">
-    <li role="presentation" class="active"><a href="#repair" data-toggle="tab" style="padding-left:20px">申請資料</a></li>
-    <li role="presentation"><a href="#repairdtl" data-toggle="tab" style="padding-left:20px">請修紀錄</a></li>
+    <li role="presentation" class="active"><a href="#repairdtl" data-toggle="tab" style="padding-left:20px">請修紀錄</a></li>
     <li role="presentation"><a href="#repairemp" data-toggle="tab" style="padding-left:20px">工程師工時</a></li>
-    @if (Model.UserId != UserManager.GetCurrentUserId(User) ||
-      RoleManager.GetUsersInRole("MedEngineer").Contains(User.Identity.Name)) //申請人不能檢視維修花費
-    {
-        <li role="presentation"><a href="#repaircost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
-    }
+    <li role="presentation"><a href="#repaircost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
     <li role="presentation"><a href="#repflowlist" data-toggle="tab" style="padding-left:20px">流程紀錄</a></li>
 </ul>
 <hr />
 <div class="tab-content">
-    <div id="repair" class="tab-pane fade in active">
-        <div>
-            @await Component.InvokeAsync("BMEDRepDetail2", new { id = Model.DocId })
-        </div>
-    </div>
-    <div id="repairdtl" class="tab-pane fade">
+    <div id="repairdtl" class="tab-pane fade in active">
         <p>
             @await Component.InvokeAsync("BMEDRepDetail", new { id = Model.DocId })
         </p>

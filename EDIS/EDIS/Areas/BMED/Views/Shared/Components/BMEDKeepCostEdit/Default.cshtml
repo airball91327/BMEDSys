@@ -51,6 +51,34 @@
                 </div>
             </div>
         </div>
+        <div id="pnlTICKET" class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="TicketDtl.TicketDtlNo" class="control-title"></label>
+                    <input asp-for="TicketDtl.TicketDtlNo" class="form-control" style="text-transform:uppercase;" />
+                    <input id="btnGETSEQ" type="button" value="取收據號(免用統一發票)" class="btn btn-default" />
+                    <span asp-validation-for="TicketDtl.TicketDtlNo" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div id="pnlSIGN" class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="SignNo" class="control-title"></label>
+                    <input asp-for="SignNo" class="form-control" style="text-transform:uppercase;" />
+                    <span asp-validation-for="SignNo" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div id="pnlACCDATE" class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="AccountDate" class="control-title"></label>
+                    <input asp-for="AccountDate" class="form-control" />
+                    <span asp-validation-for="AccountDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
         <div class="row">
             @Html.HiddenFor(model => model.PartNo)
             <div class=form-inline>
@@ -100,34 +128,6 @@
                     <label asp-for="TotalCost" class="control-title"></label>
                     <input asp-for="TotalCost" class="form-control-s" />
                     <span asp-validation-for="TotalCost" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div id="pnlTICKET" class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="TicketDtl.TicketDtlNo" class="control-title"></label>
-                    <input asp-for="TicketDtl.TicketDtlNo" class="form-control" style="text-transform:uppercase;" />
-                    <input id="btnGETSEQ" type="button" value="取收據號(免用統一發票)" class="btn btn-default" />
-                    <span asp-validation-for="TicketDtl.TicketDtlNo" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div id="pnlSIGN" class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="SignNo" class="control-title"></label>
-                    <input asp-for="SignNo" class="form-control" style="text-transform:uppercase;" />
-                    <span asp-validation-for="SignNo" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div id="pnlACCDATE" class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="AccountDate" class="control-title"></label>
-                    <input asp-for="AccountDate" class="form-control" />
-                    <span asp-validation-for="AccountDate" class="text-danger"></span>
                 </div>
             </div>
         </div>

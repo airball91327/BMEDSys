@@ -32,6 +32,17 @@ namespace EDIS.Areas.BMED.Components.KeepCost
             KeepCostModel cost = new KeepCostModel();
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
+            /* Check the device's contract. */
+            var keepDtl = _context.BMEDKeepDtls.Find(id);
+            if (keepDtl.NotInExceptDevice == "Y") //該案件為統包
+            {
+                ViewData["HideCost"] = "Y";
+            }
+            else
+            {
+                ViewData["HideCost"] = "N";
+            }
+
             int seqno = _context.BMEDKeepCosts.Where(c => c.DocId == id)
                                               .Select(c => c.SeqNo).DefaultIfEmpty().Max();
             cost.DocId = id;

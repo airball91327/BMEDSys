@@ -48,7 +48,8 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
                 listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
-                listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
+                listItem.Add(new SelectListItem { Text = "設備主管", Value = "設備主管" });
+                //listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
             }
             else  //維修流程
             {
@@ -58,11 +59,12 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
                 listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
-                listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
-                listItem.Add(new SelectListItem { Text = "醫工經辦", Value = "醫工經辦" });
+                listItem.Add(new SelectListItem { Text = "設備主管", Value = "設備主管" });
+                //listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
+                //listItem.Add(new SelectListItem { Text = "醫工經辦", Value = "醫工經辦" });
             }
-            listItem.Add(new SelectListItem { Text = "列管財產負責人", Value = "列管財產負責人" });
-            listItem.Add(new SelectListItem { Text = "固資財產負責人", Value = "固資財產負責人" });
+            //listItem.Add(new SelectListItem { Text = "列管財產負責人", Value = "列管財產負責人" });
+            //listItem.Add(new SelectListItem { Text = "固資財產負責人", Value = "固資財產負責人" });
             listItem.Add(new SelectListItem { Text = "其他", Value = "其他" });
             /* Insert values. */
             AssignModel assign = new AssignModel();
@@ -73,17 +75,17 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
             {
                 assign.Cls = repairFlow.Cls;
 
-                if (repairFlow.Cls == "驗收人")    //統一驗收人結案
+                if (repairFlow.Cls == "驗收人" || repairFlow.Cls == "醫工主管")    //驗收人 or 醫工主管結案
                 {
                     listItem.Add(new SelectListItem { Text = "結案", Value = "結案" });
                 }
-                if (repairFlow.Cls == "醫工工程師")   //醫工工程師自己為驗收人時
-                {
-                    if (repair.CheckerId == repairFlow.UserId)  //驗收人為自己
-                    {
-                        listItem.Add(new SelectListItem { Text = "結案", Value = "結案" });
-                    }
-                }
+                //if (repairFlow.Cls == "醫工工程師")   //醫工工程師自己為驗收人時
+                //{
+                //    if (repair.CheckerId == repairFlow.UserId)  //驗收人為自己
+                //    {
+                //        listItem.Add(new SelectListItem { Text = "結案", Value = "結案" });
+                //    }
+                //}
             }
             ViewData["FlowCls"] = new SelectList(listItem, "Value", "Text", "");
 

@@ -53,6 +53,10 @@ namespace EDIS.Areas.BMED.Components.KeepDtl
                 if (keepDtl.Result != null)
                     keepDtl.ResultTitle = _context.BMEDKeepResults.Find(keepDtl.Result).Title;
             }
+            /* Get CheckerName from Repair table. */
+            var checkerId = _context.BMEDKeeps.Find(id).CheckerId;
+            keepDtl.CheckerName = checkerId == 0 ? "" : _context.AppUsers.Find(checkerId).FullName;
+
             return View(keepDtl);
         }
 

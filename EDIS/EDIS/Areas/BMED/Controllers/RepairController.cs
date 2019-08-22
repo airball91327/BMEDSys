@@ -539,7 +539,7 @@ namespace EDIS.Areas.BMED.Controllers
                     // Create Repair Details.
                     RepairDtlModel dtl = new RepairDtlModel();
                     var notInExceptDevice = _context.ExceptDevice.Find(repair.AssetNo);
-                    /* If can find data in ExceptDevice, the device is "not" 統包. 
+                    /* If can find data in ExceptDevice table, the device is "not" 統包. 
                      * It means if value is "Y", the device is 統包
                      */
                     if (notInExceptDevice == null)

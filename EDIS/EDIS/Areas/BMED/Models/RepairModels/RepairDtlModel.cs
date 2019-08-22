@@ -59,5 +59,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public List<SelectListItem> DealStates { get; set; }
         [NotMapped]
         public List<SelectListItem> FailFactors { get; set; }
+        [NotMapped]
+        [Display(Name = "結案驗收人")]
+        public string CheckerName { get; set; }
     }
 }

@@ -38,5 +38,8 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [DataType(DataType.Date)]
         [Display(Name = "關帳日期")]
         public DateTime? ShutDate { get; set; }
+        [NotMapped]
+        [Display(Name = "結案驗收人")]
+        public string CheckerName { get; set; }
     }
 }
