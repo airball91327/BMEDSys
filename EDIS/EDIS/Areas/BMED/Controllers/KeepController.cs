@@ -287,8 +287,18 @@ namespace EDIS.Areas.BMED.Controllers
             string dptid = qdata.BMEDKqtyDPTID;
             string qtyDate1 = qdata.BMEDKqtyApplyDateFrom;
             string qtyDate2 = qdata.BMEDKqtyApplyDateTo;
+            string qtyKeepResult = qdata.BMEDKqtyKeepResult;
+            string qtyIsCharged = qdata.BMEDKqtyIsCharged;
             string qtyDateType = qdata.BMEDKqtyDateType;
             bool searchAllDoc = qdata.BMEDKqtySearchAllDoc;
+            string qtyEngCode = qdata.BMEDKqtyEngCode;
+            string qtyTicketNo = qdata.BMEDKqtyTicketNo;
+            string qtyVendor = qdata.BMEDKqtyVendor;
+
+            if (qtyEngCode != null)
+            {
+                searchAllDoc = true;
+            }
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -331,28 +341,47 @@ namespace EDIS.Areas.BMED.Controllers
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
             var kps = _context.BMEDKeeps.ToList();
-            if (!string.IsNullOrEmpty(docid))
+            if (!string.IsNullOrEmpty(docid))   //表單編號
             {
                 docid = docid.Trim();
                 kps = kps.Where(v => v.DocId == docid).ToList();
             }
-            if (!string.IsNullOrEmpty(ano))
+            if (!string.IsNullOrEmpty(ano))     //財產編號
             {
                 kps = kps.Where(v => v.AssetNo == ano).ToList();
             }
-            if (!string.IsNullOrEmpty(dptid))
+            if (!string.IsNullOrEmpty(dptid))   //所屬部門編號
             {
                 kps = kps.Where(v => v.DptId == dptid).ToList();
             }
-            if (!string.IsNullOrEmpty(acc))
+            if (!string.IsNullOrEmpty(acc))     //成本中心
             {
                 kps = kps.Where(v => v.AccDpt == acc).ToList();
             }
-            if (!string.IsNullOrEmpty(aname))
+            if (!string.IsNullOrEmpty(aname))   //財產名稱
             {
                 kps = kps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.VendorName.Contains(qtyVendor))
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
             }
             /* Search date by DateType.(ApplyDate) */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)
@@ -432,6 +461,7 @@ namespace EDIS.Areas.BMED.Controllers
                             Src = j.keep.Src,
                             SentDate = j.keep.SentDate,
                             EndDate = j.keepdtl.EndDate,
+                            IsCharged = j.keepdtl.IsCharged,
                             keepdata = j.keep
                         }));
                         break;
@@ -522,6 +552,7 @@ namespace EDIS.Areas.BMED.Controllers
                           SentDate = j.keep.SentDate,
                           EndDate = j.keepdtl.EndDate,
                           CloseDate = j.keepdtl.CloseDate.Value.Date,
+                          IsCharged = j.keepdtl.IsCharged,
                           keepdata = j.keep
                       }));
                       break;
@@ -542,6 +573,10 @@ namespace EDIS.Areas.BMED.Controllers
                         if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == true)
                         {
                             keepFlows = keepFlows.Where(f => f.flow.Status == "?" && f.flow.Cls.Contains("工程師")).ToList();
+                            if (!string.IsNullOrEmpty(qtyEngCode))  //工程師搜尋
+                            {
+                                keepFlows = keepFlows.Where(f => f.keep.EngId == Convert.ToInt32(qtyEngCode)).ToList();
+                            }
                         }
                         else
                         {
@@ -615,6 +650,7 @@ namespace EDIS.Areas.BMED.Controllers
                         Src = j.keep.Src,
                         SentDate = j.keep.SentDate,
                         EndDate = j.keepdtl.EndDate,
+                        IsCharged = j.keepdtl.IsCharged,
                         keepdata = j.keep
                     }));
                     break;
@@ -650,16 +686,16 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
 
-            /* Search dealStatus. */
-            //if (!string.IsNullOrEmpty(qtyDealStatus))
-            //{
-            //    rv = rv.Where(r => r.DealState == qtyDealStatus).ToList();
-            //}
+            /* Search KeepResults. */
+            if (!string.IsNullOrEmpty(qtyKeepResult))
+            {
+                kv = kv.Where(r => r.Result == _context.BMEDKeepResults.Find(Convert.ToInt32(qtyKeepResult)).Title).ToList();
+            }
             /* Search IsCharged. */
-            //if (!string.IsNullOrEmpty(qtyIsCharged))
-            //{
-            //    rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
-            //}
+            if (!string.IsNullOrEmpty(qtyIsCharged))
+            {
+                kv = kv.Where(r => r.IsCharged == qtyIsCharged).ToList();
+            }
 
             return View("List", kv);
         }

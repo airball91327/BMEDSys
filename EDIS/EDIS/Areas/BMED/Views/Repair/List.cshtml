@@ -54,16 +54,8 @@ else
                 <td width="100px">
                     @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User))
                     {
-                        if (item.FlowCls == "驗收人")
-                        {
-                            @Html.ActionLink("結案", "Edit", "Repair", new { Area = "BMED", id = item.DocId, page = 6 }, new { target = "_blank" })
-                            @Html.Raw(" |")
-                        }
-                        else
-                        {
-                            @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
-                            @Html.Raw(" |")
-                        }
+                        @Html.ActionLink("編輯", "Edit", "Repair", new { Area = "BMED", id = item.DocId }, new { target = "_blank" })
+                        @Html.Raw(" |")
                     }
                     else if (item.Flg == "?" && item.FlowCls.Contains("工程師") && UserManager.IsInRole(User, "MedEngineer")) //其他工程師案件
                     {

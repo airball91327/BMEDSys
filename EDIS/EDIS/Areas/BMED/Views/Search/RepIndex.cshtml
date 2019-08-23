@@ -16,7 +16,7 @@
     });
 </script>
 
-<h3>請修單查詢</h3>
+<h3>請修單查詢 - 全院</h3>
 <h4>醫療儀器</h4>
 <hr />
 
@@ -78,8 +78,34 @@
                         <option value="">請選擇</option>
                     </select>
                 </div>
+                <label for="BMEDqtyIsCharged" class="control-title">[有][無]費用</label>
+                <select asp-for="BMEDqtyIsCharged" asp-items="@ViewData["IsCharged"] as SelectList" class="form-control-s">
+                    <option value="">請選擇</option>
+                </select>
                 <div class="form-group">
-                    <label for="BMEDqtyApplyDateFrom" class="control-title">日期查詢</label>
+                    <label for="BMEDqtyEngCode" class="control-title">負責工程師</label>
+                    <select asp-for="BMEDqtyEngCode" asp-items="@ViewData["BMEDEngs"] as SelectList" class="form-control combobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="BMEDqtyTicketNo" class="control-title">發票號碼</label>
+                    <input asp-for="BMEDqtyTicketNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="BMEDqtyVendor" class="control-title">廠商(關鍵字)</label>
+                    <input asp-for="BMEDqtyVendor" class="form-control-s" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyApplyDateFrom" class="control-title">日期查詢</label>
                     <span>
                         <select asp-for="BMEDqtyDateType" asp-items="@ViewData["DateType"] as SelectList" class="form-control-s"></select>
                     </span>

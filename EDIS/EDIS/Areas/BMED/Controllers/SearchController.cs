@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDIS.Models.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -16,10 +18,13 @@ namespace EDIS.Areas.BMED.Controllers
     public class SearchController : Controller
     {
         private readonly BMEDDbContext _context;
+        private readonly CustomRoleManager roleManager;
 
-        public SearchController(BMEDDbContext context)
+        public SearchController(BMEDDbContext context,
+                                CustomRoleManager customRoleManager)
         {
             _context = context;
+            roleManager = customRoleManager;
         }
 
         // GET: BMED/Search/RepIndex
@@ -59,12 +64,35 @@ namespace EDIS.Areas.BMED.Controllers
             }
             ViewData["DealStatus"] = new SelectList(listItem2, "Value", "Text");
 
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["IsCharged"] = new SelectList(listItem3, "Value", "Text");
+
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
             listItem4.Add(new SelectListItem { Text = "申請日", Value = "申請日" });
             listItem4.Add(new SelectListItem { Text = "完工日", Value = "完工日" });
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["DateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
+
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
 
             QryRepListData data = new QryRepListData();
 
@@ -95,7 +123,7 @@ namespace EDIS.Areas.BMED.Controllers
             ViewData["ACCDPT"] = new SelectList(listItem, "Value", "Text");
             ViewData["APPLYDPT"] = new SelectList(listItem, "Value", "Text");
 
-            /* 處理狀態的下拉選單 */
+            /* 處理保養狀態的下拉選單 */
             var keepResults = _context.BMEDKeepResults.ToList();
             List<SelectListItem> listItem2 = new List<SelectListItem>();
             foreach (var item in keepResults)
@@ -108,12 +136,35 @@ namespace EDIS.Areas.BMED.Controllers
             }
             ViewData["KeepResults"] = new SelectList(listItem2, "Value", "Text");
 
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["IsCharged"] = new SelectList(listItem3, "Value", "Text");
+
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
             listItem4.Add(new SelectListItem { Text = "送單日", Value = "送單日" });
             listItem4.Add(new SelectListItem { Text = "完工日", Value = "完工日" });
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["DateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
+
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
 
             QryKeepListData data = new QryKeepListData();
 
@@ -128,12 +179,16 @@ namespace EDIS.Areas.BMED.Controllers
             string ano = qdata.BMEDqtyASSETNO;
             string acc = qdata.BMEDqtyACCDPT;
             string aname = qdata.BMEDqtyASSETNAME;
+            string ftype = qdata.BMEDqtyFLOWTYPE;
             string dptid = qdata.BMEDqtyDPTID;
             string qtyDate1 = qdata.BMEDqtyApplyDateFrom;
             string qtyDate2 = qdata.BMEDqtyApplyDateTo;
-            string ftype = qdata.BMEDqtyFLOWTYPE;
+            string qtyIsCharged = qdata.BMEDqtyIsCharged;
             string qtyDealStatus = qdata.BMEDqtyDealStatus;
             string qtyDateType = qdata.BMEDqtyDateType;
+            string qtyEngCode = qdata.BMEDqtyEngCode;
+            string qtyTicketNo = qdata.BMEDqtyTicketNo;
+            string qtyVendor = qdata.BMEDqtyVendor;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -199,6 +254,29 @@ namespace EDIS.Areas.BMED.Controllers
                 rps = rps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname)).ToList();
             }
+            if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.VendorName.Contains(qtyVendor))
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyEngCode))     //負責工程師
+            {
+                rps = rps.Where(v => v.EngId == Convert.ToInt32(qtyEngCode)).ToList();
+            }
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)  //申請日
             {
                 if (qtyDateType == "申請日")
@@ -228,6 +306,10 @@ namespace EDIS.Areas.BMED.Controllers
             if (!string.IsNullOrEmpty(qtyDealStatus))   //處理狀態
             {
                 repairDtls = repairDtls.Where(r => r.DealState == Convert.ToInt32(qtyDealStatus)).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyIsCharged))    //有無費用
+            {
+                repairDtls = repairDtls.Where(r => r.IsCharged == qtyIsCharged).ToList();
             }
 
             /* If no search result. */
@@ -279,6 +361,7 @@ namespace EDIS.Areas.BMED.Controllers
                     FlowUidName = _context.AppUsers.Find(j.flow.UserId).FullName,
                     EndDate = j.repdtl.EndDate,
                     CloseDate = j.repdtl.CloseDate,
+                    IsCharged = j.repdtl.IsCharged,
                     repdata = j.repair
                 }));
 
@@ -348,8 +431,13 @@ namespace EDIS.Areas.BMED.Controllers
             string dptid = qdata.BMEDKqtyDPTID;
             string qtyDate1 = qdata.BMEDKqtyApplyDateFrom;
             string qtyDate2 = qdata.BMEDKqtyApplyDateTo;
+            string qtyKeepResult = qdata.BMEDKqtyKeepResult;
+            string qtyIsCharged = qdata.BMEDKqtyIsCharged;
             string qtyDateType = qdata.BMEDKqtyDateType;
             bool searchAllDoc = qdata.BMEDKqtySearchAllDoc;
+            string qtyEngCode = qdata.BMEDKqtyEngCode;
+            string qtyTicketNo = qdata.BMEDKqtyTicketNo;
+            string qtyVendor = qdata.BMEDKqtyVendor;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -415,6 +503,29 @@ namespace EDIS.Areas.BMED.Controllers
                 kps = kps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.VendorName.Contains(qtyVendor))
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyEngCode))     //負責工程師
+            {
+                kps = kps.Where(v => v.EngId == Convert.ToInt32(qtyEngCode)).ToList();
             }
             /* Search date by DateType.(ApplyDate) */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false) //送單日
@@ -509,6 +620,7 @@ namespace EDIS.Areas.BMED.Controllers
                     SentDate = j.keep.SentDate,
                     EndDate = j.keepdtl.EndDate,
                     CloseDate = j.keepdtl.CloseDate,
+                    IsCharged = j.keepdtl.IsCharged,
                     keepdata = j.keep
                 }));
 
@@ -542,16 +654,16 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
 
-            /* Search dealStatus. */
-            //if (!string.IsNullOrEmpty(qtyDealStatus))
-            //{
-            //    rv = rv.Where(r => r.DealState == qtyDealStatus).ToList();
-            //}
+            /* Search KeepResults. */
+            if (!string.IsNullOrEmpty(qtyKeepResult))
+            {
+                kv = kv.Where(r => r.Result == _context.BMEDKeepResults.Find(Convert.ToInt32(qtyKeepResult)).Title).ToList();
+            }
             /* Search IsCharged. */
-            //if (!string.IsNullOrEmpty(qtyIsCharged))
-            //{
-            //    rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
-            //}
+            if (!string.IsNullOrEmpty(qtyIsCharged))
+            {
+                kv = kv.Where(r => r.IsCharged == qtyIsCharged).ToList();
+            }
 
             return View("KeepQryList", kv);
         }

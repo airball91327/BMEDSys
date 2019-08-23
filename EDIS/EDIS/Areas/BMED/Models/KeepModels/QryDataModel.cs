@@ -15,7 +15,7 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public string BMEDKqtyASSETNAME { get; set; }
         public string BMEDKqtyFLOWTYPE { get; set; }
         public string BMEDKqtyDPTID { get; set; }
-        public string BMEDKqtyDealStatus { get; set; }
+        public string BMEDKqtyKeepResult { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public string BMEDKqtyApplyDateFrom { get; set; }
@@ -23,6 +23,10 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         [Column(TypeName = "Date")]
         public string BMEDKqtyApplyDateTo { get; set; }
         public string BMEDKqtyDateType { get; set; }
+        public string BMEDKqtyIsCharged { get; set; }
         public bool BMEDKqtySearchAllDoc { get; set; }
+        public string BMEDKqtyEngCode { get; set; }
+        public string BMEDKqtyTicketNo { get; set; }
+        public string BMEDKqtyVendor { get; set; }
     }
 }

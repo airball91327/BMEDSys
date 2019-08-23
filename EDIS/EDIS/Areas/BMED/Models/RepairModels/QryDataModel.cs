@@ -25,5 +25,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string BMEDqtyDateType { get; set; }
         public string BMEDqtyIsCharged { get; set; }
         public bool BMEDqtySearchAllDoc { get; set; }
+        public string BMEDqtyEngCode { get; set; }
+        public string BMEDqtyTicketNo { get; set; }
+        public string BMEDqtyVendor { get; set; }
     }
 }

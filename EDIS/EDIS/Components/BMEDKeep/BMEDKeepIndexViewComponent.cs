@@ -1,5 +1,6 @@
 ﻿using EDIS.Areas.BMED.Data;
 using EDIS.Areas.BMED.Models.KeepModels;
+using EDIS.Models.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -12,10 +13,13 @@ namespace EDIS.Components.BMEDKeep
     public class BMEDKeepIndexViewComponent : ViewComponent
     {
         private readonly BMEDDbContext _context;
+        private readonly CustomRoleManager roleManager;
 
-        public BMEDKeepIndexViewComponent(BMEDDbContext context)
+        public BMEDKeepIndexViewComponent(BMEDDbContext context,
+                                          CustomRoleManager customRoleManager)
         {
             _context = context;
+            roleManager = customRoleManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -41,18 +45,24 @@ namespace EDIS.Components.BMEDKeep
             ViewData["BMEDKeepAccDpt"] = new SelectList(listItem, "Value", "Text");
             ViewData["BMEDKeepApplyDpt"] = new SelectList(listItem, "Value", "Text");
 
-            /* 處理狀態的下拉選單 */
-            var dealStatuses = _context.BMEDDealStatuses.ToList();
+            /* 處理保養狀態的下拉選單 */
+            var keepResults = _context.BMEDKeepResults.ToList();
             List<SelectListItem> listItem2 = new List<SelectListItem>();
-            foreach (var item in dealStatuses)
+            foreach (var item in keepResults)
             {
                 listItem2.Add(new SelectListItem
                 {
                     Text = item.Title,
-                    Value = item.Title
+                    Value = item.Id.ToString()
                 });
             }
-            ViewData["BMEDKeepDealStatus"] = new SelectList(listItem2, "Value", "Text");
+            ViewData["BMEDKeepResult"] = new SelectList(listItem2, "Value", "Text");
+
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["BMEDIsCharged"] = new SelectList(listItem3, "Value", "Text");
 
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
@@ -60,6 +70,23 @@ namespace EDIS.Components.BMEDKeep
             listItem4.Add(new SelectListItem { Text = "完工日", Value = "完工日" });
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["BMEDKeepDateType"] = new SelectList(listItem4, "Value", "Text", "送單日");
+
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
 
             QryKeepListData data = new QryKeepListData();
 

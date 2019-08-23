@@ -108,15 +108,15 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyDOCID" class="control-title">表單編號</label>
+                    <label for="BMEDKqtyDOCID" class="control-title">表單編號</label>
                     <input asp-for="BMEDKqtyDOCID" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyASSETNO" class="control-title">財產編號</label>
+                    <label for="BMEDKqtyASSETNO" class="control-title">財產編號</label>
                     <input asp-for="BMEDKqtyASSETNO" class="form-control-s" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyACCDPT" class="control-title">成本中心</label>
+                    <label for="BMEDKqtyACCDPT" class="control-title">成本中心</label>
                     <select asp-for="BMEDKqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
@@ -126,19 +126,58 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyASSETNAME" class="control-title">儀器名稱<br />(關鍵字)</label>
+                    <label for="BMEDKqtyASSETNAME" class="control-title">儀器名稱<br />(關鍵字)</label>
                     <input asp-for="BMEDKqtyASSETNAME" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyFLOWTYPE" class="control-title">流程狀態</label>
+                    <label for="BMEDKqtyFLOWTYPE" class="control-title">流程狀態</label>
                     <select asp-for="BMEDKqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
                 </div>
                 <div class="form-group">
-                    <label for="qtyDPTID" class="control-title">申請部門</label>
+                    <label for="BMEDKqtyDPTID" class="control-title">申請部門</label>
                     <select asp-for="BMEDKqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control BMEDKeepCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="BMEDKqtyKeepResult" class="control-title">保養狀態</label>
+                    <select asp-for="BMEDKqtyKeepResult" asp-items="@ViewData["BMEDKeepResult"] as SelectList" class="form-control">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+                <label for="BMEDKqtyIsCharged" class="control-title">[有][無]費用</label>
+                <select asp-for="BMEDKqtyIsCharged" asp-items="@ViewData["BMEDIsCharged"] as SelectList" class="form-control-s">
+                    <option value="">請選擇</option>
+                </select>
+                <div class="form-group">
+                    <label for="BMEDKqtyEngCode" class="control-title">負責工程師</label>
+                    <select asp-for="BMEDKqtyEngCode" asp-items="@ViewData["BMEDEngs"] as SelectList" class="form-control BMEDcombobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="BMEDKqtyTicketNo" class="control-title">發票號碼</label>
+                    <input asp-for="BMEDKqtyTicketNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="BMEDKqtyVendor" class="control-title">廠商(關鍵字)</label>
+                    <input asp-for="BMEDKqtyVendor" class="form-control-s" />
+                </div>
+                @*@if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
+                {
+                    <div class="form-group">
+                        <label class="control-title">查詢其他<br />工程師案件</label>
+                        <input type="checkbox" asp-for="BMEDqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
+                    </div>
+                }*@
             </div>
         </div>
         <div class="row">
