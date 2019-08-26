@@ -53,57 +53,57 @@ namespace EDIS.Areas.BMED.Controllers
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
             
             /* 工程師的流程控管 */
-            if(assign.Cls == "醫工工程師")
-            {
-                /* 如點選有費用、卻無輸入費用明細 */
-                var isCharged = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault().IsCharged;
-                if( isCharged == "Y" )
-                {
-                    var CheckRepairCost = _context.BMEDRepairCosts.Where(c => c.DocId == assign.DocId).FirstOrDefault();
-                    if(CheckRepairCost == null)
-                    {
-                        throw new Exception("尚未輸入費用明細!!");
-                    }
-                }
-                var repairDtl = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault();
-                /* 3 = 已完成，4 = 報廢 */
-                if (repairDtl.DealState == 3 || repairDtl.DealState == 4)
-                {
-                    if(repairDtl.EndDate == null)
-                    {
-                        throw new Exception("報廢及已完成，需輸入完工日!!");
-                    }
-                }
-                /* 工程師做結案 */
-                if (assign.FlowCls == "結案")
-                {
-                    if (_context.BMEDRepairEmps.Where(emp => emp.DocId == assign.DocId).Count() <= 0)
-                    {
-                        throw new Exception("沒有維修工程師紀錄!!");
-                    }
-                    else if (_context.BMEDRepairDtls.Find(assign.DocId).EndDate == null)
-                    {
-                        throw new Exception("沒有完工日!!");
-                    }
-                    else if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 0)
-                    {
-                        throw new Exception("處理狀態不可空值!!");
-                    }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).FailFactor == 0)
-                    {
-                        throw new Exception("故障原因不可空白!!");
-                    }
-                    if (string.IsNullOrEmpty(_context.BMEDRepairDtls.Find(assign.DocId).InOut))
-                    {
-                        throw new Exception("維修方式不可空白!!");
-                    }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 || 
-                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
-                    {
-                        throw new Exception("處理狀態不可為處理中或未處理!!");
-                    }
-                }
-            }
+            //if(assign.Cls == "設備工程師")
+            //{
+            //    /* 如點選有費用、卻無輸入費用明細 */
+            //    var isCharged = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault().IsCharged;
+            //    if( isCharged == "Y" )
+            //    {
+            //        var CheckRepairCost = _context.BMEDRepairCosts.Where(c => c.DocId == assign.DocId).FirstOrDefault();
+            //        if(CheckRepairCost == null)
+            //        {
+            //            throw new Exception("尚未輸入費用明細!!");
+            //        }
+            //    }
+            //    var repairDtl = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault();
+            //    /* 3 = 已完成，4 = 報廢 */
+            //    if (repairDtl.DealState == 3 || repairDtl.DealState == 4)
+            //    {
+            //        if(repairDtl.EndDate == null)
+            //        {
+            //            throw new Exception("報廢及已完成，需輸入完工日!!");
+            //        }
+            //    }
+            //    /* 工程師做結案 */
+            //    if (assign.FlowCls == "結案")
+            //    {
+            //        if (_context.BMEDRepairEmps.Where(emp => emp.DocId == assign.DocId).Count() <= 0)
+            //        {
+            //            throw new Exception("沒有維修工程師紀錄!!");
+            //        }
+            //        else if (_context.BMEDRepairDtls.Find(assign.DocId).EndDate == null)
+            //        {
+            //            throw new Exception("沒有完工日!!");
+            //        }
+            //        else if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 0)
+            //        {
+            //            throw new Exception("處理狀態不可空值!!");
+            //        }
+            //        if (_context.BMEDRepairDtls.Find(assign.DocId).FailFactor == 0)
+            //        {
+            //            throw new Exception("故障原因不可空白!!");
+            //        }
+            //        if (string.IsNullOrEmpty(_context.BMEDRepairDtls.Find(assign.DocId).InOut))
+            //        {
+            //            throw new Exception("維修方式不可空白!!");
+            //        }
+            //        if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 || 
+            //            _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
+            //        {
+            //            throw new Exception("處理狀態不可為處理中或未處理!!");
+            //        }
+            //    }
+            //}
 
             if (assign.FlowCls == "結案" || assign.FlowCls == "廢除")
                 assign.FlowUid = ur.Id;
