@@ -213,3 +213,14 @@
 </form>
 
 <div id="BMEDpnlREPLIST"></div>
+
+
+@if (UserManager.IsInRole(User, "MedAssetMgr") || UserManager.IsInRole(User, "Admin"))
+{
+    <hr />
+    <h4>未分派案件</h4>
+    <br />
+    <div id="unsignListDiv">
+        @await Component.InvokeAsync("BMEDRepResign")
+    </div>
+}
