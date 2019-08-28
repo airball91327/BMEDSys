@@ -29,8 +29,7 @@
 </div>
 
 <ul class="nav nav-pills" style="font-size:120%">
-    <li role="presentation" class="active"><a href="#repairdtl" data-toggle="tab" style="padding-left:20px">請修紀錄</a></li>
-    <li role="presentation"><a href="#repairemp" data-toggle="tab" style="padding-left:20px">工程師工時</a></li>
+    <li role="presentation" class="active"><a href="#repairdtl" data-toggle="tab" style="padding-left:20px">請修紀錄與工時</a></li>
     <li role="presentation"><a href="#repaircost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
     <li role="presentation"><a href="#repflowlist" data-toggle="tab" style="padding-left:20px">流程紀錄</a></li>
 </ul>
@@ -40,8 +39,6 @@
         <p>
             @await Component.InvokeAsync("BMEDRepDetail", new { id = Model.DocId })
         </p>
-    </div>
-    <div id="repairemp" class="tab-pane fade">
         <p>
             @await Component.InvokeAsync("BMEDRepEmpList", new { id = Model.DocId, viewType = "Views" })
         </p>

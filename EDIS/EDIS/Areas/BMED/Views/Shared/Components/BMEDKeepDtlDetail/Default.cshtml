@@ -99,14 +99,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.CheckerName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CheckerName)
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.CloseDate)
         </dt>
 
@@ -115,6 +107,14 @@
             {
                 @Model.CloseDate.Value.ToString("yyyy/MM/dd");
             }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckerName)
         </dd>
 
         <dt>
