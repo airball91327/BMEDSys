@@ -17,5 +17,9 @@ namespace EDIS.Areas.BMED.Models.KeepModels
         public string Plants { get; set; }
         [Display(Name = "格式")]
         public string Format { get; set; }
+        [Display(Name = "異動人員")]
+        public int? Rtp { get; set; }
+        [Display(Name = "異動時間")]
+        public DateTime? Rtt { get; set; }
     }
 }

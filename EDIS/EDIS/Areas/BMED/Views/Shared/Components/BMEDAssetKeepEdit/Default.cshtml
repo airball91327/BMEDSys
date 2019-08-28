@@ -58,8 +58,8 @@
 
         <div class="form-group">
             <label asp-for="KeepEngId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="KeepEngId" asp-items="@ViewData["KeepEngId"] as SelectList" class="form-control-s">
+            <div class="col-md-10 form-inline">
+                <select asp-for="KeepEngId" asp-items="@ViewData["KeepEngId"] as SelectList" class="form-control">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="KeepEngId" class="text-danger"></span>
@@ -84,8 +84,8 @@
 
         <div class="form-group">
             <label asp-for="InOut" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="InOut" asp-items="@ViewData["InOut"] as SelectList" class="form-control-s">
+            <div class="col-md-10 form-inline">
+                <select asp-for="InOut" asp-items="@ViewData["InOut"] as SelectList" class="form-control">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="InOut" class="text-danger"></span>
@@ -94,11 +94,12 @@
 
         <div class="form-group">
             <label asp-for="FormatId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="FormatId" asp-items="@ViewData["FormatId"] as SelectList" class="form-control-s assetKeepCombobox">
+            <div class="col-md-10 form-inline">
+                <select asp-for="FormatId" asp-items="@ViewData["FormatId"] as SelectList" class="form-control assetKeepCombobox">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="FormatId" class="text-danger"></span>
+                <span>(可輸入格式代號或可套用設備之關鍵字查詢)</span>
             </div>
         </div>
 
