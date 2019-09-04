@@ -146,10 +146,12 @@ $(function () {
     /* Get Assets by query string. */
     $("#AssetQryBtn").click(function () {
         var queryStr = $("#AssetQry").val();
+        var queryAccDpt = $("#AssetAccDptQry").val();
+        var queryDelivDpt = $("#AssetDelivDptQry").val();
         $.ajax({
             url: '../Repair/QueryAssets',
             type: "GET",
-            data: { QueryStr: queryStr },
+            data: { QueryStr: queryStr, QueryAccDpt: queryAccDpt, QueryDelivDpt: queryDelivDpt },
             success: function (data) {
                 console.log(data);
                 var select = $('#AssetNo');

@@ -219,7 +219,7 @@ namespace EDIS.Areas.BMED.Controllers
                     mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
                     //u = _context.AppUsers.Find(kp.KeepEngId);
                     mail.to = new System.Net.Mail.MailAddress(u.Email); //u.Email
-                    mail.message.Subject = "工務智能請修系統[醫工保養案]：設備名稱： " + keep.AssetName;
+                    mail.message.Subject = "醫工工務智能保修系統[醫工保養案]：設備名稱： " + keep.AssetName;
                     body += "<p>表單編號：" + keep.DocId + "</p>";
                     body += "<p>送單日期：" + keep.SentDate.Value.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + keep.UserName + "</p>";
@@ -701,11 +701,33 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         // GET: BMED/Keep/QueryAssets
-        public JsonResult QueryAssets(string QueryStr)
+        public JsonResult QueryAssets(string QueryStr, string QueryAccDpt, string QueryDelivDpt)
         {
-            /* Search assets by assetNo or Cname. */
-            var assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
+            List<AssetModel> assets = new List<AssetModel>();
+            // No query string.
+            if (string.IsNullOrEmpty(QueryStr) && string.IsNullOrEmpty(QueryAccDpt) && string.IsNullOrEmpty(QueryDelivDpt))
+            {
+                assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
                                                         a.Cname.Contains(QueryStr)).ToList();
+            }
+            else
+            {
+                assets = _context.BMEDAssets.ToList();
+                if (!string.IsNullOrEmpty(QueryStr))     /* Search assets by assetNo or Cname. */
+                {
+                    assets = assets.Where(a => a.AssetNo.Contains(QueryStr) ||
+                                               a.Cname.Contains(QueryStr)).ToList();
+                }
+                if (!string.IsNullOrEmpty(QueryAccDpt))    /* Search assets by AccDpt. */
+                {
+                    assets = assets.Where(a => a.AccDpt == QueryAccDpt).ToList();
+                }
+                if (!string.IsNullOrEmpty(QueryDelivDpt))   /* Search assets by DelivDpt. */
+                {
+                    assets = assets.Where(a => a.DelivDpt == QueryDelivDpt).ToList();
+                }
+            }
+
             List<SelectListItem> list = new List<SelectListItem>();
             if (assets.Count() != 0)
             {
