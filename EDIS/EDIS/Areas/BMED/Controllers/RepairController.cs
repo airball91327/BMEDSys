@@ -852,7 +852,7 @@ namespace EDIS.Areas.BMED.Controllers
             /* 擷取預設負責工程師 */
             if (engineer == null)  //該部門無預設工程師，設定選取ID為99999的User，為尚未分配之案件
             {
-                var tempEng = new { EngId = "0", UserName = "00000", FullName = "" };
+                var tempEng = new { EngId = "0", UserName = "00000", FullName = "主管再行分派" };
                 return Json(tempEng);
             }
             else
