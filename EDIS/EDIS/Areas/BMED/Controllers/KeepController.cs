@@ -755,7 +755,7 @@ namespace EDIS.Areas.BMED.Controllers
                     return StatusCode(404);
                 }
                 if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedAdmin") || 
-                    userManager.IsInRole(User, "MedManager"))
+                    userManager.IsInRole(User, "MedManager") || userManager.IsInRole(User, "MedEngineer"))
                 {
                     return View(keep);
                 }

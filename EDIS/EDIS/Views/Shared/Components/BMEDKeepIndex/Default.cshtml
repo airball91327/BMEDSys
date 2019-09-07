@@ -171,13 +171,13 @@
                     <label for="BMEDKqtyVendor" class="control-title">廠商(關鍵字)</label>
                     <input asp-for="BMEDKqtyVendor" class="form-control-s" />
                 </div>
-                @*@if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
+                @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
                 {
                     <div class="form-group">
                         <label class="control-title">查詢其他<br />工程師案件</label>
-                        <input type="checkbox" asp-for="BMEDqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
+                        <input type="checkbox" asp-for="BMEDKqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
                     </div>
-                }*@
+                }
             </div>
         </div>
         <div class="row">
