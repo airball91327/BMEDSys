@@ -47,6 +47,9 @@
             var IsCharged = $("#BMEDqtyIsCharged").val();
             var DateType = $("#BMEDqtyDateType").val();
             var SearchAllDoc = false;
+            var EngCode = $("#BMEDqtyEngCode").val();
+            var TicketNo = $("#BMEDqtyTicketNo").val();
+            var Vendor = $("#BMEDqtyVendor").val();
             if ($("#BMEDqtySearchAllDoc").is(':checked') == true) {
                 SearchAllDoc = true;
             }
@@ -65,14 +68,17 @@
                     DealStatus: DealStatus,
                     IsCharged: IsCharged,
                     DateType: DateType,
-                    SearchAllDoc: SearchAllDoc
+                    SearchAllDoc: SearchAllDoc,
+                    EngCode: EngCode,
+                    TicketNo: TicketNo,
+                    Vendor: Vendor,
                 },
                 success: function (response, textStatus, jqXHR) {
 
                     window.location.href = '@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
                         + '&qtyAccDpt=' + AccDpt + '&qtyAssetName=' + AssetName + '&qtyFlowType=' + FlowType + '&qtyDptId=' + DptId
                         + '&Date1=' + Date1 + '&Date2=' + Date2 + '&DealStatus=' + DealStatus + '&IsCharged=' + IsCharged
-                        + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc;
+                        + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc + '&EngCode=' + EngCode + '&TicketNo=' + TicketNo + '&Vendor=' + Vendor;
                 },
                 error: function (xhr, status, error) {
                     alert(error);

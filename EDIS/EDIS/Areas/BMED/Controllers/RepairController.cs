@@ -1078,7 +1078,8 @@ namespace EDIS.Areas.BMED.Controllers
 
         public IActionResult ExportToExcel(string qtyDocId, string qtyAssetNo, string qtyAccDpt, string qtyAssetName,
                                            string qtyFlowType, string qtyDptId, string Date1, string Date2,
-                                           string DealStatus, string IsCharged, string DateType, bool SearchAllDoc)
+                                           string DealStatus, string IsCharged, string DateType, bool SearchAllDoc,
+                                           string EngCode, string TicketNo, string Vendor)
         {
             string docid = qtyDocId;
             string ano = qtyAssetNo;
@@ -1092,6 +1093,9 @@ namespace EDIS.Areas.BMED.Controllers
             string qtyIsCharged = IsCharged;
             string qtyDateType = DateType;
             bool searchAllDoc = SearchAllDoc;
+            string qtyEngCode = EngCode;
+            string qtyTicketNo = TicketNo;
+            string qtyVendor = Vendor;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -1135,28 +1139,47 @@ namespace EDIS.Areas.BMED.Controllers
 
             var rps = _context.BMEDRepairs.ToList();
 
-            if (!string.IsNullOrEmpty(docid))
+            if (!string.IsNullOrEmpty(docid))   //表單編號
             {
                 docid = docid.Trim();
                 rps = rps.Where(v => v.DocId == docid).ToList();
             }
-            if (!string.IsNullOrEmpty(ano))
+            if (!string.IsNullOrEmpty(ano))     //財產編號
             {
                 rps = rps.Where(v => v.AssetNo == ano).ToList();
             }
-            if (!string.IsNullOrEmpty(dptid))
+            if (!string.IsNullOrEmpty(dptid))   //所屬部門編號
             {
                 rps = rps.Where(v => v.DptId == dptid).ToList();
             }
-            if (!string.IsNullOrEmpty(acc))
+            if (!string.IsNullOrEmpty(acc))     //成本中心
             {
                 rps = rps.Where(v => v.AccDpt == acc).ToList();
             }
-            if (!string.IsNullOrEmpty(aname))
+            if (!string.IsNullOrEmpty(aname))   //財產名稱
             {
                 rps = rps.Where(v => v.AssetName != null)
-                        .Where(v => v.AssetName.Contains(aname))
-                        .ToList();
+                         .Where(v => v.AssetName.Contains(aname))
+                         .ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTicketNo))     //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.VendorName.Contains(qtyVendor))
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
             }
             /* Search date by DateType.(ApplyDate) */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)
@@ -1310,7 +1333,7 @@ namespace EDIS.Areas.BMED.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedAdmin") || 
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "MedAdmin") ||
                         userManager.IsInRole(User, "MedEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
@@ -1318,19 +1341,31 @@ namespace EDIS.Areas.BMED.Controllers
                         if (userManager.IsInRole(User, "MedEngineer") && searchAllDoc == true)
                         {
                             repairFlows = repairFlows.Where(f => f.flow.Status == "?" && f.flow.Cls.Contains("工程師")).ToList();
+                            if (!string.IsNullOrEmpty(qtyEngCode))  //工程師搜尋
+                            {
+                                repairFlows = repairFlows.Where(f => f.repair.EngId == Convert.ToInt32(qtyEngCode)).ToList();
+                            }
                         }
                         else
                         {
-                            repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                                 (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                                  _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                            /* 個人或同部門結案案件 */
+                            //repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                            //                                     (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                            //                                      _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                            /* 個人案件 */
+                            repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                         }
                     }
                     else
                     {
-                        repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
-                                                             (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
-                                                               _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+                        /* 個人或同部門結案案件 */
+                        //repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id) ||
+                        //                                     (f.flow.Status == "?" && f.flow.Cls == "驗收人" &&
+                        //                                       _context.AppUsers.Find(f.flow.UserId).DptId == ur.DptId)).ToList();
+
+                        /* 個人案件 */
+                        repairFlows = repairFlows.Where(f => (f.flow.Status == "?" && f.flow.UserId == ur.Id)).ToList();
                     }
 
                     repairFlows.Join(_context.BMEDRepairDtls, m => m.repair.DocId, d => d.DocId,
