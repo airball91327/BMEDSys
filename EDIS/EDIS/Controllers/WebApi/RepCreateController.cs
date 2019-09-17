@@ -141,6 +141,7 @@ namespace EDIS.Controllers.WebApi
 
                     var engId = GetAreaEngId(Convert.ToInt32(buildingId), floorId, areaId);
                     repair.EngId = engId;
+                    repair.CheckerId = ur.Id;
 
                     /* 如有代理人，將工程師改為代理人*/
                     var subStaff = _context.EngSubStaff.SingleOrDefault(e => e.EngId == repair.EngId);
