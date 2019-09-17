@@ -28,7 +28,6 @@ namespace EDIS.Controllers.WebApi
         private readonly IRepository<RepairModel, string> _repRepo;
         private readonly IRepository<RepairDtlModel, string> _repdtlRepo;
         private readonly IRepository<RepairFlowModel, string[]> _repflowRepo;
-        private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly IRepository<DepartmentModel, string> _dptRepo;
         private readonly IRepository<DocIdStore, string[]> _dsRepo;
         private readonly IRepository<BuildingModel, int> _buildRepo;
@@ -107,12 +106,15 @@ namespace EDIS.Controllers.WebApi
         public IActionResult Post([FromBody] Root root)
         {
             var userName = root.UsrID;
+            var buildingId = root.Building;
+            var floorId = root.Floor;
+            var areaId = root.Area;
             AppUserModel ur = _context.AppUsers.Where(u => u.UserName == userName).FirstOrDefault();
 
             if (ur != null)   //Check UserName
             {
                 //密碼不在此比對
-                var userMD5HashPW = MD5Hash(ur.Password); //Get hashed result to compare.
+                string userMD5HashPW = GetMd5Hash(ur.Password); //Get hashed result to compare.
 
                 if (root.Passwd == userMD5HashPW)   //CheckPassWord
                 {
@@ -129,10 +131,16 @@ namespace EDIS.Controllers.WebApi
                     repair.ApplyDate = DateTime.Now;
                     repair.LocType = "本單位";
                     repair.RepType = "請修";
-                    repair.Ext = ur.Ext;
+                    repair.Ext = ur.Ext == null ? "" : ur.Ext;
                     repair.TroubleDes = "【事件處理編號:" + root.SerNo + "】" + "\n" + root.Des;
                     repair.AssetNo = root.Point;
                     repair.AssetName = root.Name;
+                    repair.Building = buildingId;
+                    repair.Floor = floorId;
+                    repair.Area = areaId;
+
+                    var engId = GetAreaEngId(Convert.ToInt32(buildingId), floorId, areaId);
+                    repair.EngId = engId;
 
                     /* 如有代理人，將工程師改為代理人*/
                     var subStaff = _context.EngSubStaff.SingleOrDefault(e => e.EngId == repair.EngId);
@@ -195,7 +203,7 @@ namespace EDIS.Controllers.WebApi
                         //To user and the next flow user.
                         Tmail mail = new Tmail();
                         string body = "";
-                        var mailToUser = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+                        var mailToUser = ur;
                         mail.from = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
                         mailToUser = _context.AppUsers.Find(flow.UserId);
                         mail.to = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
@@ -255,12 +263,26 @@ namespace EDIS.Controllers.WebApi
         //{
         //}
 
-        public static string MD5Hash(string input)
+        public static string GetMd5Hash(string input)
         {
-            using (var md5 = MD5.Create())
+            using (MD5 md5Hash = MD5.Create())
             {
-                var result = md5.ComputeHash(Encoding.ASCII.GetBytes(input));
-                return Encoding.ASCII.GetString(result);
+                // Convert the input string to a byte array and compute the hash.
+                byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+                // Create a new Stringbuilder to collect the bytes
+                // and create a string.
+                StringBuilder sBuilder = new StringBuilder();
+
+                // Loop through each byte of the hashed data 
+                // and format each one as a hexadecimal string.
+                for (int i = 0; i < data.Length; i++)
+                {
+                    sBuilder.Append(data[i].ToString("x2"));
+                }
+
+                // Return the hexadecimal string.
+                return sBuilder.ToString();
             }
         }
 
@@ -303,6 +325,46 @@ namespace EDIS.Controllers.WebApi
                 return e.Message;
             }
             return did;
+        }
+
+        public int GetAreaEngId(int BuildingId, string FloorId, string PlaceId)
+        {
+            var engineers = _context.EngsInDepts.Include(e => e.AppUsers).Include(e => e.Departments)
+                                                .Where(e => e.BuildingId == BuildingId &&
+                                                            e.FloorId == FloorId &&
+                                                            e.PlaceId == PlaceId).ToList();
+
+            /* 擷取預設負責工程師 */
+            if (engineers.Count() == 0)  //該部門無預設工程師
+            {
+                var engId = _context.AppUsers.Where(a => a.UserName == "181316").FirstOrDefault().Id;
+                return engId;
+            }
+            else
+            {
+                if (engineers.Count() > 1)
+                {
+                    var eng = engineers.Join(_context.EngDealingDocs, ed => ed.EngId, e => e.EngId,
+                                (ed, e) => new
+                                {
+                                    ed.EngId,
+                                    ed.UserName,
+                                    ed.AppUsers.FullName,
+                                    e.DealingDocs
+                                }).OrderBy(o => o.DealingDocs).FirstOrDefault();
+                    return eng.EngId;
+                }
+                else
+                {
+                    var eng = engineers.Select(e => new
+                    {
+                        e.EngId,
+                        e.UserName,
+                        e.AppUsers.FullName,
+                    }).FirstOrDefault();
+                    return eng.EngId;
+                }
+            }
         }
     }
 }
