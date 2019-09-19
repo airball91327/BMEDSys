@@ -107,7 +107,18 @@ $(function () {
 
     $("#modalVENDOR").on("hidden.bs.modal", function () {
         var vendorName = $("#Vno option:selected").text();
-        $("#VendorName").val(vendorName);
+        var vendorId = $("#Vno option:selected").val();
+
+        /* includes is not support in IE, so need to use indexOf. */
+        if ($("#Vno option:selected").text() == "請選擇" || $("#Vno option:selected").text() == "查無廠商" ||
+            $("#Vno option:selected").text().indexOf("請選擇廠商") != -1) {
+            $("#VendorName").val("");
+            $("#VendorId").val("");
+        }
+        else {
+            $("#VendorName").val(vendorName);
+            $("#VendorId").val(vendorId);
+        }
     });
 
     /* Default settings.*/
