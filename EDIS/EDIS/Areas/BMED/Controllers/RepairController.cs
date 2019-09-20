@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using ClosedXML.Excel;
 using System.IO;
 using EDIS.Models;
+using Zen.Barcode;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -992,10 +993,11 @@ namespace EDIS.Areas.BMED.Controllers
                 vm.ApplyDate = repair.ApplyDate;
                 vm.AssetNo = repair.AssetNo;
                 vm.AssetNam = repair.AssetName;
-                vm.Company = _context.Departments.Find(repair.DptId).Name_C;
+                vm.Company = "(" + _context.Departments.Find(repair.DptId).DptId + ")" + _context.Departments.Find(repair.DptId).Name_C;
                 vm.Contact = repair.Ext;
                 vm.MVPN = repair.Mvpn;
-                //vm.PlantDoc = repair.PlantDoc;
+                vm.Amt = repair.Amt;
+                vm.PlantDoc = repair.PlantDoc;
                 vm.PlaceLoc = repair.PlaceLoc;
                 vm.RepType = repair.RepType;
                 vm.TroubleDes = repair.TroubleDes;
@@ -1015,7 +1017,7 @@ namespace EDIS.Areas.BMED.Controllers
                 AppUserModel EngTemp = _context.AppUsers.Find(lastFlowEng.UserId);       
                 if (EngTemp != null)
                 {
-                    vm.EngName = EngTemp.FullName + " (" + EngTemp.UserName + ")";
+                    vm.EngName = " (" + EngTemp.UserName + ")" + EngTemp.FullName;
                 }
                 else
                 {
@@ -1068,6 +1070,18 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                     }
                 }
+
+                var barcodeString = repair.DocId.ToString();
+                Zen.Barcode.Code128BarcodeDraw barcode1 = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
+                var barcodeImage = barcode1.Draw(barcodeString, 40);
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    barcodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+                    byte[] imageBytes = ms.ToArray();
+
+                    ViewBag.Img =  Convert.ToBase64String(imageBytes);
+                }
+
             }
             //if( printType != 0 )
             //{
