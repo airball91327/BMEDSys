@@ -1069,10 +1069,10 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                 }
             }
-            if( printType != 0 )
-            {
-                return View("PrintRepairDoc2", vm);
-            }
+            //if( printType != 0 )
+            //{
+            //    return View("PrintRepairDoc2", vm);
+            //}
             return View(vm);
         }
 
