@@ -772,6 +772,33 @@ namespace EDIS.Areas.BMED.Controllers
             return StatusCode(404);
         }
 
+        // POST: BMED/Keep/Update/5
+        [HttpPost]
+        public IActionResult Update(KeepModel keepModel)
+        {
+            KeepModel keep = _context.BMEDKeeps.Find(keepModel.DocId);
+            if (keep == null)
+            {
+                return BadRequest("查無案件!");
+            }
+
+            if (string.IsNullOrEmpty(keepModel.AccDpt))
+            {
+                return BadRequest("成本中心不可空白!");
+            }
+
+            keepModel.AccDpt = keepModel.AccDpt.Trim();
+            var dpt = _context.Departments.Find(keepModel.AccDpt);
+            if (dpt == null)
+            {
+                return BadRequest("此編號查無部門!");
+            }
+            keep.AccDpt = keepModel.AccDpt;
+            _context.Entry(keep).State = EntityState.Modified;
+            _context.SaveChanges();
+            return PartialView("Update", keep);
+        }
+
         // GET: BMED/Keep/Views
         public IActionResult Views(string id)
         {

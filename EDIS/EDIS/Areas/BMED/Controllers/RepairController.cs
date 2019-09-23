@@ -665,6 +665,33 @@ namespace EDIS.Areas.BMED.Controllers
             return View(repair);
         }
 
+        // POST: BMED/Repair/Update/5
+        [HttpPost]
+        public IActionResult Update(RepairModel repairModel)
+        {
+            RepairModel repair = _context.BMEDRepairs.Find(repairModel.DocId);
+            if (repair == null)
+            {
+                return BadRequest("查無案件!");
+            }
+
+            if (string.IsNullOrEmpty(repairModel.AccDpt))
+            {
+                return BadRequest("成本中心不可空白!");
+            }
+
+            repairModel.AccDpt = repairModel.AccDpt.Trim();
+            var dpt = _context.Departments.Find(repairModel.AccDpt);
+            if (dpt == null)
+            {
+                return BadRequest("此編號查無部門!");
+            }
+            repair.AccDpt = repairModel.AccDpt;
+            _context.Entry(repair).State = EntityState.Modified;
+            _context.SaveChanges();
+            return PartialView("Update", repair);
+        }
+
         public IActionResult Detail()
         {
             RepairModel repair = new RepairModel();
@@ -1071,6 +1098,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                 }
 
+                /* Draw barcode and use Base64 to image to show barcode on view. */
                 var barcodeString = repair.DocId.ToString();
                 Zen.Barcode.Code128BarcodeDraw barcode1 = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
                 var barcodeImage = barcode1.Draw(barcodeString, 30);

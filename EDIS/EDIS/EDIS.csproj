@@ -42,6 +42,9 @@
     <Content Update="Areas\BMED\Views\Keep\PrintKeepDoc.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Keep\Update.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\RepairSearch\Index.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -55,6 +58,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\BMED\Views\Repair\Delete.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\BMED\Views\Repair\Update.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\BMED\Views\Repair\Edit.cshtml">
@@ -90,6 +96,9 @@
     <Content Update="Areas\BMED\Views\Shared\Components\BMEDKeepCostPrintList\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\BMEDKeepEdit\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Shared\Components\BMEDKeepEmpEdit\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -103,6 +112,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\BMED\Views\Shared\Components\BMEDRepCostPrintList\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\BMEDRepEdit\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Areas\BMED\Views\Vendor\QryVendor.cshtml">

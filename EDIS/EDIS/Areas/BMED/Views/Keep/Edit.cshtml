@@ -55,8 +55,16 @@
     </div>
 </div>
 
-<div>
-    @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
+<div id="pnlKEEPDTL2">
+    @if (UserManager.IsInRole(User, "MedEngineer") == true || UserManager.IsInRole(User, "MedAdmin") == true ||
+         UserManager.IsInRole(User, "Admin") == true)
+    {
+        @await Component.InvokeAsync("BMEDKeepEdit", new { id = Model.DocId })
+    }
+    else
+    {
+        @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
+    }
 </div>
 
 <ul class="nav nav-pills" style="font-size:120%">
