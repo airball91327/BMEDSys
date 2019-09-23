@@ -118,7 +118,10 @@
                                 請修日期
                             </td>
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                @Model.ApplyDate.Value.ToString("yyyy/MM/dd")
+                                @{
+                                    string printApplyDate = (Model.ApplyDate.Value.Year - 1911).ToString() + "年" + Model.ApplyDate.Value.Month + "月" + Model.ApplyDate.Value.Day + "日";
+                                }
+                                @printApplyDate
                             </td>
                             <td class="style5"
                                 style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000"
@@ -282,7 +285,9 @@
                                             style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
                                             @if (Model.EndDate.HasValue)
                                             {
-                                                @Model.EndDate.Value.ToString("yyyy/MM/dd")
+                                                string printEndDate = (Model.EndDate.Value.Year - 1911).ToString() + "年" + Model.EndDate.Value.Month + "月" + Model.EndDate.Value.Day + "日";
+                                                @printEndDate
+                                                //@Model.EndDate.Value.ToString("yyyy/MM/dd")
                                             }
                                             else
                                             {
@@ -434,7 +439,10 @@
                                 請修日期
                             </td>
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                @Model.ApplyDate.Value.ToString("yyyy/MM/dd")
+                                @{
+                                    string printApplyDate2 = (Model.ApplyDate.Value.Year - 1911).ToString() + "年" + Model.ApplyDate.Value.Month + "月" + Model.ApplyDate.Value.Day + "日";
+                                }
+                                @printApplyDate2
                             </td>
                             <td class="style5"
                                 style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000"
