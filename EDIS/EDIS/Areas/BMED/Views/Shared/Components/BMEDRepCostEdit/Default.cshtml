@@ -40,6 +40,23 @@
                 </div>*@
             </div>
         </div>
+        <div id="pnlPETTY" class="row">
+            <div class="form-inline">
+                <label asp-for="IsPetty" class="control-title"></label>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="IsPetty" id="IsPettyY" value="Y">
+                        是
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="IsPetty" id="IsPettyN" value="N" checked>
+                        否
+                    </label>
+                </div>
+            </div>
+        </div>
         <div class="row">
             @Html.HiddenFor(model => model.VendorId)
             <div class=form-inline>

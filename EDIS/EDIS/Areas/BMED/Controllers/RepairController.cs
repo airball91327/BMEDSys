@@ -1073,13 +1073,13 @@ namespace EDIS.Areas.BMED.Controllers
 
                 var barcodeString = repair.DocId.ToString();
                 Zen.Barcode.Code128BarcodeDraw barcode1 = Zen.Barcode.BarcodeDrawFactory.Code128WithChecksum;
-                var barcodeImage = barcode1.Draw(barcodeString, 40);
+                var barcodeImage = barcode1.Draw(barcodeString, 30);
                 using (MemoryStream ms = new MemoryStream())
                 {
                     barcodeImage.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     byte[] imageBytes = ms.ToArray();
 
-                    ViewBag.Img =  Convert.ToBase64String(imageBytes);
+                    ViewBag.Img = "data:image/png;base64," + Convert.ToBase64String(imageBytes);
                 }
 
             }

@@ -57,11 +57,11 @@
                             </td>
                             <td colspan="4"
                                 style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                <barcode:BarcodeLabel ID="BarcodeLabel1" runat="server"
+                                @*<barcode:BarcodeLabel ID="BarcodeLabel1" runat="server"
                                                       BarcodeEncoding="Code39NC" BarMaxHeight="40" BarMaxWidth="2" BarMinWidth="1"
                                                       Text="1234" ShowLabel="False">
-                                </barcode:BarcodeLabel>
-                                <img src="@ViewBag.Img" />
+                                </barcode:BarcodeLabel>*@
+                                <img src="@ViewBag.Img"/>
                             </td>
                             <td style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000; text-align: center"
                                 width="70">
@@ -380,17 +380,14 @@
                 <td>
                     <table cellpadding="0" cellspacing="0" class="style2"
                            style="border: 2px solid #000000">
-                        <tr>
+                        <tr style="height: 39px">
                             <td colspan="2" align="center"
                                 style="border-bottom-style: solid; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
                                 醫&nbsp; 工&nbsp; 部&nbsp; 請&nbsp; 修&nbsp; 單
                             </td>
                             <td colspan="6"
                                 style="border-right-style: solid; border-bottom-style: solid; border-right-width: 1px; border-bottom-width: 1px; border-right-color: #000000; border-bottom-color: #000000">
-                                <barcode:BarcodeLabel ID="BarcodeLabel2" runat="server"
-                                                      BarcodeEncoding="Code39NC" BarMaxHeight="40" BarMaxWidth="2" BarMinWidth="1"
-                                                      Text="1234" ShowLabel="False">
-                                </barcode:BarcodeLabel>
+                                <img src="@ViewBag.Img" />
                             </td>
                         </tr>
                         <tr>
