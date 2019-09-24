@@ -976,6 +976,25 @@ namespace EDIS.Areas.BMED.Controllers
             return Json(list);
         }
 
+        // POST: BMED/Repair/UpdateChecker
+        [HttpPost]
+        public IActionResult UpdateChecker(string DocId, string UpdChecker)
+        {
+            var repair = _context.BMEDRepairs.Find(DocId);
+            if (repair == null)
+            {
+                return BadRequest();
+            }
+            repair.CheckerId = Convert.ToInt32(UpdChecker);
+            _context.Entry(repair).State = EntityState.Modified;
+            _context.SaveChanges();
+
+            return new JsonResult(repair)
+            {
+                Value = new { success = true, error = "" }
+            };
+        }
+
         // GET: Repair/Delete/5
         public ActionResult Delete(string id)
         {

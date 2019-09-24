@@ -132,10 +132,16 @@ namespace EDIS.Areas.BMED.Controllers
                     {
                         throw new Exception("維修方式不可空白!!");
                     }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 ||
-                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
+                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 3 ||
+                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 4 ||
+                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 8)
                     {
-                        throw new Exception("處理狀態不可為處理中或未處理!!");
+                        //Do nothing.
+                        //狀態為【已完成】、【報廢】、【退件】才可送至驗收人
+                    }
+                    else
+                    {
+                        throw new Exception("送至驗收人處理狀態只可為【已完成】、【報廢】、【退件】!!");
                     }
                 }
                 if (assign.FlowCls == "結案")
@@ -305,7 +311,7 @@ namespace EDIS.Areas.BMED.Controllers
                         }
                     }
                     break;
-                case "設備主管":
+                case "賀康主管": //設備主管
                     s = roleManager.GetUsersInRole("MedAssetMgr").ToList();
                     list = new List<SelectListItem>();
                     foreach (string l in s)

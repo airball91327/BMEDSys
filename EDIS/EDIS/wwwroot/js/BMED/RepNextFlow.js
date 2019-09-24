@@ -216,4 +216,54 @@ $(function () {
         }
     });
 
+    /* Query users. */
+    $("#CheckerQryBtn").click(function () {
+        var queryStr = $("#CheckerQry").val();
+        $('#imgLOADING_CHK').show();
+        $.ajax({
+            url: '../../Repair/QueryUsers',
+            type: "GET",
+            data: { QueryStr: queryStr },
+            success: function (data) {
+                $('#imgLOADING_CHK').hide();
+                var select = $('#UpdChecker');
+                var i = 0;
+                var defaultOption = 0;
+                console.log(select);
+                select.empty();
+                $.each(data, function (index, item) {  // item is now an object containing properties 
+                    if (i === defaultOption) {
+                        select.append($('<option selected="selected"></option>').text(item.text).val(item.value));
+                    }
+                    else {
+                        select.append($('<option></option>').text(item.text).val(item.value));
+                    }
+                    i++;
+                });
+            }
+        });
+    });
+
+    /* Update checker. */
+    $("#UpdCheckerBtn").click(function () {
+        var updChecker = $("#UpdChecker").val();
+        var docId = $("#DocId").val();
+        $('#imgLOADING_CHK').show();
+        $.ajax({
+            url: '../../Repair/UpdateChecker',
+            type: "POST",
+            data: { DocId: docId, UpdChecker: updChecker },
+            error: onFailed,
+            success: function (data) {
+                alert("修改成功!");
+                $.Toast.showToast({
+                    'title': '頁面重整中，請稍待...',
+                    'icon': 'loading',
+                    'duration': 0
+                });
+                window.location.reload();
+            }
+        });
+    });
+
 });

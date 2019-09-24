@@ -1,6 +1,6 @@
 ﻿function showmsg2() {
     alert("儲存成功!");
-    window.location.reload();   //刷新RepairDtl與RepairDtl2的頁面資訊
+    window.location.reload();   //刷新RepairDtl與RepairDtl2及RepairFlow的頁面資訊
 }
 
 $(document).ready(function () {

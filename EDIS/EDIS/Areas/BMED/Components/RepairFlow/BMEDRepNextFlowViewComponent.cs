@@ -34,6 +34,7 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
         {
             /* Get repair and flow details. */
             RepairModel repair = _context.BMEDRepairs.Find(id);
+            RepairDtlModel repairDtl = _context.BMEDRepairDtls.Find(id);
             RepairFlowModel repairFlow = _context.BMEDRepairFlows.Where(f => f.DocId == id && f.Status == "?")
                                                                  .FirstOrDefault();
             /* 增設流程 */
@@ -48,7 +49,7 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
                 listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
-                listItem.Add(new SelectListItem { Text = "設備主管", Value = "設備主管" });
+                listItem.Add(new SelectListItem { Text = "賀康主管", Value = "賀康主管" });
                 //listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
             }
             else  //維修流程
@@ -59,9 +60,24 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
                 listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
                 listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
-                listItem.Add(new SelectListItem { Text = "設備主管", Value = "設備主管" });
-                //listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
-                //listItem.Add(new SelectListItem { Text = "醫工經辦", Value = "醫工經辦" });
+                listItem.Add(new SelectListItem { Text = "賀康主管", Value = "賀康主管" });
+
+                //額外流程控管
+                if (repairDtl.IsCharged == "Y" && repairDtl.NotInExceptDevice == "N")   //有費用 & 非統包
+                {
+                    var itemToRemove = listItem.Single(r => r.Value == "驗收人");
+                    listItem.Remove(itemToRemove);    //只醫工主管可結案
+                }
+                if (repairDtl.DealState == 4)   //報廢
+                {
+                    var itemToRemove = listItem.Single(r => r.Value == "驗收人");
+                    listItem.Remove(itemToRemove);    //只醫工主管可結案
+                }
+                if (repairDtl.IsCharged == "Y" && repairDtl.NotInExceptDevice == "Y")   //有費用 & 統包
+                {
+                    var itemToRemove = listItem.Single(r => r.Value == "醫工主管");
+                    listItem.Remove(itemToRemove);    //移除醫工主管的選項
+                }
             }
             //listItem.Add(new SelectListItem { Text = "列管財產負責人", Value = "列管財產負責人" });
             //listItem.Add(new SelectListItem { Text = "固資財產負責人", Value = "固資財產負責人" });
@@ -93,7 +109,13 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
             listItem3.Add(new SelectListItem { Text = "", Value = "" });
             ViewData["FlowUid"] = new SelectList(listItem3, "Value", "Text", "");
 
-            assign.Hint = "使用者key單→設備工程師維護(若無費用user驗收結案,有費用夾帶報價資料給設備主管)→單位主管(相關單位主管核決)→設備工程師維護→使用者驗收結案";
+            /* Get Default Checker for MedEngineers to edit. */
+            List<SelectListItem> listItem4 = new List<SelectListItem>();
+            var defaultChecker = _context.AppUsers.Find(repair.CheckerId);
+            listItem4.Add(new SelectListItem { Text = defaultChecker.FullName, Value = defaultChecker.Id.ToString() });
+            ViewData["DefaultChecker"] = new SelectList(listItem4, "Value", "Text", defaultChecker.Id.ToString());
+
+            assign.Hint = "申請者→負責工程師→使用單位→[(若有費用及報廢)醫工部主管]→結案";
 
             /* 於流程頁面顯示請修類型、及處理狀態*/
             string hintRepType = repair.RepType;
