@@ -935,6 +935,42 @@ namespace EDIS.Areas.BMED.Controllers
             return Json(list);
         }
 
+        public JsonResult QueryUsers2(string QueryStr, string QueryDptId)
+        {
+            var users = _context.AppUsers.ToList();
+
+            /* Search user by fullname or username. */
+            if (!string.IsNullOrEmpty(QueryStr))
+            {
+                users = users.Where(u => u.FullName.Contains(QueryStr) || u.UserName.Contains(QueryStr)).ToList();
+            }
+
+            /* Search user by department. */
+            if (!string.IsNullOrEmpty(QueryDptId))
+            {
+                users = users.Where(u => u.DptId == QueryDptId).ToList();
+            }
+
+            /* If no search value. */
+            if (string.IsNullOrEmpty(QueryDptId) && string.IsNullOrEmpty(QueryStr))
+            {
+                users = users.Where(u => u.FullName.Contains(QueryStr) || u.UserName.Contains(QueryStr)).ToList();
+            }
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            if (users.Count() != 0)
+            {
+                users.ForEach(ur => {
+                    list.Add(new SelectListItem
+                    {
+                        Text = ur.FullName + "(" + ur.UserName + ")",
+                        Value = ur.Id.ToString()
+                    });
+                });
+            }
+            return Json(list);
+        }
+
         public JsonResult QueryAssets(string QueryStr, string QueryAccDpt, string QueryDelivDpt)
         {
             List<AssetModel> assets = new List<AssetModel>();
