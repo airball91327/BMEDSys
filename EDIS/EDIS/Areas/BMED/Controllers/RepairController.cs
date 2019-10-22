@@ -253,7 +253,9 @@ namespace EDIS.Areas.BMED.Controllers
                            FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                            EndDate = j.repdtl.EndDate,
                            IsCharged = j.repdtl.IsCharged,
-                           repdata = j.repair
+                           repdata = j.repair,
+                           ExFlowUid = _context.BMEDRepairFlows.Where(r => r.DocId == j.flow.DocId).OrderByDescending(r => r.StepId).Skip(1).FirstOrDefault().UserId,
+                           ExFlowCls = _context.BMEDRepairFlows.Where(r => r.DocId == j.flow.DocId).OrderByDescending(r => r.StepId).Skip(1).FirstOrDefault().Cls
                        }));
                     break;
                 /* 與登入者相關且結案的文件 */
