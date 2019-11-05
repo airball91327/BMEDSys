@@ -115,7 +115,6 @@ namespace EDIS.Controllers.WebApi
 
             if (ur != null)   //Check is UserName exist
             {
-                //密碼不在此比對
                 string DESKey = "12345678";
                 string userPW = DESDecrypt(root.Passwd, DESKey);    //DES decrypt.
                 Boolean CheckPassWord = false;
