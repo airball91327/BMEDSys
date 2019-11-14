@@ -24,6 +24,7 @@ using System.Net.Http;
 using System.Web;
 using System.Text;
 using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Authentication;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -43,19 +44,21 @@ namespace EDIS.Controllers
         private readonly IEmailSender _emailSender;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
+        private readonly CustomSignInManager _signInManager;
         private int pageSize = 100; //Setting XPageList's pageSize for one page.
 
         public HaSRepairController(ApplicationDbContext context,
                                    IRepository<RepairModel, string> repairRepo,
-                                IRepository<RepairDtlModel, string> repairdtlRepo,
-                                IRepository<RepairFlowModel, string[]> repairflowRepo,
-                                IRepository<AppUserModel, int> userRepo,
-                                IRepository<DepartmentModel, string> dptRepo,
-                                IRepository<DocIdStore, string[]> dsRepo,
-                                IRepository<BuildingModel, int> buildRepo,
-                                IEmailSender emailSender,
-                                CustomUserManager customUserManager,
-                                CustomRoleManager customRoleManager)
+                                   IRepository<RepairDtlModel, string> repairdtlRepo,
+                                   IRepository<RepairFlowModel, string[]> repairflowRepo,
+                                   IRepository<AppUserModel, int> userRepo,
+                                   IRepository<DepartmentModel, string> dptRepo,
+                                   IRepository<DocIdStore, string[]> dsRepo,
+                                   IRepository<BuildingModel, int> buildRepo,
+                                   IEmailSender emailSender,
+                                   CustomUserManager customUserManager,
+                                   CustomRoleManager customRoleManager,
+                                   CustomSignInManager signInManager)
         {
             _context = context;
             _repRepo = repairRepo;
@@ -68,6 +71,7 @@ namespace EDIS.Controllers
             _emailSender = emailSender;
             userManager = customUserManager;
             roleManager = customRoleManager;
+            _signInManager = signInManager;
         }
 
         public class LoginModel
@@ -120,6 +124,10 @@ namespace EDIS.Controllers
 
                 if (CheckPassWord == true)   //Check passed.
                 {
+                    var signInId = ur.Id.ToString();
+                    var user = new ApplicationUser { Id = signInId, UserName = ur.UserName };
+
+                    await _signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = true });
                     return RedirectToAction("Create", "Repair");
                 }
                 else
