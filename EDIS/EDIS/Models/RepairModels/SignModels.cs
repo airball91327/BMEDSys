@@ -13,6 +13,7 @@ namespace EDIS.Models.RepairModels
         public int DeliveryCount { get; set; }
         public int BMEDrepCount { get; set; }
         public int BMEDkeepCount { get; set; }
+        public int BMEDDeliveryCount { get; set; }
     }
 
     public class AssignModel

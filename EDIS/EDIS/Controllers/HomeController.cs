@@ -42,28 +42,28 @@ namespace EDIS.Controllers
             /* Get user details. */
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
-            var repairCount = _context.RepairFlows.Where(f => f.Status == "?")
-                                                  .Where(f => f.UserId == ur.Id).Count();
             var BMEDrepairCount = _BMEDcontext.BMEDRepairFlows.Where(f => f.Status == "?")
                                                               .Where(f => f.UserId == ur.Id).Count();
             var BMEDkeepCount = _BMEDcontext.BMEDKeepFlows.Where(f => f.Status == "?")
                                                           .Where(f => f.UserId == ur.Id).Count();
+            //var BMEDdeliveryCount = _BMEDcontext.BMEDDeliveryFlows.Where(f => f.Status == "?")
+            //                                                      .Where(f => f.UserId == ur.Id).Count();
+            var BMEDdeliveryCount = 0;
 
             UnsignCounts v = new UnsignCounts();
-            v.RepairCount = repairCount;
-            v.KeepCount = 0;
             v.BMEDrepCount = BMEDrepairCount;
             v.BMEDkeepCount = BMEDkeepCount;
+            v.BMEDDeliveryCount = BMEDdeliveryCount;
 
-            if (fBrowserIsMobile())
-            {
-                if (userManager.IsInRole(User, "RepEngineer") == true &&
-                    userManager.IsInRole(User, "RepMgr") == false)
-                {
-                    // go to mobile pages
-                    return RedirectToAction("Index", "Repair", new { Area = "Mobile" });
-                }
-            }
+            //if (fBrowserIsMobile())
+            //{
+            //    if (userManager.IsInRole(User, "RepEngineer") == true &&
+            //        userManager.IsInRole(User, "RepMgr") == false)
+            //    {
+            //        // go to mobile pages
+            //        return RedirectToAction("Index", "Repair", new { Area = "Mobile" });
+            //    }
+            //}
 
             return View(v);
         }
