@@ -1,0 +1,192 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+@{
+    ViewBag.Title = "驗收單/新增";
+}
+
+<h2>驗收單/新增</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>Delivery</legend>
+        @Html.HiddenFor(model => model.DocId)
+        <div class="editor-label">
+            @Html.LabelFor(model => model.UserId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.UserId)
+            @Html.EditorFor(model => model.UserName)
+            @Html.ValidationMessageFor(model => model.UserId)
+            @Html.ValidationMessageFor(model => model.UserName)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Company)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Company)
+            @Html.ValidationMessageFor(model => model.Company)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Contact)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Contact)
+            @Html.ValidationMessageFor(model => model.Contact)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ApplyDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ApplyDate)
+            @Html.ValidationMessageFor(model => model.ApplyDate)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AccDpt)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AccDpt)
+            @Html.EditorFor(model => model.AccDptNam)
+            @Html.ValidationMessageFor(model => model.AccDpt)
+            @Html.ValidationMessageFor(model => model.AccDptNam)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.ContractNo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.ContractNo)
+            @Html.ValidationMessageFor(model => model.ContractNo)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.WartyMon)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.WartyMon)
+            @Html.ValidationMessageFor(model => model.WartyMon)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.WartyNt)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.WartyNt)
+            @Html.ValidationMessageFor(model => model.WartyNt)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.AcceptDate)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.AcceptDate)
+            @Html.ValidationMessageFor(model => model.AcceptDate)
+        </div>
+        <div class="editor-label">
+            @Html.LabelFor(model => model.BudgetId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.BudgetId)
+            @Html.ValidationMessageFor(model => model.BudgetId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.PurchaseNo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.PurchaseNo)
+            @Html.ValidationMessageFor(model => model.PurchaseNo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.CrlItemNo)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.CrlItemNo)
+            @Html.ValidationMessageFor(model => model.CrlItemNo)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DelivDateR)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DelivDateR)
+            @Html.ValidationMessageFor(model => model.DelivDateR)
+        </div>
+        <div class="display-label">
+            @Html.LabelFor(model => model.EngId)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.EngId, ViewData["ENG"] as SelectList)
+        </div>
+        <div class="display-label">
+            @Html.LabelFor(model => model.PurchaserId)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.PurchaserId, ViewData["PUR"] as SelectList)
+        </div>
+        <div style="margin:5px; padding:10px;background-color: #dedcdc;">
+            <div class="editor-field">
+                @Html.Partial("_ChooseVendor")
+            </div>
+            <div class="display-label">
+                @Html.LabelFor(model => model.VendorId)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.VendorId)
+                @Html.ValidationMessageFor(model => model.VendorId)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.VendorNam)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.VendorNam)
+                @Html.ValidationMessageFor(model => model.VendorNam)
+            </div><span id="msg" style="color: red"></span>
+
+        </div>
+
+        <div class="display-label">
+            @Html.LabelFor(model => model.DelivPson)
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.DelivPson, ViewData["Item2"] as SelectList, "請選擇", new { @id = "SelDelivPson" })
+            @Html.ValidationMessageFor(model => model.DelivPson)
+        </div>
+        <div class="display-label">
+            使用單位人員
+        </div>
+        <div class="editor-field">
+            @Html.DropDownListFor(model => model.UserDpt, ViewData["Users"] as SelectList, optionLabel: "請選擇")
+        </div>
+        <div class="display-label">
+            @Html.LabelFor(model => model.Memo)
+        </div>
+        <div class="editor-field">
+            @Html.TextAreaFor(model => model.Memo)
+            @Html.ValidationMessageFor(model => model.Memo)
+        </div>
+        <div class="display-label">
+            儀器列表
+        </div>
+        <div style="padding-left: 20px; color: gray">
+            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = false })*@
+        </div>
+        <p>
+            <input id="btnSEND" type="submit" value="確定送出" />
+        </p>
+    </fieldset>
+}
+
+<div>
+    @Html.ActionLink("回到列表", "Index")
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/BMED/VendorChoose.js" asp-append-version="true"></script>
+}

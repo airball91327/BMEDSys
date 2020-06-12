@@ -1,0 +1,105 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplyDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccDpt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccDptNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContractNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PurchaseNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MakeNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DelivPson)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DelivDateR)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Memo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplyDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccDpt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccDptNam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PurchaseNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.MakeNo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DelivPson)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DelivDateR)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Memo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.DocId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.DocId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.DocId })
+        </td>
+    </tr>
+}
+
+</table>

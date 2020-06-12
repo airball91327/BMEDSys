@@ -1,0 +1,75 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DelivFlowModel
+@using EDIS.Models.Identity
+
+@inject CustomUserManager UserManager
+
+<form asp-controller="DelivFlow" asp-action="NextFlow" asp-area="BMED"
+      data-ajax="true" data-ajax-method="POST" id="nextFlowForm"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-success="flowmsg" data-ajax-failure="onFailed">
+
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.DocId)
+
+    <h2>關卡設定</h2>
+    <table style="width: 100%;">
+        @if (Model.FlowHint != null)
+        {
+            <tr>
+                <td class="head">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FlowHint)
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: bold; color: darkorange;">
+                        @Html.DisplayFor(model => model.FlowHint)
+                        @Html.ValidationMessageFor(model => model.FlowHint)
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Opinions)
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.RadioButtonFor(model => model.SelOpin, "同意")同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "不同意")不同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "其他")其他
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Opinions)
+                    @Html.ValidationMessageFor(model => model.Opinions)
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Cls)
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.DropDownListFor(model => model.Cls, ViewData["Item"] as SelectList, "請選擇", new { @id = "SelectCls" })
+                    @Html.ValidationMessageFor(model => model.Cls)
+                    @Html.DropDownListFor(model => model.UserId, ViewData["Item2"] as SelectList, "請選擇", new { @id = "SelectEng" })
+                    @Html.ValidationMessageFor(model => model.UserId)
+                </div>
+            </td>
+        </tr>
+    </table>
+    <p>
+        <input id="btnSEND" type="submit" value="確定送出" />
+    </p>
+
+</form>

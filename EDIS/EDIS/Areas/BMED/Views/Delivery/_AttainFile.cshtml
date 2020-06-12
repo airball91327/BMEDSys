@@ -1,0 +1,11 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+
+<a class="button" href="@Url.Content("~/AttainFile/Create?id="+ Model.DocId + "&typ=4")"
+   id="FileChooseLink">夾帶檔案</a>
+<div id="FileList">
+    @Html.Action("List", "AttainFile", new { id = Model.DocId, typ = "4" })
+</div>
+<div id="AttainFileDialog" class="hidden">
+
+</div>
+

@@ -36,6 +36,9 @@
     <Content Update="Areas\Admin\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Delivery\_AttainFile.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Keep\Delete.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -160,6 +163,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\BMED\Views\DelivFlow\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\BMED\Keep\" />
     <Folder Include="wwwroot\Files\BMED\Repair\" />

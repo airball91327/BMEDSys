@@ -7,7 +7,7 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('.BMEDDeliveryCombobox').combobox();
+        $('.DelivCombobox').combobox();
         /* Only first visit the page, will submit the form. */
         var count = 0;
         $('.nav-tabs a[href="#menu3"]').on('shown.bs.tab', function (event) {
@@ -54,7 +54,7 @@
                 </div>
                 <div class="form-group">
                     <label for="BMEDKqtyACCDPT" class="control-title">成本中心</label>
-                    <select asp-for="BMEDKqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control BMEDKeepCombobox">
+                    <select asp-for="BMEDKqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control DelivCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -72,7 +72,7 @@
                 </div>
                 <div class="form-group">
                     <label for="BMEDKqtyDPTID" class="control-title">申請部門</label>
-                    <select asp-for="BMEDKqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control BMEDKeepCombobox">
+                    <select asp-for="BMEDKqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control DelivCombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>

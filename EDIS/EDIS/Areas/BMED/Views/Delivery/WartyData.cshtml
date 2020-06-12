@@ -1,0 +1,119 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DelivDataVModel
+
+@using (Html.BeginForm("", "", FormMethod.Post,
+    new { @id = "WartyDataForm" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.DocId)
+    <div id="pnlTODO">
+        <h2>設備經辦專區</h2>
+        <div style="padding-left: 20px">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.WartyNt)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.WartyNt)
+                @Html.ValidationMessageFor(model => model.WartyNt)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.AcceptDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.AcceptDate)
+                @Html.ValidationMessageFor(model => model.AcceptDate)
+            </div>
+        </div>
+    </div>
+    <div id="pnlMEDMGR">
+        <h2>設備主管專區</h2>
+        <div style="padding-left: 20px">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.WartySt)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.WartySt)
+                @Html.ValidationMessageFor(model => model.WartySt)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.WartyEd)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.WartyEd)
+                @Html.ValidationMessageFor(model => model.WartyEd)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.FileTestDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.FileTestDate)
+                @Html.ValidationMessageFor(model => model.FileTestDate)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Stype2)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.Stype2, null, "請選擇",null)
+                @Html.ValidationMessageFor(model => model.Stype2)
+            </div>
+
+            <div class="editor-label">
+                @Html.LabelFor(model => model.Code)
+            </div>
+            <div class="editor-field">
+                @Html.DropDownListFor(model => model.Code, null, "請選擇", null)
+                @Html.ValidationMessageFor(model => model.Code)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.OrderDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.OrderDate)
+                @Html.ValidationMessageFor(model => model.OrderDate)
+            </div>
+            <div class="editor-label">
+                @Html.LabelFor(model => model.OpenDate)
+            </div>
+            <div class="editor-field">
+                @Html.EditorFor(model => model.OpenDate)
+                @Html.ValidationMessageFor(model => model.OpenDate)
+            </div>
+            <div>
+                <table style="width: 100%">
+                    <tr>
+                        <th>財產編號</th>
+                        <th>儀器名稱</th>
+                        <th>起始年月</th>
+                        <th>保養週期</th>
+                        <th>保養方式</th>
+                        <th>工時</th>
+                        <th>費用</th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in Model.ak)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.AssetNo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cname)</td>
+                            <td>@Html.DisplayFor(modelItem => item.KeepYm)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cycle)</td>
+                            <td>@Html.DisplayFor(modelItem => item.InOut)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Hours)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cost)</td>
+                            <td>@Html.ActionLink("編輯", "EditData", "AssetKeep", new { ano = item.AssetNo, id = Model.DocId }, new { target = "_blank" })</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">
+                                <div>
+                                    @Html.Action("AssetList", "AssetFile", new { @id=item.AssetNo})
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,248 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+<script src="~/Scripts/jquery-1.7.1.js"></script>
+<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+@{
+    ViewBag.Title = "驗收單";
+}
+
+<h2>編輯</h2>
+
+<fieldset>
+    <legend>驗收單</legend>
+
+    @Html.HiddenFor(model => model.DocId)
+    <div style="margin-bottom: 10px">
+        @Html.Partial("_AttainFile", Model)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UserId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.UserId)
+        @Html.ValidationMessageFor(model => model.UserId)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UserName)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.UserName)
+        @Html.ValidationMessageFor(model => model.UserName)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Company)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Company)
+        @Html.ValidationMessageFor(model => model.Company)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Contact)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Contact)
+        @Html.ValidationMessageFor(model => model.Contact)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.WartyMon)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.WartyMon)
+        @Html.ValidationMessageFor(model => model.WartyMon)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.ApplyDate)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.ApplyDate)
+        @Html.ValidationMessageFor(model => model.ApplyDate)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.AccDpt)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.AccDpt)
+        @Html.EditorFor(model => model.AccDptNam)
+        @Html.ValidationMessageFor(model => model.AccDpt)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.ContractNo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.ContractNo)
+        @Html.ValidationMessageFor(model => model.ContractNo)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.BudgetId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.BudgetId)
+        @Html.ValidationMessageFor(model => model.BudgetId)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.PurchaseNo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.PurchaseNo)
+        @Html.ValidationMessageFor(model => model.PurchaseNo)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.CrlItemNo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.CrlItemNo)
+        @Html.ValidationMessageFor(model => model.CrlItemNo)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.DelivPson)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.DelivPson)
+        @Html.EditorFor(model => model.DelivPsonNam)
+        @Html.ValidationMessageFor(model => model.DelivPson)
+        @if (Model.DelivPson != null)
+        {
+            @*@Html.Action("UserInfo", "Account", new { id = Model.DelivPson })*@
+        }
+
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.DelivDateR)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.DelivDateR)
+        @Html.ValidationMessageFor(model => model.DelivDateR)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.VendorId)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.VendorNam)
+        @Html.ValidationMessageFor(model => model.VendorNam)
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.Memo)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.Memo)
+        @Html.ValidationMessageFor(model => model.Memo)
+    </div>
+    <div id="pnlASSET">
+        <div class="display-label">
+            儀器列表
+        </div>
+        <div style="padding-left: 20px; color: gray">
+            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid })*@
+        </div>
+    </div>
+    <div id="pnlASSETVIEW">
+        <div class="display-label">
+            儀器列表
+        </div>
+        <div style="padding-left: 20px; color: gray">
+            @Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "查看" })
+        </div>
+    </div>
+    <div id="pnlVENDOR">
+        <h2>
+            廠商專區
+        </h2>
+        <div>
+            @Html.ActionLink("新增儀器", "New", "Asset", new { docid = Model.DocId, rdate = Model.DelivDateR },
+                  new { id = "btnAddAsset", target = "_blank" })
+        </div>
+        <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
+            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid, upload = "得標廠商" })*@
+        </div>
+        <img src="~/Images/ajax-loader.gif" id="imgLOAD_VENDOR" />
+    </div>
+    <div id="pnlMEDENG">
+        <h2>
+            設備工程師專區
+        </h2>
+        <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
+            @Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "設備工程師" })
+        </div>
+    </div>
+    <div id="pnlWartyData">
+        @Html.Action("WartyData", "Delivery", new { id = Model.DocId })
+    </div>
+    <div>
+        @Html.Action("GetList", "DelivFlow", new { id = Model.DocId })
+    </div>
+    <div>
+        @Html.Action("NextFlow", "DelivFlow", new { id = Model.DocId })
+    </div>
+
+</fieldset>
+<script>
+     $(function () {
+        var page = window.location.hash
+            ? window.location.hash.slice(1) : 1;
+        fetchPage(page);
+    });
+
+    var fetchPage = function (page) {
+        var pagedPartialUrl = '@Url.Action("BuyEvaluateListItem", "Asset")';
+        var s = "id=" + $("#Docid").val() + "&upload=得標廠商";
+        $.ajax({
+            url: pagedPartialUrl,
+            type: "POST",
+            async: true,
+            data: s + "&page=" + page,
+            beforeSend: function () {
+                $("#imgLOAD_VENDOR").show();
+            },
+            success: function (data) {
+                //window.location.hash = page;
+                $('#gvASSETLIST').html(data);
+                $('#gvASSETLIST .pagination li a').each(function (i, item) {
+                    var hyperLinkUrl = $(item).attr('href');
+                    if (typeof hyperLinkUrl !== 'undefined' && hyperLinkUrl !== false) {
+                        var pageNumber = hyperLinkUrl.substr(hyperLinkUrl.length-1);
+                        $(item).attr('href', '#').click(function (event) {
+                            event.preventDefault();
+                            $(event.target).attr('href');
+                            fetchPage(pageNumber);
+                        });
+                    }
+                });
+            },
+            complete: function () {
+                $("#imgLOAD_VENDOR").hide();
+            }
+        });
+    };
+
+    function OnSuccess(ano, seqno, fid, data) {
+        //$("tr[id='" + ano + seqno + "']").hide();
+        //alert(ano + seqno);
+        if (data != "")
+        {
+            alert(data);
+            return false;
+        }
+        var f = document.getElementById("upfstatus" + ano);
+        var c = document.getElementById("cls_now");
+        $(f).html('').load(encodeURI("../../AssetFile/CheckFiles?id=" + ano + "&cls=" + $(c).text()), function () {
+            $("tr[id='" + ano + seqno + fid + "']").hide();
+            alert('刪除成功');
+        });
+    }
+</script>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
+    <script src="~/js/BMED/DelivNextFlow.js" asp-append-version="true"></script>
+}

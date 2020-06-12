@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using EDIS.Areas.BMED.Models;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Models.KeepModels;
+using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Models.Identity;
 
 namespace EDIS.Areas.BMED.Data
@@ -53,6 +54,11 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<AssetKeepModel> BMEDAssetKeeps { get; set; }
         public DbSet<DeviceClassCode> BMEDDeviceClassCodes { get; set; }
         public DbSet<ExceptDeviceModel> ExceptDevice { get; set; }
+
+        public DbSet<DeliveryModel> Deliveries { get; set; }
+        public DbSet<DelivFlowModel> DelivFlows { get; set; }
+        public DbSet<DelivCodeModel> DelivCodes { get; set; }
+        public DbSet<AssetFileModel> AssetFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
