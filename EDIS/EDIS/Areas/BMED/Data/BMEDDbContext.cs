@@ -59,6 +59,7 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<DelivFlowModel> DelivFlows { get; set; }
         public DbSet<DelivCodeModel> DelivCodes { get; set; }
         public DbSet<AssetFileModel> AssetFiles { get; set; }
+        public DbSet<NeedFileModel> NeedFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -96,6 +97,12 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<AssetKeepModel>().HasKey(c => new { c.AssetNo });
             builder.Entity<DeviceClassCode>().HasKey(c => new { c.M_code });
             builder.Entity<ExceptDeviceModel>().HasKey(c => new { c.AssetNo });
+
+            builder.Entity<DeliveryModel>().HasKey(c => new { c.DocId });
+            builder.Entity<DelivFlowModel>().HasKey(c => new { c.DocId, c.StepId });
+            builder.Entity<DelivCodeModel>().HasKey(c => new { c.Code });
+            builder.Entity<AssetFileModel>().HasKey(c => new { c.AssetNo, c.SeqNo, c.Fid });
+            builder.Entity<NeedFileModel>().HasKey(c => new { c.SeqNo });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

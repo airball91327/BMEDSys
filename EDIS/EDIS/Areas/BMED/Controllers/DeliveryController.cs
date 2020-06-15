@@ -58,35 +58,37 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(FormCollection form)
+        public IActionResult Index(IFormCollection form)
         {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
+            listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
+            listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
+            ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "待處理");
+            //
             List<DeliveryListVModel> vm;
-            vm = GetList2(form["qtyFLOWTYP"]);
-            if (form["qtyDOCID"] != "")
+            vm = GetList(form["qtyFLOWTYPE"]);
+            if (!string.IsNullOrEmpty(form["qtyDOCID"]))
             {
                 vm = vm.Where(m => m.DocId == form["qtyDOCID"]).ToList();
             }
-            if (form["qtyPURCHASENO"] != "")
+            if (!string.IsNullOrEmpty(form["qtyPURCHASENO"]))
             {
                 vm = vm.Where(m => m.PurchaseNo == form["qtyPURCHASENO"]).ToList();
             }
-            if (form["qtyDPTID"] != "")
+            if (!string.IsNullOrEmpty(form["qtyCUSTID"]))
             {
-                vm = vm.Where(m => m.Company == form["qtyDPTID"]).ToList();
+                vm = vm.Where(m => m.Company == form["qtyCUSTID"]).ToList();
             }
-            if (form["qtyBUDGETID"] != "")
+            if (!string.IsNullOrEmpty(form["qtyBUDGETID"]))
             {
                 vm = vm.Where(m => m.BudgetId == form["qtyBUDGETID"]).ToList();
             }
-            if (form["qtyCONTRACTNO"] != "")
+            if (!string.IsNullOrEmpty(form["qtyCONTRACTNO"]))
             {
                 vm = vm.Where(m => m.ContractNo == form["qtyCONTRACTNO"]).ToList();
             }
-            if (form["qtyACCDPT"] != "")
-            {
-                vm = vm.Where(m => m.AccDpt == form["qtyACCDPT"]).ToList();
-            }
-            if (form["qtyASSETNO"] != "")
+            if (!string.IsNullOrEmpty(form["qtyASSETNO"]))
             {
                 AssetModel at = _context.BMEDAssets.Find(form["qtyASSETNO"]);
                 if (at != null)
@@ -96,31 +98,13 @@ namespace EDIS.Areas.BMED.Controllers
                 else
                     vm.Clear();
             }
-            if (form["qtyASSETNAME"] != "")
+            foreach (var item in vm)
             {
-                string s = form["qtyASSETNAME"];
-                List<AssetModel> at = _context.BMEDAssets.Where(a => a.Cname.Contains(s))
-                    .ToList();
-                if (at != null)
-                {
-                    vm = vm.Join(at, v => v.DocId, a => a.Docid,
-                        (v, a) => v).ToList();
-                }
-                else
-                    vm.Clear();
-            }
-            if (form["qtyVENDOR"] != "")
-            {
-                string s = form["qtyVENDOR"];
-                List<VendorModel> vs = _context.BMEDVendors.Where(a => a.VendorName.Contains(s))
-                    .ToList();
-                if (vs != null)
-                {
-                    vm = vm.Join(vs, v => v.VendorNo, a => a.UniteNo,
-                        (v, a) => v).ToList();
-                }
-                else
-                    vm.Clear();
+                var u = _context.AppUsers.Find(item.UserId);
+                item.Contact = u == null ? "" : u.Ext;
+                u = _context.AppUsers.Find(item.FlowUid);
+                item.FlowUname = u == null ? "" : u.FullName;
+                item.CompanyNam = _context.Departments.Find(item.Company) == null ? "" : _context.Departments.Find(item.Company).Name_C;
             }
             return PartialView("_DeliveryList", vm);
         }
@@ -453,7 +437,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<SelectListItem> listItem4 = new List<SelectListItem>();
             List<SelectListItem> listItem5 = new List<SelectListItem>();
             var eng = roleManager.GetUsersInRole("MedEngineer").ToList();
-            var buyer = roleManager.GetUsersInRole("Buyer").ToList();
+            var buyer = roleManager.GetUsersInRole("Buyer");
             AppUserModel p;
             foreach (string s in eng)
             {
@@ -658,7 +642,7 @@ namespace EDIS.Areas.BMED.Controllers
             switch (cls)
             {
                 case "已處理":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='?'")
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='?'")
                                              .Where(m => m.UserId != ur.Id).ToList();
                     if (userManager.IsInRole(User, "MedToDo"))
                     {
@@ -677,7 +661,7 @@ namespace EDIS.Areas.BMED.Controllers
 
                     break;
                 case "已結案":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='2'").ToList();
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='2'").ToList();
                     if (userManager.IsInRole(User, "MedToDo"))
                     {
                         rf.AddRange(rf2);
@@ -694,7 +678,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     break;
                 case "查詢":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='?'").ToList();
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='?'").ToList();
                     DeliveryModel r;
                     foreach (DelivFlowModel f in rf2)
                     {
@@ -703,7 +687,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     break;
                 default:
-                    rf = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='?'")
+                    rf = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='?'")
                         .Where(m => m.UserId == ur.Id).ToList();
                     break;
             }
@@ -752,7 +736,7 @@ namespace EDIS.Areas.BMED.Controllers
             switch (cls)
             {
                 case "已處理":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='?'")
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='?'")
                         .Where(m => m.UserId != ur.Id).ToList();
                     if (!userManager.IsInRole(User, "Usual"))
                     {
@@ -771,7 +755,7 @@ namespace EDIS.Areas.BMED.Controllers
 
                     break;
                 case "已結案":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='2'").ToList();
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='2'").ToList();
                     if (!userManager.IsInRole(User, "Usual"))
                     {
                         rf.AddRange(rf2);
@@ -788,7 +772,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     break;
                 case "所有":
-                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='2' OR STATUS ='?'").ToList();
+                    rf2 = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='2' OR STATUS ='?'").ToList();
                     if (!userManager.IsInRole(User, "Usual"))
                     {
                         rf.AddRange(rf2);
@@ -805,7 +789,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     break;
                 default:
-                    rf = _context.DelivFlows.FromSql("SELECT * FROM DELIVFLOW WHERE STATUS ='?'")
+                    rf = _context.DelivFlows.FromSql("SELECT * FROM BMEDDELIVFLOWS WHERE STATUS ='?'")
                                             .Where(m => m.UserId == ur.Id).ToList();
                     break;
             }
@@ -842,13 +826,13 @@ namespace EDIS.Areas.BMED.Controllers
         public string GetID()
         {
             string str = "";
-            str += "SELECT MAX(DOCID) DocId FROM Delivery ";
-            var r = _context.Deliveries.FromSql(str);
+            str += "SELECT MAX(DOCID) DocId FROM BMEDDeliveries ";
+            var r = _context.Deliveries.FromSql(str).Select(d => d.DocId).ToList();
             string did = "";
             int yymm = (System.DateTime.Now.Year - 1911) * 100 + System.DateTime.Now.Month;
-            foreach (DeliveryModel s in r)
+            foreach (string s in r)
             {
-                did = s.DocId;
+                did = s;
             }
             if (did != "")
             {

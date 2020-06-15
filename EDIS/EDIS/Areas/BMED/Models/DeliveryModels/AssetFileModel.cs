@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EDIS.Areas.BMED.Models.DeliveryModels
 {
-    [Table("AssetFiles")]
+    [Table("BMEDAssetFiles")]
     public class AssetFileModel
     {
         [Key, Column(Order = 1)]

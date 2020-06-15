@@ -10,7 +10,7 @@ using EDIS.Areas.BMED.Models.KeepModels;
 
 namespace EDIS.Areas.BMED.Models.DeliveryModels
 {
-    [Table("Deliveries")]
+    [Table("BMEDDeliveries")]
     public class DeliveryModel
     {
         [Key]
@@ -46,10 +46,12 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
         [Required]
         [Display(Name = "實際交期")]
         public DateTime DelivDateR { get; set; }
+        [Required]
         [Display(Name = "採購人員")]
         public int PurchaserId { get; set; }
         [NotMapped]
         public string PurchaserName { get; set; }
+        [Required]
         [Display(Name = "設備工程師")]
         public int EngId { get; set; }
         [NotMapped]
@@ -95,7 +97,7 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
 
     }
 
-    [Table("DelivFlows")]
+    [Table("BMEDDelivFlows")]
     public class DelivFlowModel
     {
         [Key, Column(Order = 1)]
@@ -130,7 +132,7 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
         public string Cls { get; set; }
     }
 
-    [Table("DelivCodes")]
+    [Table("BMEDDelivCodes")]
     public class DelivCodeModel
     {
         [Key]

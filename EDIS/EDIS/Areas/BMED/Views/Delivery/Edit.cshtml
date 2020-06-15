@@ -150,7 +150,7 @@
             儀器列表
         </div>
         <div style="padding-left: 20px; color: gray">
-            @Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "查看" })
+            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "查看" })*@
         </div>
     </div>
     <div id="pnlVENDOR">
@@ -171,17 +171,17 @@
             設備工程師專區
         </h2>
         <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
-            @Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "設備工程師" })
+            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "設備工程師" })*@
         </div>
     </div>
     <div id="pnlWartyData">
-        @Html.Action("WartyData", "Delivery", new { id = Model.DocId })
+        @*@Html.Action("WartyData", "Delivery", new { id = Model.DocId })*@
     </div>
     <div>
-        @Html.Action("GetList", "DelivFlow", new { id = Model.DocId })
+        @*@Html.Action("GetList", "DelivFlow", new { id = Model.DocId })*@
     </div>
     <div>
-        @Html.Action("NextFlow", "DelivFlow", new { id = Model.DocId })
+        @*@Html.Action("NextFlow", "DelivFlow", new { id = Model.DocId })*@
     </div>
 
 </fieldset>

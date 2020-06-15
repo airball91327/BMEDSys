@@ -25,7 +25,12 @@ namespace EDIS.Models.Identity
 
         public string[] GetUsersInRole(string roleName)
         {
-            int roleId = _context.AppRoles.Where(r => r.RoleName == roleName).FirstOrDefault().RoleId;
+            int roleId = 4; 
+            var role = _context.AppRoles.Where(r => r.RoleName == roleName).FirstOrDefault();
+            if (role != null)
+            {
+                roleId = role.RoleId;
+            }
             var getUsers = _context.UsersInRoles.Where(r => r.RoleId == roleId).ToList();
             string[] roleUsers = new string[getUsers.Count];
             int i = 0;

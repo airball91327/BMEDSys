@@ -46,9 +46,8 @@ namespace EDIS.Controllers
                                                               .Where(f => f.UserId == ur.Id).Count();
             var BMEDkeepCount = _BMEDcontext.BMEDKeepFlows.Where(f => f.Status == "?")
                                                           .Where(f => f.UserId == ur.Id).Count();
-            //var BMEDdeliveryCount = _BMEDcontext.BMEDDeliveryFlows.Where(f => f.Status == "?")
-            //                                                      .Where(f => f.UserId == ur.Id).Count();
-            var BMEDdeliveryCount = 0;
+            var BMEDdeliveryCount = _BMEDcontext.DelivFlows.Where(f => f.Status == "?")
+                                                           .Where(f => f.UserId == ur.Id).Count();
 
             UnsignCounts v = new UnsignCounts();
             v.BMEDrepCount = BMEDrepairCount;

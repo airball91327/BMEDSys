@@ -1,5 +1,4 @@
-﻿@model EDIS.Areas.BMED.Models.KeepModels.QryKeepListData
-@using EDIS.Models.Identity
+﻿@using EDIS.Models.Identity
 
 @inject CustomUserManager UserManager
 <link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
@@ -17,7 +16,7 @@
             };
         });   
     });
-    function BMEDKeepReSubmit() {
+    function BMEDDelivReSubmit() {
         $("#BMEDdelivSearchForm").submit();
         /* Refresh delivery count. */
         $.ajax({
@@ -45,76 +44,40 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="BMEDDqtyDOCID" class="control-title">表單編號</label>
-                    <input asp-for="BMEDKqtyDOCID" class="form-control" />
+                    @Html.Label("qtyDOCID", "表單編號", htmlAttributes: new { @class = "control-title" })
+                    @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <label for="BMEDKqtyASSETNO" class="control-title">財產編號</label>
-                    <input asp-for="BMEDKqtyASSETNO" class="form-control-s" />
+                    @Html.Label("qtyASSETNO", "財產編號", htmlAttributes: new { @class = "control-title" })
+                    @Html.TextBox("qtyASSETNO", "", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <label for="BMEDKqtyACCDPT" class="control-title">成本中心</label>
-                    <select asp-for="BMEDKqtyACCDPT" asp-items="@ViewData["BMEDKeepAccDpt"] as SelectList" class="form-control DelivCombobox">
-                        <option value="">請選擇</option>
-                    </select>
+                    @Html.Label("qtyACCDPT", "成本中心", new { @class = "control-title" })
+                    @Html.DropDownList("qtyACCDPT", ViewData["ACCDPT"] as SelectList, "請選擇", new { @class = "form-control DelivCombobox" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="BMEDKqtyASSETNAME" class="control-title">預算編號</label>
-                    <input asp-for="BMEDKqtyASSETNAME" class="form-control" />
+                    @Html.Label("qtyBUDGETID", "預算編號", htmlAttributes: new { @class = "control-title" })
+                    @Html.TextBox("qtyBUDGETID", "", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <label for="BMEDKqtyFLOWTYPE" class="control-title">採購案號</label>
-                    <select asp-for="BMEDKqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
+                    @Html.Label("qtyPURCHASENO", "採購案號", htmlAttributes: new { @class = "control-title" })
+                    @Html.TextBox("qtyPURCHASENO", "", new { @class = "form-control" })
                 </div>
                 <div class="form-group">
-                    <label for="BMEDKqtyDPTID" class="control-title">申請部門</label>
-                    <select asp-for="BMEDKqtyDPTID" asp-items="@ViewData["BMEDKeepApplyDpt"] as SelectList" class="form-control DelivCombobox">
-                        <option value="">請選擇</option>
-                    </select>
+                    @Html.Label("qtyDPTID", "申請部門", new { @class = "control-title" })
+                    @Html.DropDownList("qtyDPTID", ViewData["APPLYDPT"] as SelectList, "請選擇", new { @class = "form-control DelivCombobox" })
                 </div>
             </div>
         </div>
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="BMEDKqtyFLOWTYPE" class="control-title">流程狀態</label>
-                    <select asp-for="BMEDKqtyFLOWTYPE" asp-items="@ViewData["BMEDKeepFlowType"] as SelectList" class="form-control-s"></select>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label for="BMEDKqtyTicketNo" class="control-title">發票號碼</label>
-                    <input asp-for="BMEDKqtyTicketNo" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label for="BMEDKqtyVendor" class="control-title">廠商(關鍵字)</label>
-                    <input asp-for="BMEDKqtyVendor" class="form-control-s" />
-                </div>
-                @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
-                {
-                    <div class="form-group">
-                        <label class="control-title">查詢其他<br />工程師案件</label>
-                        <input type="checkbox" asp-for="BMEDKqtySearchAllDoc" style="margin: 7px 0px 0px 7px;" />
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label for="qtyApplyDateFrom" class="control-title">日期查詢</label>
-                    <span>
-                        <select asp-for="BMEDKqtyDateType" asp-items="@ViewData["BMEDKeepDateType"] as SelectList" class="form-control-s"></select>
-                    </span>
-                    <input asp-for="BMEDKqtyApplyDateFrom" class="form-control" />
-                    <span> ~ </span>
-                    <input asp-for="BMEDKqtyApplyDateTo" class="form-control" />
+                    @Html.Label("qtyFLOWTYP", "流程狀態", new { @class = "control-title" })
+                    @Html.DropDownList("qtyFLOWTYP", ViewData["FLOWTYP"] as SelectList, null, new { @class = "form-control" })
                 </div>
             </div>
         </div>
