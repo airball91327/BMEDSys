@@ -183,8 +183,8 @@
         <div class="editor-label">
             <label asp-for="Memo" class="control-title"></label>
         </div>
-        <div class="editor-field">
-            <input asp-for="Memo" class="form-control" />
+        <div class="editor-field form-inline">
+            <textarea asp-for="Memo" class="form-control" rows="3"></textarea>
             <span asp-validation-for="Memo" class="text-danger"></span>
         </div>
 

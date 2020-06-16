@@ -120,6 +120,12 @@
     <Content Update="Areas\BMED\Views\Shared\Components\BMEDRepEdit\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\DelivFlowList\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\DelivNextFlow\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Vendor\QryVendor.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -157,6 +163,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\Components\RepDtlEdit\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\Components\UserInfo\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

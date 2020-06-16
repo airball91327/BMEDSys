@@ -1,9 +1,28 @@
 ﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
-<script src="~/Scripts/jquery-1.7.1.js"></script>
-<script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+
+<script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
+<script src="~/js/BMED/DelivNextFlow.js" asp-append-version="true"></script>
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+
 @{
-    ViewBag.Title = "驗收單";
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "驗收單/編輯";
 }
+
+<style>
+    /*fieldset{
+        border-style:solid;
+        border-width:2px;
+        border-color:white;
+    }*/
+    fieldset > legend{
+        color:white;
+        /*width:auto;*/
+    }
+    a {
+        color: deepskyblue;
+    }
+</style>
 
 <h2>編輯</h2>
 
@@ -12,142 +31,146 @@
 
     @Html.HiddenFor(model => model.DocId)
     <div style="margin-bottom: 10px">
-        @Html.Partial("_AttainFile", Model)
+        @await Html.PartialAsync("_AttainFile", Model)
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.UserId)
+        <label asp-for="UserId" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.UserId)
-        @Html.ValidationMessageFor(model => model.UserId)
+        <input asp-for="UserId" class="form-control" readonly />
+        <span asp-validation-for="UserId" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.UserName)
+        <label asp-for="UserName" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.UserName)
-        @Html.ValidationMessageFor(model => model.UserName)
+        <input asp-for="UserName" class="form-control" readonly />
+        <span asp-validation-for="UserName" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.Company)
+        <label asp-for="Company" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.Company)
-        @Html.ValidationMessageFor(model => model.Company)
+        <input asp-for="Company" class="form-control" readonly />
+        <span asp-validation-for="Company" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.Contact)
+        <label asp-for="Contact" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.Contact)
-        @Html.ValidationMessageFor(model => model.Contact)
-    </div>
-    <div class="editor-label">
-        @Html.LabelFor(model => model.WartyMon)
-    </div>
-    <div class="editor-field">
-        @Html.EditorFor(model => model.WartyMon)
-        @Html.ValidationMessageFor(model => model.WartyMon)
-    </div>
-    <div class="editor-label">
-        @Html.LabelFor(model => model.ApplyDate)
-    </div>
-    <div class="editor-field">
-        @Html.EditorFor(model => model.ApplyDate)
-        @Html.ValidationMessageFor(model => model.ApplyDate)
+        <input asp-for="Contact" class="form-control" readonly />
+        <span asp-validation-for="Contact" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.AccDpt)
+        <label asp-for="WartyMon" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.AccDpt)
-        @Html.EditorFor(model => model.AccDptNam)
-        @Html.ValidationMessageFor(model => model.AccDpt)
+        <input asp-for="WartyMon" class="form-control" />
+        <span asp-validation-for="WartyMon" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.ContractNo)
+        <label asp-for="ApplyDate" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.ContractNo)
-        @Html.ValidationMessageFor(model => model.ContractNo)
+        <input asp-for="ApplyDate" type="date" class="form-control" readonly />
+        <span asp-validation-for="ApplyDate" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.BudgetId)
+        <label asp-for="AccDpt" class="control-title"></label>
     </div>
-    <div class="editor-field">
-        @Html.EditorFor(model => model.BudgetId)
-        @Html.ValidationMessageFor(model => model.BudgetId)
+    <div class="editor-field form-inline">
+        <input asp-for="AccDpt" class="form-control" readonly />
+        <input asp-for="AccDptNam" class="form-control" readonly />
+        <span asp-validation-for="AccDpt" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.PurchaseNo)
+        <label asp-for="ContractNo" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.PurchaseNo)
-        @Html.ValidationMessageFor(model => model.PurchaseNo)
+        <input asp-for="ContractNo" class="form-control" />
+        <span asp-validation-for="ContractNo" class="text-danger"></span>
     </div>
+
     <div class="editor-label">
-        @Html.LabelFor(model => model.CrlItemNo)
+        <label asp-for="BudgetId" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.CrlItemNo)
-        @Html.ValidationMessageFor(model => model.CrlItemNo)
+        <input asp-for="BudgetId" class="form-control" />
+        <span asp-validation-for="BudgetId" class="text-danger"></span>
     </div>
+
     <div class="editor-label">
-        @Html.LabelFor(model => model.DelivPson)
+        <label asp-for="PurchaseNo" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.DelivPson)
-        @Html.EditorFor(model => model.DelivPsonNam)
-        @Html.ValidationMessageFor(model => model.DelivPson)
+        <input asp-for="PurchaseNo" class="form-control" />
+        <span asp-validation-for="PurchaseNo" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="CrlItemNo" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="CrlItemNo" class="form-control" />
+        <span asp-validation-for="CrlItemNo" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="DelivPson" class="control-title"></label>
+    </div>
+    <div class="editor-field form-inline">
+        <input asp-for="DelivPson" class="form-control" readonly />
+        <input asp-for="DelivPsonNam" class="form-control" readonly />
+        <span asp-validation-for="DelivPson" class="text-danger"></span>
         @if (Model.DelivPson != null)
         {
-            @*@Html.Action("UserInfo", "Account", new { id = Model.DelivPson })*@
+            @await Component.InvokeAsync("UserInfo", new { id = Model.DelivPson })
         }
-
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.DelivDateR)
+        <label asp-for="DelivDateR" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.DelivDateR)
-        @Html.ValidationMessageFor(model => model.DelivDateR)
+        <input asp-for="DelivDateR" type="date" class="form-control" />
+        <span asp-validation-for="DelivDateR" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.VendorId)
+        <label asp-for="VendorId" class="control-title"></label>
     </div>
     <div class="editor-field">
-        @Html.EditorFor(model => model.VendorNam)
-        @Html.ValidationMessageFor(model => model.VendorNam)
+        <input asp-for="VendorNam" class="form-control" readonly />
+        <span asp-validation-for="VendorNam" class="text-danger"></span>
     </div>
 
     <div class="editor-label">
-        @Html.LabelFor(model => model.Memo)
+        <label asp-for="Memo" class="control-title"></label>
     </div>
-    <div class="editor-field">
-        @Html.EditorFor(model => model.Memo)
-        @Html.ValidationMessageFor(model => model.Memo)
+    <div class="editor-field form-inline">
+        <textarea asp-for="Memo" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Memo" class="text-danger"></span>
     </div>
+
     <div id="pnlASSET">
-        <div class="display-label">
-            儀器列表
+        <div class="editor-label">
+            <label class="control-title">儀器列表</label>
         </div>
         <div style="padding-left: 20px; color: gray">
             @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid })*@
         </div>
     </div>
     <div id="pnlASSETVIEW">
-        <div class="display-label">
-            儀器列表
+        <div class="editor-label">
+            <label class="control-title">儀器列表</label>
         </div>
         <div style="padding-left: 20px; color: gray">
             @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "查看" })*@
@@ -164,7 +187,7 @@
         <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
             @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid, upload = "得標廠商" })*@
         </div>
-        <img src="~/Images/ajax-loader.gif" id="imgLOAD_VENDOR" />
+        <img src="~/Images/opc-ajax-loader.gif" id="imgLOAD_VENDOR" />
     </div>
     <div id="pnlMEDENG">
         <h2>
@@ -175,13 +198,14 @@
         </div>
     </div>
     <div id="pnlWartyData">
+        @*@await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId })*@
         @*@Html.Action("WartyData", "Delivery", new { id = Model.DocId })*@
     </div>
     <div>
-        @*@Html.Action("GetList", "DelivFlow", new { id = Model.DocId })*@
+        @await Component.InvokeAsync("DelivFlowList", new { id = Model.DocId })
     </div>
     <div>
-        @*@Html.Action("NextFlow", "DelivFlow", new { id = Model.DocId })*@
+        @await Component.InvokeAsync("DelivNextFlow", new { id = Model.DocId })
     </div>
 
 </fieldset>
@@ -225,8 +249,6 @@
     };
 
     function OnSuccess(ano, seqno, fid, data) {
-        //$("tr[id='" + ano + seqno + "']").hide();
-        //alert(ano + seqno);
         if (data != "")
         {
             alert(data);
@@ -243,6 +265,4 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
-    <script src="~/js/BMED/DelivNextFlow.js" asp-append-version="true"></script>
 }

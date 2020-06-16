@@ -1,0 +1,52 @@
+﻿@model EDIS.Areas.BMED.Models.RepairModels.AttainFileModel
+
+@{
+    Layout = "";
+}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+@using (Html.BeginForm("Create", "AttainFile", FormMethod.Post, new { Area = "BMED", id = "filepost", enctype = "multipart/form-data" }))
+{
+    @Html.ValidationSummary(true)
+    <fieldset>
+        <legend>AttainFile</legend>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DocType)
+            @Html.ValidationMessageFor(model => model.DocType)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.DocId)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.DocId, new { id = "FileDocId" })
+            @Html.ValidationMessageFor(model => model.DocId)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Rtp)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Rtp)
+            @Html.ValidationMessageFor(model => model.Rtp)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.Title)
+        </div>
+        <div class="editor-field">
+            @Html.EditorFor(model => model.Title)
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.FileLink)
+        </div>
+        @Html.TextBoxFor(model => model.FileLink, new { type = "file", width = "300px" })
+        @Html.ValidationMessageFor(model => model.FileLink)
+
+    </fieldset>
+}
+
+<iframe id="result" name="result" style="display: none;"></iframe>

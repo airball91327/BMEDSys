@@ -11,8 +11,9 @@
 }
 else
 {
-    <table style="width: 100%">
+    <table class="table" style="width: 100%">
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.DocType)
             </th>
@@ -40,7 +41,6 @@ else
             <th>
                 @Html.DisplayNameFor(model => model.Days)
             </th>
-            <th></th>
         </tr>
         @{
             int i = 0;
@@ -48,7 +48,17 @@ else
         }
         @foreach (var item in Model)
         {
-            <tr style="background-color: @s">
+            <tr>
+                <td>
+                    @if (item.Flg == "?" && UserManager.GetCurrentUserId(User) == item.FlowUid)
+                    {
+                        @Html.ActionLink("編輯", "Edit", "Delivery", new { id = item.DocId }, new { target = "_blank" })
+                    }
+                    else
+                    {
+                        @Html.ActionLink("查看", "Details", "Delivery", new { id = item.DocId }, new { target = "_blank" })
+                    }
+                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DocType)
                 </td>
@@ -70,33 +80,23 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.CrlItemNo)
                 </td>
-                <td style="color: blue">
+                <td>
                     @Html.DisplayFor(modelItem => item.BudgetId)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Days)
                 </td>
-                <td>
-                    @if (item.Flg == "?" && UserManager.GetCurrentUserId(User) == item.FlowUid)
-                    {
-                        @Html.ActionLink("編輯", "Edit", "Delivery", new { id = item.DocId }, new { target = "_blank" })
-                    }
-                    else
-                    {
-                        @Html.ActionLink("查看", "Details", "Delivery", new { id = item.DocId }, new { target = "_blank" })
-                    }
-                </td>
             </tr>
-            <tr>
+            @*<tr>
                 <td colspan="9">
                     <div style="margin-left: 50px">
                         <h3>儀器列表</h3>
                         <div style="padding-left: 20px; color: gray">
-                            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = item.Docid, upload = "查看" })*@
+                            @Html.Action("BuyEvaluateListItem", "Asset", new { id = item.Docid, upload = "查看" })
                         </div>
                     </div>
                 </td>
-            </tr>
+            </tr>*@
         }
 
     </table>

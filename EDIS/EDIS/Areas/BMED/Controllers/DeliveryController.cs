@@ -67,7 +67,7 @@ namespace EDIS.Areas.BMED.Controllers
             ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "待處理");
             //
             List<DeliveryListVModel> vm;
-            vm = GetList(form["qtyFLOWTYPE"]);
+            vm = GetList(form["qtyFLOWTYP"]);
             if (!string.IsNullOrEmpty(form["qtyDOCID"]))
             {
                 vm = vm.Where(m => m.DocId == form["qtyDOCID"]).ToList();
@@ -76,9 +76,13 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 vm = vm.Where(m => m.PurchaseNo == form["qtyPURCHASENO"]).ToList();
             }
-            if (!string.IsNullOrEmpty(form["qtyCUSTID"]))
+            if (!string.IsNullOrEmpty(form["qtyDPTID"]))
             {
-                vm = vm.Where(m => m.Company == form["qtyCUSTID"]).ToList();
+                vm = vm.Where(m => m.Company == form["qtyDPTID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyACCDPT"]))
+            {
+                vm = vm.Where(m => m.AccDpt == form["qtyACCDPT"]).ToList();
             }
             if (!string.IsNullOrEmpty(form["qtyBUDGETID"]))
             {
@@ -523,7 +527,8 @@ namespace EDIS.Areas.BMED.Controllers
                 rf.Cls = "得標廠商";
                 _context.DelivFlows.Add(rf);
                 //
-                List<AssetModel> ar = _context.BMEDAssets.Where(a => a.Docid == delivery.PurchaseNo).ToList();
+                List<AssetModel> ar = _context.BMEDAssets.Where(a => !string.IsNullOrEmpty(a.Docid))
+                                                         .Where(a => a.Docid == delivery.PurchaseNo).ToList();
                 VendorModel v;
                 u = _context.AppUsers.Find(Convert.ToInt32(delivery.UserDpt));
                 foreach (AssetModel a in ar)
@@ -565,7 +570,7 @@ namespace EDIS.Areas.BMED.Controllers
                 //mail.SendMail();
                 //----------------------------------------------------------------------------------
 
-                return RedirectToAction("Index", "Members");
+                return RedirectToAction("Index", "Home");
             }
 
             return View(delivery);
@@ -712,6 +717,7 @@ namespace EDIS.Areas.BMED.Controllers
                 i.ContractNo = r.ContractNo;
                 i.PurchaseNo = r.PurchaseNo;
                 i.CrlItemNo = r.CrlItemNo;
+                i.AccDpt = r.AccDpt;
                 i.AccDptNam = _context.Departments.Find(r.AccDpt) == null ? "" : _context.Departments.Find(r.AccDpt).Name_C;
                 i.BudgetId = "";
                 if (f.Status == "?")
