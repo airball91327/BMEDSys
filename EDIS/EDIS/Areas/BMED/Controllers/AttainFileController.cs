@@ -359,10 +359,8 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(AttainFileModel attainFile, IEnumerable<IFormFile> file)
         {
-            string s = "~/Files/BMED";
-#if DEBUG
-            s = "~/App_Data";
-#endif
+            string s = "/Files/BMED";
+
             switch (attainFile.DocType)
             {
                 case "0":
@@ -397,9 +395,13 @@ namespace EDIS.Areas.BMED.Controllers
                     break;
             }
             string WebRootPath = _hostingEnvironment.WebRootPath;
-            int? i = _context.BMEDAttainFiles.FromSql("SELECT MAX(SEQNO) FROM AttainFile WHERE DOCTYPE = @typ AND DOCID = @id",
-                    new SqlParameter("@typ", attainFile.DocType),
-                    new SqlParameter("@id", attainFile.DocId)).Select(af => af.SeqNo).ToList().FirstOrDefault();
+            var bmedFile = _context.BMEDAttainFiles.Where(af => af.DocType == attainFile.DocType && af.DocId == attainFile.DocId)
+                                                   .Select(af => af.SeqNo).ToList();
+            int? i = null;
+            if (bmedFile.Count() > 0)
+            {
+                i = bmedFile.Max();
+            }
             if (i == null)
                 attainFile.SeqNo = 1;
             else

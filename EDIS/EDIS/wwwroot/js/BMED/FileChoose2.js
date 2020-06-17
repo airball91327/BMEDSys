@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var f = $('#FileList');
+    var f = $('#pnlFILES');
    
     $('#AttainFileDialog').dialog({
         autoOpen: false,
@@ -16,8 +16,8 @@
                     var t = $('#DocType').val();
                     $.ajax({
                         url: '../../AttainFile/List',
-                        data: { id: s, typ: t },
-                        method: "GET",
+                        data: { docid: s, doctyp: t },
+                        method: "POST",
                         dataType: "html", 
                         complete: function (data) {
                             f.html(data.responseText);

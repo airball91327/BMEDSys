@@ -1,9 +1,5 @@
 ﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
 
-<script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
-<script src="~/js/BMED/DelivNextFlow.js" asp-append-version="true"></script>
-<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-
 @{
     Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "驗收單/編輯";
@@ -15,10 +11,11 @@
         border-width:2px;
         border-color:white;
     }*/
-    fieldset > legend{
-        color:white;
+    .setWhiteColor {
+        color: white;
         /*width:auto;*/
     }
+
     a {
         color: deepskyblue;
     }
@@ -27,7 +24,7 @@
 <h2>編輯</h2>
 
 <fieldset>
-    <legend>驗收單</legend>
+    <legend class="setWhiteColor">驗收單</legend>
 
     @Html.HiddenFor(model => model.DocId)
     <div style="margin-bottom: 10px">
@@ -265,4 +262,7 @@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="~/js/BMED/DelivNextFlow.js" asp-append-version="true"></script>
+    <script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
 }
