@@ -195,8 +195,7 @@
         </div>
     </div>
     <div id="pnlWartyData">
-        @*@await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId })*@
-        @*@Html.Action("WartyData", "Delivery", new { id = Model.DocId })*@
+        @await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId })
     </div>
     <div>
         @await Component.InvokeAsync("DelivFlowList", new { id = Model.DocId })

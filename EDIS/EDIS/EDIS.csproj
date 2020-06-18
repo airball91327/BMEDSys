@@ -126,6 +126,9 @@
     <Content Update="Areas\BMED\Views\Shared\Components\DelivNextFlow\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\DelivWartyData\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Vendor\QryVendor.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -166,6 +169,9 @@
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Shared\Components\UserInfo\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\_LayoutNoTitle.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>

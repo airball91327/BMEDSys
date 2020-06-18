@@ -58,7 +58,7 @@ namespace EDIS.Controllers
                 {
                     UserList u = new UserList();
                     u.uid = f.Id;
-                    u.uname = f.FullName;
+                    u.uname = "(" + f.UserName + ")" + f.FullName;
                     us.Add(u);
                 }
                 s = JsonConvert.SerializeObject(us);
