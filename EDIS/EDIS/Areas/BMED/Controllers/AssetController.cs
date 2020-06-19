@@ -609,5 +609,10 @@ namespace EDIS.Areas.BMED.Controllers
             }
         }
 
+        public IActionResult BuyEvaluateListItem(string id = null, string upload = null, int page = 1)
+        {
+            return ViewComponent("BuyEvaluateAssetListItem", new { id = id, upload = upload, page = page });
+        }
+
     }
 }

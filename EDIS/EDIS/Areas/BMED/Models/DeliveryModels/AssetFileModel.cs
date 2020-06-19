@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace EDIS.Areas.BMED.Models.DeliveryModels
 {
@@ -21,7 +22,7 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
         [Required]
         [Display(Name = "摘要")]
         public string Title { get; set; }
-        [Required]
+        //[Required]
         [Display(Name = "檔案連結")]
         public string FileLink { get; set; }
         [Display(Name = "異動人員")]
@@ -30,6 +31,9 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
         public string UserName { get; set; }
         [Display(Name = "異動時間")]
         public DateTime Rtt { get; set; }
+        [NotMapped]
+        [Required]
+        public List<IFormFile> Files { get; set; }
     }
 
     public class CopyToFile

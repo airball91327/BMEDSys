@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace EDIS.Areas.BMED.Models.DeliveryModels
 {
-    [Table("NeedFiles")]
+    [Table("BMEDNeedFiles")]
     public class NeedFileModel
     {
         [Key, Column(Order = 1)]

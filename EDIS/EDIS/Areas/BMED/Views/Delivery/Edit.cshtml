@@ -162,7 +162,7 @@
             <label class="control-title">儀器列表</label>
         </div>
         <div style="padding-left: 20px; color: gray">
-            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid })*@
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId })
         </div>
     </div>
     <div id="pnlASSETVIEW">
@@ -170,7 +170,7 @@
             <label class="control-title">儀器列表</label>
         </div>
         <div style="padding-left: 20px; color: gray">
-            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "查看" })*@
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = "查看" })
         </div>
     </div>
     <div id="pnlVENDOR">
@@ -181,8 +181,8 @@
             @Html.ActionLink("新增儀器", "New", "Asset", new { docid = Model.DocId, rdate = Model.DelivDateR },
                   new { id = "btnAddAsset", target = "_blank" })
         </div>
-        <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
-            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.Docid, upload = "得標廠商" })*@
+        <div id="gvASSETLIST" style="padding-left: 20px; color: whitesmoke">
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = "得標廠商" })
         </div>
         <img src="~/Images/opc-ajax-loader.gif" id="imgLOAD_VENDOR" />
     </div>
@@ -191,7 +191,7 @@
             設備工程師專區
         </h2>
         <div id="gvASSETLIST" style="padding-left: 20px; color: gray">
-            @*@Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = "設備工程師" })*@
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = "設備工程師" })
         </div>
     </div>
     <div id="pnlWartyData">
@@ -213,8 +213,8 @@
     });
 
     var fetchPage = function (page) {
-        var pagedPartialUrl = '@Url.Action("BuyEvaluateListItem", "Asset")';
-        var s = "id=" + $("#Docid").val() + "&upload=得標廠商";
+        var pagedPartialUrl = '@Url.Action("BuyEvaluateListItem", "Asset", new { Area = "BMED" })';
+        var s = "id=" + $("#DocId").val() + "&upload=得標廠商";
         $.ajax({
             url: pagedPartialUrl,
             type: "POST",

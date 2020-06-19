@@ -71,12 +71,9 @@ namespace EDIS.Areas.BMED.Controllers
         {
             if (ModelState.IsValid)
             {
-                string s = "~/Files";
+                string s = "/Files/BMED";
                 s += "/Asset";
 
-#if DEBUG
-                s = "~/App_Data";
-#endif
                 int? i = _context.AssetFiles.FromSql("SELECT MAX(Fid) FROM AssetFile WHERE ASSETNO = @ano AND SEQNO = @sno ",
                         assetfile.AssetNo, assetfile.SeqNo).FirstOrDefault().Fid;
                 if (i == null)

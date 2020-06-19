@@ -1,0 +1,79 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.AssetFileModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
+}
+
+<form asp-action="Create" asp-controller="AssetFile" method="post" id="filepost" enctype="multipart/form-data">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <fieldset>
+        <legend style="color:white">上傳檔案</legend>
+        <div id="body">
+
+            <input asp-for="SeqNo" type="hidden" />
+            <div class="editor-label">
+                <label asp-for="AssetNo" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="AssetNo" class="form-control" id="Docid" />
+                <span asp-validation-for="AssetNo" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Rtp" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Rtp" class="form-control" />
+                <span asp-validation-for="Rtp" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Title" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="FileLink" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="FileLink" type="hidden"/>
+                <input asp-for="Files" type="file" class="form-control" />
+                <span asp-validation-for="FileLink" class="text-danger"></span>
+            </div>
+        </div>
+        <div style="padding-top:5px;">
+            <input class="btn btn-primary" id="btnUpload" type="submit" value="傳送" />
+        </div>
+    </fieldset>
+
+</form>
+
+<iframe id="result" name="result" style="display: none;"></iframe>
+<script>
+    var t = $("#Title");
+    if (t.val() != "其他")
+        t.prop("readonly", true);
+    else
+        t.removeProp("disabled");
+    $("#btnUpload").click(function () {
+        $('#result').load(function () {
+            $('#result').off('load');
+            var f = window.opener.document.getElementById("upfstatus" + $("#AssetNo").val());
+            var s = window.opener.document.getElementById("AssetFileList" + $("#AssetNo").val() + $("#Title").val());
+            var c = window.opener.document.getElementById("cls_now");
+            $(s).html('').load(encodeURI("../AssetFile/List?id=" + $("#AssetNo").val() + "&title=" + $("#Title").val()), function () {
+                $(f).html('').load(encodeURI("../AssetFile/CheckFiles?id=" + $("#AssetNo").val() + "&cls=" + $(c).text()), function () {
+                    window.close();
+                });
+            });
+
+        });
+        $('#filepost').attr('target', 'result');
+        $('#filepost').submit();
+    });
+</script>
