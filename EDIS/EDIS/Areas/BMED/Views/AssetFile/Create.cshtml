@@ -17,7 +17,7 @@
                 <label asp-for="AssetNo" class="control-title"></label>
             </div>
             <div class="editor-field">
-                <input asp-for="AssetNo" class="form-control" id="Docid" />
+                <input asp-for="AssetNo" class="form-control" />
                 <span asp-validation-for="AssetNo" class="text-danger"></span>
             </div>
 
@@ -46,7 +46,7 @@
                 <span asp-validation-for="FileLink" class="text-danger"></span>
             </div>
         </div>
-        <div style="padding-top:5px;">
+        <div style="padding-top:7px;">
             <input class="btn btn-primary" id="btnUpload" type="submit" value="傳送" />
         </div>
     </fieldset>
@@ -54,7 +54,10 @@
 </form>
 
 <iframe id="result" name="result" style="display: none;"></iframe>
+
 <script>
+    var url = '@Url.Action("List", "AssetFile", new { Area = "BMED" })';
+    var url2 = '@Url.Action("CheckFiles", "AssetFile", new { Area = "BMED" })';
     var t = $("#Title");
     if (t.val() != "其他")
         t.prop("readonly", true);
@@ -66,12 +69,11 @@
             var f = window.opener.document.getElementById("upfstatus" + $("#AssetNo").val());
             var s = window.opener.document.getElementById("AssetFileList" + $("#AssetNo").val() + $("#Title").val());
             var c = window.opener.document.getElementById("cls_now");
-            $(s).html('').load(encodeURI("../AssetFile/List?id=" + $("#AssetNo").val() + "&title=" + $("#Title").val()), function () {
-                $(f).html('').load(encodeURI("../AssetFile/CheckFiles?id=" + $("#AssetNo").val() + "&cls=" + $(c).text()), function () {
+            $(s).html('').load(encodeURI(url + "?id=" + $("#AssetNo").val() + "&title=" + $("#Title").val()), function () {
+                $(f).html('').load(encodeURI(url2 + "?id=" + $("#AssetNo").val() + "&cls=" + $(c).text()), function () {
                     window.close();
                 });
             });
-
         });
         $('#filepost').attr('target', 'result');
         $('#filepost').submit();

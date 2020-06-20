@@ -22,9 +22,10 @@
                 <td>@Html.DisplayFor(modelItem => item.UserName)</td>
                 <td>
                     @{ string s = "OnSuccess('" + item.AssetNo + "','" + item.SeqNo + "','" + item.Fid + "', data)"; }
-                    <a asp-action="Delete" asp-controller="AssetFile" asp-area="BMED" 
-                        asp-route-ano="@item.AssetNo" asp-route-seqno="@item.SeqNo" asp-route-fid="@item.Fid"
-                        data-ajax="true" data-ajax-success="@s">刪除
+                    <a asp-action="Delete" asp-controller="AssetFile" asp-area="BMED"
+                       asp-route-ano="@item.AssetNo" asp-route-seqno="@item.SeqNo" asp-route-fid="@item.Fid"
+                       data-ajax="true" data-ajax-success="@s">
+                        刪除
                     </a>
                 </td>
             </tr>

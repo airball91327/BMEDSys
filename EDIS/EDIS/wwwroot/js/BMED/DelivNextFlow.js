@@ -1,18 +1,19 @@
-﻿function showmsg(data) {
-    if (data.error !== null) {
+﻿function flowmsg(data) {
+    $("#btnGO").attr("disabled", false);
+    if (!data.success) {
         $("#btnSEND").attr("disabled", false);
         alert(data.error);
     }
     else {
         alert("送出成功!");
-        window.opener.jQuery("#btnDelivQry").trigger("click");
+        window.opener.location = "javascript:BMEDDelivReSubmit();";
         window.close();
     }
-};
+}
 
 function presend() {
     document.getElementById('btnSEND').disabled = true;
-};
+}
 
 $.fn.addItems = function (data) {
 
@@ -80,8 +81,13 @@ $(function () {
         if ($(this).val() === "維修工程師") {
             $('#SelectVendor').removeProp("disabled");
         }
+        if ($(this).val() === "結案" || $(this).val() === "廢除") {
+            var appenddata;
+            appenddata += "<option value = '0' selected=true></option>";
+            select.html(appenddata);
+        }
         else {
-            $('#imgLOADING').show();
+            $('#imgLOADING_flow').show();
             $('#SelectVendor').val('');
             $('#SelectVendor').prop("disabled", true);
             $.ajax({
@@ -94,7 +100,7 @@ $(function () {
                     var select = $('#SelectEng');
                     $('option', select).remove();
                     select.addItems(data);
-                    $('#imgLOADING').hide();
+                    $('#imgLOADING_flow').hide();
                 }
             });
         }
@@ -108,23 +114,24 @@ $(function () {
                 async: true,
                 data: s,
                 success: function () {
-                    $.ajax({
-                        url: '../../DelivFlow/EndFlow',
-                        type: "POST",
-                        async: true,
-                        dataType: "json",
-                        data: "id=" + $('#DocId').val() + "&op=" + $('#Opinions').val(),
-                        success: function (data) {
-                            location.replace('../../Members/Index');
-                        }
-                    });
+                    $("#fmFLOW").submit();
+                    //$.ajax({
+                    //    url: '../../DelivFlow/EndFlow',
+                    //    type: "POST",
+                    //    async: true,
+                    //    dataType: "json",
+                    //    data: "id=" + $('#Docid').val() + "&op=" + $('#Opinions').val(),
+                    //    success: function (data) {
+                    //        location.replace('../../Home/Index');
+                    //    }
+                    //});
                 },
                 error: function () {
                     alert('驗收明細儲存錯誤!');
                     return false;
                 }
             });
-
+            return false;
         }
         else {
             var c = $('span[id="cls_now"]').text();
@@ -138,7 +145,7 @@ $(function () {
                     return false;
                 }
             }
-            else if (c === "設備主管" || c === "設備經辦") {
+            if (c === "設備主管" || c === "設備經辦" || c === "設備工程師") {
                 s = $('#WartyDataForm').serialize();
                 $.ajax({
                     url: '../../Delivery/EditData',

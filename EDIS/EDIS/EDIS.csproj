@@ -85,6 +85,9 @@
     <Content Update="Areas\BMED\Views\Repair\Views.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Shared\Components\AssetFileAssetList\Default.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Shared\Components\AssetFileList\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -178,6 +181,9 @@
     <Content Update="Views\Shared\Components\UserInfo\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Views\Shared\_LayoutEmpty.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\_LayoutNoTitle.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -188,6 +194,8 @@
     <Folder Include="Areas\BMED\Views\DelivFlow\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\BMED\Keep\" />
+    <Folder Include="wwwroot\Files\BMED\Delivery\" />
+    <Folder Include="wwwroot\Files\BMED\Asset\" />
     <Folder Include="wwwroot\Files\BMED\Repair\" />
     <Folder Include="wwwroot\Files\Repair\" />
   </ItemGroup>

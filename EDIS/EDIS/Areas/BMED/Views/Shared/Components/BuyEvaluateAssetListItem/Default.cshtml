@@ -1,6 +1,6 @@
 ﻿@model X.PagedList.IPagedList<EDIS.Areas.BMED.Models.RepairModels.AssetModel>
 @using PagedList.Core.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     int i = 0;
@@ -66,11 +66,11 @@
                         @Html.DisplayFor(modelItem => item.AccDpt)
                     </td>
                     <td>
-                        @Html.ActionLink("詳細", "Details", new { ano = item.AssetNo }, new { target = "_blank" })
+                        @Html.ActionLink("詳細", "Details", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
                         @if (item.upload == "得標廠商" || item.upload == "設備工程師")
                         {
-                            <span> | </span>@Html.ActionLink("編輯", "NewEdit", new { id = item.AssetNo }, new { target = "_blank" })
-                            <span> | </span>@Html.ActionLink("刪除", "Delete2", new { id = item.AssetNo }, new { target = "_blank" })
+                            <span> | </span>@Html.ActionLink("編輯", "NewEdit", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
+                            <span> | </span>@Html.ActionLink("刪除", "Delete2", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
                         }
                     </td>
                 </tr>
