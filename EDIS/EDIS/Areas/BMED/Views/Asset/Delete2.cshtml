@@ -1,0 +1,132 @@
+﻿@model EDIS.Areas.BMED.Models.RepairModels.AssetModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
+}
+
+<h2>刪除</h2>
+
+<h3>確定要刪除此資料?</h3>
+<fieldset>
+    <legend style="color: white">儀器設備</legend>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Cname)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Cname)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Ename)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Ename)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.AccDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AccDate)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.BuyDate)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BuyDate)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Brand)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Brand)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Standard)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Standard)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Type)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Type)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.VendorId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.VendorId)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.DisposeKind)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DisposeKind)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.DelivDpt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.DelivDpt)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.LeaveSite)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.LeaveSite)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.AccDpt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AccDpt)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Cost)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Cost)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Shares)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Shares)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.MakeNo)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.MakeNo)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Note)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Note)
+    </div>
+
+</fieldset>
+
+<form asp-action="DeleteById" asp-controller="Asset" asp-area="BMED" data-ajax="true">
+    <input asp-for="AssetNo" type="hidden" name="id" />
+    <div>
+        <input class="btn btn-primary" type="submit" value="確定刪除" />
+    </div>
+</form>

@@ -1,0 +1,120 @@
+﻿@model EDIS.Areas.BMED.Models.KeepModels.AssetKeepModel
+
+@{ 
+    Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
+}
+
+<form asp-action="EditData" asp-controller="AssetKeep" asp-area="BMED" data-ajax="true" data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+            'title':'儲存資料中，請稍待...',
+            'icon':'loading',
+            'duration':0
+            })"
+      data-ajax-success="OnSuccess(data.msg)"
+      data-ajax-failure="OnFailure"
+      data-ajax-complete="$.Toast.hideToast()">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <fieldset>
+        <legend style="color:white">設備保養資料</legend>
+
+        @Html.HiddenFor(model => model.AssetNo)
+        <div class="editor-label">
+            <label asp-for="Cname" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Cname" class="form-control" readonly />
+            <span asp-validation-for="Cname" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Cycle" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Cycle" class="form-control" />
+            <span asp-validation-for="Cycle" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="KeepYm" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="KeepYm" class="form-control" />
+            <span asp-validation-for="KeepYm" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="KeepEngId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="KeepEngId" asp-items="@ViewData["Items"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="KeepEngId" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Cost" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Cost" class="form-control" />
+            <span asp-validation-for="Cost" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Hours" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Hours" class="form-control" />
+            <span asp-validation-for="Hours" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="InOut" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="InOut" asp-items="@ViewData["INOUTITEMS"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="InOut" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="FormatId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="FormatId" asp-items="@ViewData["FORMATITEMS"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="FormatId" class="text-danger"></span>
+            <script>
+                $('#SelectFormatId').change(function () {
+                    var txt = $(this).val();
+                    var url = "../../KeepFormat/GetPlants?id=" + txt;
+                    $("#pnlPLANTS").html('').load(encodeURI(url));
+                });
+            </script>
+        </div>
+
+        <div style="color:gray;margin-top:3px;" id="pnlPLANTS">
+
+        </div>
+
+        <div style="padding-top:7px;">
+            <input class="btn btn-primary" type="submit" value="儲存" />
+        </div>
+    </fieldset>
+
+</form>
+
+<script>
+    function OnSuccess(msg) {
+
+        var f = window.opener.document.getElementById("pnlWartyData");
+        var d = window.opener.document.getElementById("DocId").value;
+        $(f).html('').load(encodeURI("../../Delivery/WartyData?id=" + d), function () {
+            alert(msg);
+            window.close();
+        });
+    }
+</script>

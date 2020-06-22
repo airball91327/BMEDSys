@@ -199,7 +199,7 @@ namespace EDIS.Areas.BMED.Controllers
                 //mail.SendMail();
                 return new JsonResult(DelivFlow)
                 {
-                    Value = new { success = true }
+                    Value = new { success = true, error = "" }
                 };
             }
             else

@@ -1,0 +1,69 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RepairModels.AssetModel>
+
+@{
+    Layout = "~/Views/Shared/_LayoutEmpty.cshtml";
+}
+
+<form asp-action="CopyTo" asp-controller="AssetFile" asp-area="BMED"
+      data-ajax="true" method="post"
+      data-ajax-success="ShowMsg">
+
+    <input name="ano" type="hidden" value=@ViewData["ano"].ToString() />
+    <input name="sno" type="hidden" value=@ViewData["sno"].ToString() />
+    <div style="margin-left: 10px">
+        <div class="display-label">
+            財產名稱： @ViewData["cname"].ToString()
+        </div>
+        <div class="display-label">
+            檔案類別： @ViewData["title"].ToString()
+        </div>
+    </div>
+
+    <hr />
+    <table style="width:90%; margin-left: 10px">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cname)
+            </th>
+            <th style="text-align:center">
+                是否複製
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssetNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cname)
+                </td>
+                <td style="text-align:center">
+                    <input type="checkbox" name="IsCopy" value=@item.AssetNo />
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div style="margin-left: 10px">
+        <input class="btn btn-primary" type="submit" value="確定送出" />
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    function ShowMsg(data) {
+        if (data != "") {
+            alert(data);
+        }
+        else {
+            window.opener.location.reload();
+            close();
+        }
+    }
+</script>

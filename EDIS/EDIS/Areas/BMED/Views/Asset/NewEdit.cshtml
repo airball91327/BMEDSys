@@ -4,32 +4,17 @@
     Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
 }
 
-<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-
 <div id="body">
-    <section class="main-content clear-fix" id="wrapper">
-        <form asp-action="New" asp-controller="Asset" asp-area="BMED" data-ajax="true" data-ajax-method="POST"
-              data-ajax-begin="$.Toast.showToast({
-            'title':'儲存資料中，請稍待...',
-            'icon':'loading',
-            'duration':0
-            })"
+    <section class="content-wrapper main-content clear-fix">
+        <form asp-action="NewEdit" asp-controller="Asset" asp-area="BMED" data-ajax="true"
+              method="post" enctype="multipart/form-data" id="filepost"
               data-ajax-success="OnSuccess"
-              data-ajax-failure="OnFailure"
-              data-ajax-complete="$.Toast.hideToast()">
+              data-ajax-failure="OnFailure">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <table>
                 <tr>
-                    <td>
-                        <div class="editor-label">
-                            <label asp-for="AssetNo" class="control-title"></label>
-                        </div>
-                        <div class="editor-field">
-                            <input asp-for="AssetNo" class="form-control" />
-                            <span asp-validation-for="AssetNo" class="text-danger"></span>
-                        </div>
-                    </td>
+                    @Html.HiddenFor(model => model.AssetNo)
                     <td>
                         <div class="editor-label">
                             <label asp-for="Cname" class="control-title"></label>
@@ -58,7 +43,7 @@
                 @Html.RadioButton("AssetClass", "工程設施")工程設施
                 <span asp-validation-for="AssetClass" class="text-danger"></span>
             </div>
-            <input asp-for="AccDate" type="hidden" />
+            @Html.HiddenFor(model => model.AccDate)
 
             <div class="editor-label">
                 <label asp-for="RelDate" class="control-title"></label>
@@ -83,8 +68,8 @@
                 <input asp-for="Type" class="form-control" />
                 <span asp-validation-for="Type" class="text-danger"></span>
             </div>
-            <input asp-for="VendorId" type="hidden" />
-            <input asp-for="DisposeKind" type="hidden" />
+            @Html.HiddenFor(model => model.VendorId)
+            @Html.HiddenFor(model => model.DisposeKind)
 
             <div class="editor-label">
                 <label asp-for="DelivDpt" class="control-title"></label>
@@ -98,7 +83,6 @@
 
             <div class="editor-label">
                 <label asp-for="DelivEmp" class="control-title"></label>
-                <input asp-for="DelivEmp" type="hidden" />
             </div>
             <div class="editor-field form-inline">
                 <select asp-for="DelivUid" asp-items="@ViewData["DelivUids"] as SelectList" class="form-control">
@@ -107,7 +91,6 @@
                 <span asp-validation-for="DelivUid" class="text-danger"></span>
             </div>
 
-
             <div class="editor-label">
                 <label asp-for="LeaveSite" class="control-title"></label>
             </div>
@@ -115,7 +98,16 @@
                 <input asp-for="LeaveSite" class="form-control" />
                 <span asp-validation-for="LeaveSite" class="text-danger"></span>
             </div>
-            <input asp-for="AccDpt" type="hidden" />
+
+            <div class="editor-label">
+                <label asp-for="AccDpt" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="AccDpt" asp-items="@ViewData["AccDpts"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="AccDpt" class="text-danger"></span>
+            </div>
 
             <div class="editor-label">
                 <label asp-for="Cost" class="control-title"></label>
@@ -133,7 +125,7 @@
                 @Html.RadioButtonFor(model => model.RiskLvl, "2")II
                 @Html.RadioButtonFor(model => model.RiskLvl, "3")III
                 @Html.RadioButtonFor(model => model.RiskLvl, "0")無
-                @Html.ValidationMessageFor(model => model.RiskLvl)
+                <span asp-validation-for="RiskLvl" class="text-danger"></span>
             </div>
 
             <div class="editor-label">
@@ -167,7 +159,7 @@
                 <input asp-for="Note" class="form-control" />
                 <span asp-validation-for="Note" class="text-danger"></span>
             </div>
-            <input asp-for="KeepYm" type="hidden" />
+            @Html.HiddenFor(model => model.KeepYm)
 
             <div class="editor-label">
                 <label asp-for="Cycle" class="control-title"></label>
@@ -176,29 +168,25 @@
                 <input asp-for="Cycle" class="form-control" />
                 <span asp-validation-for="Cycle" class="text-danger"></span>
             </div>
-            <input asp-for="Docid" type="hidden" />
+            @Html.HiddenFor(model => model.Docid)
 
             <div style="padding-top:7px;">
-                <input type="submit" value="確定送出" class="btn btn-primary" />
+                <input class="btn btn-primary" type="submit" value="確定送出" />
             </div>
 
         </form>
     </section>
 </div>
-
-<div id="pnlASSETLIST">
-
-</div>
+<div id="pnlASSETLIST"></div>
 
 <script language="javascript" type="text/javascript">
-
     $(function () {
-
+        var url = '@Url.Action("GetUsersInDpt", "AppUser", new { Area = "" })';
         $("#DelivDpt").change(function () {
             var s = $(this).val();
             $.ajax({
                 contentType: "application/json; charset=utf-8",
-                url: '../../AppUser/GetUsersInDpt',
+                url: url,
                 type: "GET",
                 data: "id=" + s,
                 dataType: "json",
@@ -216,27 +204,24 @@
                 }
             });
         });
-        $('#DelivUid').change(function () {
-            var delivName = $('#DelivUid option:selected').text();
-            if (delivName != "") {
-                $('#DelivEmp').val(delivName);
-            }
-        });
-        $("#DelivDpt").trigger("change");
+    });
+
+    $(window).on('beforeunload', function () {
+        var s = $("#Docid").val();
+        var v = "<img src='../../images/opc-ajax-loader.gif' id='imgLOADING' />";
+        window.opener.$("#gvASSETLIST").html(v)
+            .load(encodeURI('../../Asset/BuyEvaluateListItem?id=' + s + '&upload=' + '得標廠商'));
+        return '確定要離開此頁面嗎?';
     });
 
     function OnSuccess(data) {
         if (data == "success") {
-            opener.location.reload();
-            alert('新增成功');
-            //
-            $("#AssetNo").val('');
-            $("#MakeNo").val('');
-            window.close();
+            alert('儲存成功');
+            window.opener.location.reload();
+            close();
         }
         else
             alert(data);
-
     }
 
     function OnFailure(xhr, status) {

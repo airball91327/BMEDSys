@@ -1,33 +1,33 @@
-﻿@model PagedList.IPagedList<EDIS.Areas.BMED.Models.RepairModels.AssetModel>
-@using PagedList.Mvc;
-<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+﻿@model X.PagedList.IPagedList<EDIS.Areas.BMED.Models.RepairModels.AssetModel>
+@using PagedList.Core.Mvc;
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     int i = 0;
     var s = "";
     if (Model.Count() > 0)
     {
-    <table style="width:80%">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().AssetNo)
-            </th>
-            <th>
-                儀器名稱
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().AccDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().BuyDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().AccDpt)
-            </th>
-            <th></th>
-        </tr>
+        <table style="width:80%">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AssetNo)
+                </th>
+                <th>
+                    儀器名稱
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AccDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().BuyDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AccDpt)
+                </th>
+                <th></th>
+            </tr>
 
-        @foreach (var item in Model)
+            @foreach (var item in Model)
             {
                 i++;
                 if (i % 2 == 0)
@@ -38,62 +38,61 @@
                 {
                     s = "#ffffff";
                 }
-        <tr style="background-color: #ffffff; color: lightgray; font-size: 1em;">
-            <td>
-                @Html.DisplayFor(modelItem => item.AssetNo)
-                @if (item.DisposeKind == "報廢")
+                <tr style="background-color: #2a40be; color: lightgray; font-size: 1em;">
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AssetNo)
+                        @if (item.DisposeKind == "報廢")
                         {
-                <span style="color: red;">報廢</span>
+                            <span style="color: red;">報廢</span>
                         }
-            </td>
-            <td style="width: 100px;">
-                @Html.DisplayFor(modelItem => item.Cname)
-                @Html.DisplayFor(modelItem => item.Ename)
-            </td>
-            <td>
-                @if (item.AccDate != null)
+                    </td>
+                    <td style="width: 100px;">
+                        @Html.DisplayFor(modelItem => item.Cname)
+                        @Html.DisplayFor(modelItem => item.Ename)
+                    </td>
+                    <td>
+                        @if (item.AccDate != null)
                         {
-                @item.AccDate.Value.ToString("yyyy/MM/dd")
+                            @item.AccDate.Value.ToString("yyyy/MM/dd")
                         }
-            </td>
-            <td>
-                @if (item.BuyDate != null)
+                    </td>
+                    <td>
+                        @if (item.BuyDate != null)
                         {
-                @item.BuyDate.Value.ToString("yyyy/MM/dd")
+                            @item.BuyDate.Value.ToString("yyyy/MM/dd")
                         }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AccDpt)
-            </td>
-            <td>
-                @Html.ActionLink("詳細", "Details", new { ano = item.AssetNo }, new { target = "_blank" })
-                @if (item.upload == "得標廠商" || item.upload == "設備工程師")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AccDpt)
+                    </td>
+                    <td>
+                        @Html.ActionLink("詳細", "Details", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
+                        @if (item.upload == "得標廠商" || item.upload == "設備工程師")
                         {
-                <span> | </span>@Html.ActionLink("編輯", "NewEdit", new { id = item.AssetNo }, new { target = "_blank" })
-                <span> | </span>@Html.ActionLink("刪除", "Delete2", new { id = item.AssetNo }, new { target = "_blank" })
+                            <span> | </span>@Html.ActionLink("編輯", "NewEdit", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
+                            <span> | </span>@Html.ActionLink("刪除", "Delete2", new { Area = "BMED", id = item.AssetNo }, new { target = "_blank" })
                         }
-            </td>
-        </tr>
+                    </td>
+                </tr>
                 if (item.upload != "查看")
                 {
-        <tr>
-            <td colspan="6" style="padding-left: 10px">
-                <div>
-                    @Html.Action("Index", "NeedFile", new { id = item.AssetNo, up = item.upload })
-                </div>
-                <div class="fstatus" id="@Html.Raw("upfstatus" + item.AssetNo)" style="color: red">
-                    @Html.Action("CheckFiles", "AssetFile", new { id = item.AssetNo, cls = item.upload })
-                </div>
-            </td>
-        </tr>
+                    <tr>
+                        <td colspan="6" style="padding-left: 10px">
+                            <div>
+                                @await Component.InvokeAsync("NeedFileList", new { id = item.AssetNo, up = item.upload })
+                            </div>
+                            <div class="fstatus" id="@Html.Raw("upfstatus" + item.AssetNo)" style="color: red">
+                                @await Component.InvokeAsync("AssetFileCheckFiles", new { id = item.AssetNo, cls = item.upload })
+                            </div>
+                        </td>
+                    </tr>
                 }
             }
 
-    </table>
-    <div>
-        @Html.PagedListPager(Model,
-                 page => Url.Action("BuyEvaluateListItem","Assets", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
-    </div>
+        </table>
+        <div>
+            <pager class="pager-container" list="@Model" options="@PagedListRenderOptions.ClassicPlusFirstAndLast" asp-action="BuyEvaluateListItem" asp-controller="Assets" asp-area="BMED" asp-route-query="page" />
+        </div>
     }
 }
 
