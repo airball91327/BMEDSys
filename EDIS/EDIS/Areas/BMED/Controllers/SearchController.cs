@@ -18,15 +18,22 @@ namespace EDIS.Areas.BMED.Controllers
     public class SearchController : Controller
     {
         private readonly BMEDDbContext _context;
+        private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
 
         public SearchController(BMEDDbContext context,
+                                CustomUserManager customUserManager,
                                 CustomRoleManager customRoleManager)
         {
             _context = context;
+            userManager = customUserManager;
             roleManager = customRoleManager;
         }
 
+        /// <summary>
+        /// The Index of searching all repair docs.
+        /// </summary>
+        /// <returns></returns>
         // GET: BMED/Search/RepIndex
         public IActionResult RepIndex()
         {
@@ -99,6 +106,10 @@ namespace EDIS.Areas.BMED.Controllers
             return View(data);
         }
 
+        /// <summary>
+        /// The Index of searching all keep docs.
+        /// </summary>
+        /// <returns></returns>
         // GET: BMED/Search/KeepIndex
         public IActionResult KeepIndex()
         {
@@ -171,6 +182,54 @@ namespace EDIS.Areas.BMED.Controllers
             return View(data);
         }
 
+        /// <summary>
+        /// The Index of searching all delivery docs.
+        /// </summary>
+        /// <returns></returns>
+        // GET: BMED/Search/DelivIndex
+        public IActionResult DelivIndex()
+        {
+            //
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "所有", Value = "所有" });
+            listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
+            listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
+            ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "所有");
+            //
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            SelectListItem li;
+            _context.Departments.ToList()
+                .ForEach(d =>
+                {
+                    li = new SelectListItem();
+                    li.Text = d.Name_C;
+                    li.Value = d.DptId;
+                    listItem2.Add(li);
+
+                });
+            ViewData["ACCDPT"] = new SelectList(listItem2, "Value", "Text");
+            if (userManager.IsInRole(User, "Usual"))
+            {
+                //listItem2.Clear();
+                //AppUserModel u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                //if (u != null)
+                //{
+                //    li = new SelectListItem();
+                //    li.Text = _context.Departments.Find(u.DptId).Name_C;
+                //    li.Value = u.DptId;
+                //    listItem2.Add(li);
+                //}
+            }
+            ViewData["APPLYDPT"] = new SelectList(listItem2, "Value", "Text");
+
+            return View();
+        }
+
+        /// <summary>
+        /// Get the query result list of repair docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
         // POST: BMED/Search/GetRepQryList
         [HttpPost]
         public IActionResult GetRepQryList(QryRepListData qdata)
@@ -419,6 +478,11 @@ namespace EDIS.Areas.BMED.Controllers
             return View("RepQryList", rv);
         }
 
+        /// <summary>
+        /// Get the query result list of keep docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
         // POST: BMED/Search/GetKeepQryList
         [HttpPost]
         public IActionResult GetKeepQryList(QryKeepListData qdata)
@@ -667,6 +731,7 @@ namespace EDIS.Areas.BMED.Controllers
 
             return View("KeepQryList", kv);
         }
+
 
     }
 }

@@ -25,8 +25,8 @@ namespace EDIS.Areas.BMED.Controllers
     {
         private readonly BMEDDbContext _context;
         private readonly IRepository<AppUserModel, int> _userRepo;
-        private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
+        private readonly CustomUserManager userManager;
         private int pageSize = 100;
 
         public AssetController(BMEDDbContext context,
