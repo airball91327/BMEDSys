@@ -85,6 +85,9 @@
     <Content Update="Areas\BMED\Views\Repair\Views.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Search\DelivQryList.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Shared\Components\AssetFileAssetList\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

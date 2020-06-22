@@ -10,6 +10,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDIS.Models.Identity;
 using Microsoft.EntityFrameworkCore;
+using EDIS.Areas.BMED.Models.DeliveryModels;
+using Microsoft.AspNetCore.Http;
+using EDIS.Repositories;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -18,14 +21,17 @@ namespace EDIS.Areas.BMED.Controllers
     public class SearchController : Controller
     {
         private readonly BMEDDbContext _context;
+        private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
 
         public SearchController(BMEDDbContext context,
+                                IRepository<AppUserModel, int> userRepo,
                                 CustomUserManager customUserManager,
                                 CustomRoleManager customRoleManager)
         {
             _context = context;
+            _userRepo = userRepo;
             userManager = customUserManager;
             roleManager = customRoleManager;
         }
@@ -732,6 +738,179 @@ namespace EDIS.Areas.BMED.Controllers
             return View("KeepQryList", kv);
         }
 
+        /// <summary>
+        /// Get the query result list of delivery docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
+        // POST: BMED/Search/GetDelivQryList
+        [HttpPost]
+        public IActionResult GetDelivQryList(IFormCollection form)
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
+            listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
+            listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
+            ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "待處理");
+            //
+            List<DeliveryListVModel> vm;
+            vm = GetDeliveryList(form["qtyFLOWTYP"]);
+            if (!string.IsNullOrEmpty(form["qtyDOCID"]))
+            {
+                vm = vm.Where(m => m.DocId == form["qtyDOCID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyPURCHASENO"]))
+            {
+                vm = vm.Where(m => m.PurchaseNo == form["qtyPURCHASENO"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyDPTID"]))
+            {
+                vm = vm.Where(m => m.Company == form["qtyDPTID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyACCDPT"]))
+            {
+                vm = vm.Where(m => m.AccDpt == form["qtyACCDPT"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyBUDGETID"]))
+            {
+                vm = vm.Where(m => m.BudgetId == form["qtyBUDGETID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyCONTRACTNO"]))
+            {
+                vm = vm.Where(m => m.ContractNo == form["qtyCONTRACTNO"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyASSETNO"]))
+            {
+                AssetModel at = _context.BMEDAssets.Find(form["qtyASSETNO"]);
+                if (at != null)
+                {
+                    vm = vm.Where(m => m.DocId == at.Docid).ToList();
+                }
+                else
+                    vm.Clear();
+            }
+            foreach (var item in vm)
+            {
+                var u = _context.AppUsers.Find(item.UserId);
+                item.Contact = u == null ? "" : u.Ext;
+                u = _context.AppUsers.Find(item.FlowUid);
+                item.FlowUname = u == null ? "" : u.FullName;
+                item.CompanyNam = _context.Departments.Find(item.Company) == null ? "" : _context.Departments.Find(item.Company).Name_C;
+            }
+            return PartialView("DelivQryList", vm);
+        }
+
+        public List<DeliveryListVModel> GetDeliveryList(string cls = null)
+        {
+            List<DeliveryListVModel> dv = new List<DeliveryListVModel>();
+            List<DelivFlowModel> rf = new List<DelivFlowModel>();
+            List<DelivFlowModel> rf2;
+            // Get Login User's details.
+            var ur = _userRepo.Find(usr => usr.UserName == User.Identity.Name).FirstOrDefault();
+            switch (cls)
+            {
+                case "已處理":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "?")
+                                             .Where(m => m.UserId != ur.Id).ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+
+                    break;
+                case "已結案":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "2").ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+                    break;
+                case "所有":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "2" || df.Status == "?").ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+                    break;
+                case "查詢":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "?").ToList();
+                    DeliveryModel r;
+                    foreach (DelivFlowModel f in rf2)
+                    {
+                        r = _context.Deliveries.Find(f.DocId);
+                        rf.Add(f);
+                    }
+                    break;
+                default:
+                    rf = _context.DelivFlows.Where(df => df.Status == "?")
+                                            .Where(m => m.UserId == ur.Id).ToList();
+                    break;
+            }
+            rf.OrderByDescending(m => m.Rtt);
+            DeliveryListVModel i;
+            foreach (DelivFlowModel f in rf)
+            {
+                DeliveryModel r = _context.Deliveries.Find(f.DocId);
+                AppUserModel p = _context.AppUsers.Find(r.UserId);
+                DepartmentModel c = _context.Departments.Find(p.DptId);
+                //BuyEvaluate b = db.BuyEvaluates.Find(r.PurchaseNo);
+                i = new DeliveryListVModel();
+                i.DocType = "驗收";
+                i.DocId = r.DocId;
+                i.UserId = r.UserId;
+                i.UserName = r.UserName;
+                if (p != null && p.DptId != null)
+                {
+                    i.Company = p.DptId;
+                    i.CompanyNam = c == null ? "" : c.Name_C;
+                }
+                i.ContractNo = r.ContractNo;
+                i.PurchaseNo = r.PurchaseNo;
+                i.CrlItemNo = r.CrlItemNo;
+                i.AccDpt = r.AccDpt;
+                i.AccDptNam = _context.Departments.Find(r.AccDpt) == null ? "" : _context.Departments.Find(r.AccDpt).Name_C;
+                i.BudgetId = "";
+                if (f.Status == "?")
+                    i.Days = DateTime.Now.Subtract(r.ApplyDate.GetValueOrDefault()).Days;
+                else
+                    i.Days = null;
+                i.Flg = f.Status;
+                i.FlowUid = f.UserId;
+                dv.Add(i);
+            }
+            //
+            return dv;
+        }
 
     }
 }

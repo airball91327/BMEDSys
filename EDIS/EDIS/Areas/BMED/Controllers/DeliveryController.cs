@@ -447,7 +447,7 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 p = _context.AppUsers.Where(ur => ur.UserName == s).FirstOrDefault();
                 if (p.Status == "Y")
-                    listItem.Add(new SelectListItem { Text = p.FullName, Value = p.Id.ToString() });
+                    listItem.Add(new SelectListItem { Text = "(" + p.UserName + ")" + p.FullName, Value = p.Id.ToString() });
             }
             ViewData["ENG"] = new SelectList(listItem, "Value", "Text");
             //
@@ -570,7 +570,7 @@ namespace EDIS.Areas.BMED.Controllers
                 //mail.SendMail();
                 //----------------------------------------------------------------------------------
 
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Home", new { Area = "" });
             }
 
             return View(delivery);
