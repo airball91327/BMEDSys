@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.94.2" />
+    <PackageReference Include="EPPlus" Version="5.1.2" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.8" PrivateAssets="All" />
@@ -194,6 +195,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="Areas\BMED\Models\BuyEvaluateModel\" />
     <Folder Include="Areas\BMED\Views\DelivFlow\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\BMED\Keep\" />

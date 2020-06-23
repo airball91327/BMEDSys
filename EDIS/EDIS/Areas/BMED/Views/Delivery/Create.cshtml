@@ -188,12 +188,13 @@
             <span asp-validation-for="Memo" class="text-danger"></span>
         </div>
 
-        @*<div class="display-label">
-                儀器列表
-            </div>
-            <div style="padding-left: 20px; color: gray">
-                @Html.Action("BuyEvaluateListItem", "Asset", new { id = Model.DocId, upload = false })
-            </div>*@
+        @*<div class="editor-label">
+            <label class="control-title">儀器列表</label>
+        </div>
+        <div style="padding-left: 20px; color: whitesmoke">
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = false })
+        </div>*@
+
         <div style="padding-top: 20px;">
             <input class="btn btn-primary" id="btnSEND" type="submit" value="確定送出" />
         </div>

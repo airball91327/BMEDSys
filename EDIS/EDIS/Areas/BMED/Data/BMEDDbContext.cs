@@ -60,6 +60,11 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<DelivCodeModel> DelivCodes { get; set; }
         public DbSet<AssetFileModel> AssetFiles { get; set; }
         public DbSet<NeedFileModel> NeedFiles { get; set; }
+        public DbSet<BudgetModel> Budgets { get; set; }
+        public DbSet<BuyEvaluateModel> BuyEvaluates { get; set; }
+        public DbSet<BuyFlowModel> BuyFlows { get; set; }
+        public DbSet<BuySFlowModel> BuySFlows { get; set; }
+        public DbSet<BuyVendorModel> BuyVendors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

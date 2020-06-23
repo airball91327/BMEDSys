@@ -91,8 +91,8 @@ else
                 <td colspan="9">
                     <div style="margin-left: 50px">
                         <h3>儀器列表</h3>
-                        <div style="padding-left: 20px; color: gray">
-                            @Html.Action("BuyEvaluateListItem", "Asset", new { id = item.Docid, upload = "查看" })
+                        <div style="padding-left: 20px; color: whitesmoke">
+                            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = item.DocId, upload = "查看" })
                         </div>
                     </div>
                 </td>
