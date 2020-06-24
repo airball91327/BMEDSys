@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
 
-namespace EDIS.Areas.BMED.Models.DeliveryModels
+namespace EDIS.Areas.BMED.Models.BuyEvaluateModels
 {
     public class BuyEvaluateListVModel
     {

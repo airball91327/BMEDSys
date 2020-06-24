@@ -1,0 +1,45 @@
+﻿
+<script src="~/js/BMED/FileChoose.js" asp-append-version="true"></script>
+<script src="~/js/BMED/jquery.form.js" asp-append-version="true"></script>
+<script src="~/js/BMED/TransToBuyEvaluate.js" asp-append-version="true"></script>
+
+<form asp-action="Index" asp-controller="Budget" asp-area="BMED" id="ChooseBudget"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-update="#pnlBUDGETLIST">
+
+    @Html.Hidden("doctype", "0")
+    <div style="margin-bottom: 10px">
+        @await Html.PartialAsync("_AttainFile")
+    </div>
+    <table>
+        <tr>
+            <td>
+                @Html.Label("", "預算編號", htmlAttributes: new { @class = "control-title" })
+                @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.Label("", "成本中心", htmlAttributes: new { @class = "control-title" })
+                @Html.TextBox("qtyACCDPT", "", new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.CheckBox("qtyTRANS", true)尚未產生採購評估案
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input id="btnQTY" type="submit" value="查詢" />
+        <input id="btnTRANS" type="button" value="產生採購評估案件" />
+    </div>
+
+</form>
+
+<div id="pnlBUDGETLIST">
+    @*@Html.Action("List")*@
+</div>

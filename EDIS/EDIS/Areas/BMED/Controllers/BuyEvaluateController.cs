@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
 using EDIS.Areas.BMED.Models.DeliveryModels;
-using EDIS.Areas.BMED.Models.KeepModels;
+using EDIS.Areas.BMED.Models.BuyEvaluateModels;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Models.Identity;
 using EDIS.Repositories;
@@ -476,15 +476,15 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("Sheet1");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            using (var memoryStream = new MemoryStream())
-            {
-                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                Response.AddHeader("content-disposition", "attachment;  filename=EvaluateStandard.xlsx");
-                excel.SaveAs(memoryStream);
-                memoryStream.WriteTo(Response.OutputStream);
-                Response.Flush();
-                Response.End();
-            }
+            //using (var memoryStream = new MemoryStream())
+            //{
+            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+            //    Response.Headers.Add("content-disposition", "attachment;  filename=EvaluateStandard.xlsx");
+            //    excel.SaveAs(memoryStream);
+            //    memoryStream.WriteTo(Response.OutputStream);
+            //    Response.Flush();
+            //    Response.End();
+            //}
         }
 
         [HttpPost]

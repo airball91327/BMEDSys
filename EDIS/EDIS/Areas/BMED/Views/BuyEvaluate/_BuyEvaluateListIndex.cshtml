@@ -1,0 +1,62 @@
+﻿
+<form asp-action="BuyEvaluateListIndex" asp-controller="BuyEvaluate" asp-area="BMED" id="BuyEvaluateListIdx"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-update="#pnlEVALUATELIST">
+
+    <table>
+        <tr>
+            <td>
+                @Html.Label("", "表單編號")
+                @Html.TextBox("qtyDOCID")
+            </td>
+            <td>
+                @Html.Label("", "預算編號")
+                @Html.TextBox("qtyBUDGETID")
+            </td>
+            <td>
+                @Html.Label("", "申請單位")
+                @Html.TextBox("qtyCUSTID")
+            </td>
+            <td>
+                @Html.Label("", "儀器名稱(關鍵字)")
+                @Html.TextBox("qtyCNAME")
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("", "規格已確定")
+                @Html.CheckBox("qtySTANDARD")
+            </td>
+            <td colspan="2">
+                @Html.Label("", "規格日期")
+                @Html.Editor("qtyAGREEDATE1", "DateTime")~@Html.Editor("qtyAGREEDATE2", "DateTime")
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>
+                @Html.Label("", "流程狀態")
+                @Html.DropDownList("qtyFLOWTYP", ViewData["Item"] as SelectList)
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+
+    <div style="display:inline-block">
+        <input id="btnQTY" type="submit" value="查詢" />
+    </div>
+
+</form>
+
+<div id="pnlEVALUATELIST" style="margin-top: 20px">
+    @Html.Action("BuyEvaluateList", "BuyEvaluate")
+</div>

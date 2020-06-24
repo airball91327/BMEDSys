@@ -1,0 +1,75 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BudgetModel
+
+@{
+    ViewBag.Title = "刪除";
+}
+
+<h2>刪除</h2>
+
+<h3>確定要刪除此項目?</h3>
+<fieldset>
+    <legend>預算</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlantName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AccDpt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AccDpt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Amt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TotalPrice)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TotalPrice)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.EngName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EngName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Year)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Year)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.BuyId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BuyId)
+    </div>
+</fieldset>
+
+<form>
+    <div>
+        <input type="submit" value="確定刪除" /> |
+        <a href='@Url.Content("~/BMED/Budget/Index")'>回到列表</a>
+    </div>
+</form>

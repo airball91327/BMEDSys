@@ -195,7 +195,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Areas\BMED\Models\BuyEvaluateModel\" />
+    <Folder Include="Areas\BMED\Models\BuyEvaluateModels\" />
     <Folder Include="Areas\BMED\Views\DelivFlow\" />
     <Folder Include="Views\RepairDtl\Components\" />
     <Folder Include="wwwroot\Files\BMED\Keep\" />

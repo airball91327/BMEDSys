@@ -9,6 +9,7 @@ using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Models.KeepModels;
 using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Models.Identity;
+using EDIS.Areas.BMED.Models.BuyEvaluateModels;
 
 namespace EDIS.Areas.BMED.Data
 {

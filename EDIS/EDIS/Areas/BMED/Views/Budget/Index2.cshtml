@@ -1,0 +1,36 @@
+﻿@{
+    Layout = "";
+}
+
+<form asp-action="Index2" asp-controller="Budget" asp-area="BMED" id="ChooseBudget"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-update="#pnlBUDGETLIST">
+
+    <table>
+        <tr>
+            <td>
+                @Html.Label("", "預算編號", htmlAttributes: new { @class = "control-title" })
+                @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
+            </td>
+            <td>
+                @Html.Label("", "成本中心", htmlAttributes: new { @class = "control-title" })
+                @Html.TextBox("qtyACCDPT", "", new { @class = "form-control" })
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input class="btn btn-primary" id="btnQTY" type="submit" value="查詢" />
+    </div>
+
+</form>
+
+<div id="pnlBUDGETLIST">
+    @*@Html.Action("List2")*@
+</div>

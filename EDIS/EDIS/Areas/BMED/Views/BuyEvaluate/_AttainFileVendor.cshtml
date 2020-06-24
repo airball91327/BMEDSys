@@ -1,0 +1,17 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyPriceListVModel
+
+<table>
+    <tr>
+        <td>
+            <div id="FileList">
+                @Html.Action("VenderList", "AttainFile", new { Area = "BMED", id = Model.DocId, typ = "3" })
+            </div>
+        </td>
+        <td><a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id=" + Model.DocId + "&typ=3")" 
+    id="FileChooseLink">夾帶檔案</a></td>
+    </tr>
+
+</table>
+
+<div id="AttainFileDialog" class="hidden">
+</div>

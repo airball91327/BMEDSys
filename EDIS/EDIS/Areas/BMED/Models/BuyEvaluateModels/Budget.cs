@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 
-namespace EDIS.Areas.BMED.Models.DeliveryModels
+namespace EDIS.Areas.BMED.Models.BuyEvaluateModels
 {
     [Table("BMEDBudgets")]
     public class BudgetModel

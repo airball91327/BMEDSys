@@ -59,7 +59,7 @@
             <li class="@Html.IsSelected(area: null) @Html.IsSelected(area: "BMED") @Html.IsSelected(area: "Admin")">
                 <a href="#"><span class="nav-label">醫療儀器</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse @Html.IsSelected(area: "BMED", cssClass: "in")">
-                   
+
                     <li class="@Html.IsSelected(controller: "Repair", area: "BMED") @Html.IsSelected(controller: "Keep", area: "BMED")">
                         <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse @Html.IsSelected(controller: "Repair", area: "BMED", cssClass: "in") @Html.IsSelected(controller: "Keep", area: "BMED", cssClass: "in")">
@@ -73,6 +73,10 @@
                                 <a href="@Url.Action("Create", "Delivery", new { Area = "BMED" })">驗收單</a>
                             </li>
                         </ul>
+                    </li>
+
+                    <li class="@Html.IsSelected(controller: "Budget", area: "BMED")">
+                        <a href="@Url.Action("Index", "Budget", new { Area = "BMED" })"><span class="nav-label">預算</span></a>
                     </li>
 
                     <li class="@Html.IsSelected(controller: "Search", area: "BMED")">

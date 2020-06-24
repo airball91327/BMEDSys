@@ -1,0 +1,80 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyPriceListVModel>
+
+<script src="~/js/BMED/FileChooseVendor.js"></script>
+@{
+    int i = 0;
+    var s = "";
+    <table style="width: 100%">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustNam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlantCnam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorNo)
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            i++;
+            if (i % 2 == 0)
+            {
+                s = "#efeeef";
+            }
+            else
+            {
+                s = "#ffffff";
+            }
+            <tr style="background-color: @s"}>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustNam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlantCnam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorNam)
+                </td>
+                <td>
+                    @await Html.PartialAsync("_AttainFile", item)
+                </td>
+                <td>
+                    @Html.ActionLink("上傳完成", "Upload", "BuyVendor", new {id = item.DocId, vno = item.VendorNo }, null)
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+<div id="AttainFileDialog" class="hidden">
+
+</div>

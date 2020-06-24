@@ -1,0 +1,36 @@
+﻿@model MedEngMgr.Models.BuyVendor
+
+<h2>設定邀標廠商</h2>
+
+@using (Ajax.BeginForm("Edit", "BuyVendor", new AjaxOptions
+{
+    HttpMethod = "POST",
+    UpdateTargetId = "BuyVendorPanel"
+}))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Docid)
+    @Html.HiddenFor(model => model.VendorNo)
+
+    <div class="editor-field">
+        @Html.Partial("_ChooseVendor")
+    </div>
+
+    <div class="editor-label">
+        @Html.LabelFor(model => model.VendorNam)
+    </div>
+    <div class="editor-field">
+        @Html.EditorFor(model => model.VendorNam)
+        @Html.ValidationMessageFor(model => model.VendorNam)
+    </div>
+    <div class="editor-label">
+        @Html.LabelFor(model => model.UniteNo)
+    </div>
+    <div>
+        @Html.EditorFor(model => model.UniteNo)
+        @Html.ValidationMessageFor(model => model.UniteNo)
+        <input type="submit" value="加入廠商" />
+    </div>
+
+}

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyFlowModel>
+
+
+<h2>流程資訊</h2>
+<table style="width: 100%;margin-left: 30px;">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.StepId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Opinions)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Role)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Rtt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cls)
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.StepId)
+        </td>
+         <td>
+            @Html.DisplayFor(modelItem => item.UserNam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Opinions)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Role)
+        </td>*@
+        <td>
+            @if (item.Status == "1")
+            {
+                <div>已處理</div>
+            }
+            else if (item.Status == "?")
+            {
+                <div>未處理</div>
+            }
+            else if (item.Status == "2")
+            {
+                <div>結案</div>
+            }
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Rtt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Cls)
+        </td>
+    </tr>
+}
+</table>
+<h3>目前關卡：<span id="cls_now">@ViewData["cls_now"]</span></h3>
+<script>
+    $(document).ready(function () {
+        $('#pnlUSUAL').hide();
+        $('#pnlMEDENG').hide();
+        $('#pnlMEDMGR').hide();
+        var c = $('span[id="cls_now"]').text();
+        if (c != "採購人員" && c != "採購主管") {
+            $('#pnlBUYVENDOR').hide();
+            $('#pnlSList').hide();
+        }
+        if (c == "設備工程師" || c == "評估工程師") {
+            $('#pnlMEDENG').show();
+        }
+        else if (c == "設備主管") {
+            $('#pnlMEDMGR').show();
+        }
+        else {
+            $('#pnlUSUAL').show();
+        }
+    });
+</script>

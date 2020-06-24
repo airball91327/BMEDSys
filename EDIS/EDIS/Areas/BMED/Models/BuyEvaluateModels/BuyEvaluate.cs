@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Globalization;
 using System.Linq;
 
-namespace EDIS.Areas.BMED.Models.DeliveryModels
+namespace EDIS.Areas.BMED.Models.BuyEvaluateModels
 {
     [Table("BMEDBuyEvaluates")]
     public class BuyEvaluateModel

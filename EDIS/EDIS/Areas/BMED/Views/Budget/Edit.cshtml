@@ -1,0 +1,97 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BudgetModel
+
+@{
+    ViewBag.Title = "編輯/預算";
+}
+
+<h2>編輯</h2>
+
+<form>
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <fieldset>
+        <legend>預算</legend>
+
+        @Html.HiddenFor(model => model.DocId)
+        <div class="editor-label">
+            <label asp-for="Loc" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Loc" class="form-control" />
+            <span asp-validation-for="Loc" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="PlantName" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="PlantName" class="form-control" />
+            <span asp-validation-for="PlantName" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="AccDpt" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="AccDpt" class="form-control" />
+            <span asp-validation-for="AccDpt" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Amt" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Amt" class="form-control" />
+            <span asp-validation-for="Amt" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Price" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="LTotalPriceoc" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="TotalPrice" class="form-control" />
+            <span asp-validation-for="TotalPrice" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="EngName" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="EngName" class="form-control" />
+            <span asp-validation-for="EngName" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Year" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="BuyId" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="BuyId" class="form-control" />
+            <span asp-validation-for="BuyId" class="text-danger"></span>
+        </div>
+
+        <div>
+            <input class="btn btn-primary" type="submit" value="儲存" />
+        </div>
+    </fieldset>
+
+</form>
+
+<div>
+    @Html.ActionLink("回到預算列表", "Index", "Budget", new { Area = "BMED" })
+</div>

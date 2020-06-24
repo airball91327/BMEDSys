@@ -1,0 +1,102 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel>
+
+@{
+    ViewBag.Title = "採購評估列表";
+}
+
+<h2>採購評估列表</h2>
+
+<p>
+    @Html.ActionLink("新增採購評估", "Create")
+</p>
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Company)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Contact)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccDpt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PlantType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.PlantCnam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Unit)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Place)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EngId)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.UserName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Company)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Contact)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccDpt)
+            @Html.DisplayFor(modelItem => item.AccDptNam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PlantType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.PlantCnam)
+            @Html.DisplayFor(modelItem => item.PlantEnam)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Amt)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Unit)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TotalPrice)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Place)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EngId)
+            @Html.DisplayFor(modelItem => item.EngName)
+        </td>
+        <td>
+            @Html.ActionLink("編輯", "Edit", new { id=item.DocId }) |
+            @Html.ActionLink("詳細", "Details", new { id=item.DocId }) |
+            @Html.ActionLink("刪除", "Delete", new { id=item.DocId })           
+        </td>
+    </tr>
+}
+
+</table>

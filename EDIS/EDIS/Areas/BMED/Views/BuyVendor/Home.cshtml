@@ -1,0 +1,73 @@
+﻿@model IEnumerable<MedEngMgr.Models.BuyPriceListVModel>
+
+<p>
+    @Html.ActionLink("廠商登錄", "VendorLogin", "Account",
+    new {returnUrl=Url.Action("BuyPriceList","BuyVendor") }, null)
+</p>
+@{
+    int i = 0;
+    var s = "";
+}
+<table style="width: 100%">
+        <tr>       
+            <th>
+                @Html.DisplayNameFor(model => model.Docid)
+            </th>     
+            <th>
+                @Html.DisplayNameFor(model => model.PlantCnam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Unit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorNo)
+            </th> 
+             <th>
+                @Html.DisplayNameFor(model => model.buyer)
+            </th> 
+            <th></th>          
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            i++;
+            if (i % 2 == 0)
+            {
+                s = "#efeeef";
+            }
+            else
+            {
+                s = "#ffffff";
+            }
+            <tr style="background-color: @s"}>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Docid)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlantCnam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Unit)
+                </td>
+                <td>
+                    @Html.Raw(item.VendorNam)
+                </td>
+                <td>
+                    姓名：@Html.DisplayFor(modelItem => item.buyer)<br />
+                    電話：@Html.DisplayFor(modelItem => item.tel)<br />
+                    郵件：@Html.DisplayFor(modelItem => item.email)
+                </td>    
+                <td>
+                    @Html.Action("VenderPublicList", "AttainFile", new {id = item.Docid })
+                </td>                            
+            </tr>
+        }
+
+    </table>
+<p style="color: gray">以上採購評估案，若有其他廠商參考相關規格，有符合要求之產品並欲參與競標，請與採購人員聯絡。</p>

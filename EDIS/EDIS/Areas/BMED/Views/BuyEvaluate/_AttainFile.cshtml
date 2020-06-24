@@ -1,0 +1,11 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
+
+<a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id="+ Model.DocId + "&typ=3")" 
+    id="FileChooseLink">夾帶檔案</a>
+<div id="FileList">
+    @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "3", viewType = "Edit" })
+</div>
+<div id="AttainFileDialog" class="hidden">
+
+</div>
+

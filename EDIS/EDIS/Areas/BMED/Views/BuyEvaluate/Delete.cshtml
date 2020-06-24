@@ -1,0 +1,103 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
+
+@{
+    ViewBag.Title = "採購評估/刪除";
+}
+
+<h2>刪除</h2>
+
+<h3>您確定要刪除此案件嗎?</h3>
+<fieldset>
+    <legend>採購評估</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserName)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Company)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Company)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Contact)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Contact)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.AccDpt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AccDpt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlantType)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantType)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlantCnam)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantCnam)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.PlantEnam)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantEnam)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Amt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amt)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Unit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Unit)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.TotalPrice)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TotalPrice)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Place)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Place)
+    </div>
+</fieldset>
+
+@using (Html.BeginForm()) {
+    <p>
+        <input type="submit" value="確定刪除" /> |
+        @Html.ActionLink("回到列表", "Index", "Home", new { Area = "" })
+    </p>
+}
