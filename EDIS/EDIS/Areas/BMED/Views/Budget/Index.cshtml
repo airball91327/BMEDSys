@@ -1,7 +1,13 @@
 ﻿
-<script src="~/js/BMED/FileChoose.js" asp-append-version="true"></script>
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "預算";
+}
+
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="~/js/BMED/jquery.form.js" asp-append-version="true"></script>
 <script src="~/js/BMED/TransToBuyEvaluate.js" asp-append-version="true"></script>
+<script src="~/js/BMED/FileChoose.js" asp-append-version="true"></script>
 
 <form asp-action="Index" asp-controller="Budget" asp-area="BMED" id="ChooseBudget"
       data-ajax="true"
@@ -33,9 +39,10 @@
             </td>
         </tr>
     </table>
-    <div>
-        <input id="btnQTY" type="submit" value="查詢" />
-        <input id="btnTRANS" type="button" value="產生採購評估案件" />
+    <div style="padding-top: 7px;">
+        <input class="btn btn-primary" id="btnQTY" type="submit" value="查詢" />
+        <input class="btn btn-primary" id="btnTRANS" type="button" value="產生採購評估案件" />
+        <img id="imgLOADING" src="~/images/opc-ajax-loader.gif" hidden />
     </div>
 
 </form>

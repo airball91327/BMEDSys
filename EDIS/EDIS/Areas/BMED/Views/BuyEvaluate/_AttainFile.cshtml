@@ -2,10 +2,10 @@
 
 <a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id="+ Model.DocId + "&typ=3")" 
     id="FileChooseLink">夾帶檔案</a>
-<div id="FileList">
+<div id="pnlFILES">
     @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "3", viewType = "Edit" })
 </div>
-<div id="AttainFileDialog" class="hidden">
+<div id="AttainFileDialog" hidden>
 
 </div>
 

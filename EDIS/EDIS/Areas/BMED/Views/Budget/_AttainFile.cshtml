@@ -1,11 +1,11 @@
 ﻿
 <a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id=0&typ=0")" 
-    id="FileChooseLink">匯入預算檔案(EXCEL)</a>
+    id="FileChooseLink" style="color:deepskyblue">匯入預算檔案(EXCEL)</a>
 
-<div id="FileList">
+<div id="pnlFILES">
     @await Component.InvokeAsync("BMEDAttainFileList", new { id = "0", typ = "0", viewType = "Edit" })
 </div>
-<div id="AttainFileDialog" class="hidden">
+<div id="AttainFileDialog" hidden>
 
 </div>
 

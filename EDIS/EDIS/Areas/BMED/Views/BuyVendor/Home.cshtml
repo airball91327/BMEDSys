@@ -1,4 +1,4 @@
-﻿@model IEnumerable<MedEngMgr.Models.BuyPriceListVModel>
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyPriceListVModel>
 
 <p>
     @Html.ActionLink("廠商登錄", "VendorLogin", "Account",
@@ -11,7 +11,7 @@
 <table style="width: 100%">
         <tr>       
             <th>
-                @Html.DisplayNameFor(model => model.Docid)
+                @Html.DisplayNameFor(model => model.DocId)
             </th>     
             <th>
                 @Html.DisplayNameFor(model => model.PlantCnam)
@@ -44,7 +44,7 @@
             }
             <tr style="background-color: @s"}>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Docid)
+                    @Html.DisplayFor(modelItem => item.DocId)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.PlantCnam)
@@ -64,7 +64,7 @@
                     郵件：@Html.DisplayFor(modelItem => item.email)
                 </td>    
                 <td>
-                    @Html.Action("VenderPublicList", "AttainFile", new {id = item.Docid })
+                    @Component.InvokeAsync("BMEDAttainFileVenderPList", new { id = item.DocId })
                 </td>                            
             </tr>
         }

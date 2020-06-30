@@ -58,5 +58,5 @@
 </form>
 
 <div id="pnlEVALUATELIST" style="margin-top: 20px">
-    @Html.Action("BuyEvaluateList", "BuyEvaluate")
+    @await Component.InvokeAsync("BuyEvaluateList")
 </div>

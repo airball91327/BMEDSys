@@ -197,20 +197,20 @@
             @Html.ActionLink("修改資料", "Update", new { id = Model.DocId }, new { @class = "button", target = "_blank" })
         </div>
         <div>
-            @Html.Action("Edit", "BuyVendor", new { id = Model.DocId })
+            @Component.InvokeAsync("BuyVendorEdit", new { id = Model.DocId })
         </div>
         <div id="BuyVendorPanel">
-            @Html.Action("Index", "BuyVendor", new { id = Model.DocId })
+            @Component.InvokeAsync("BuyVendorIndex", new { id = Model.DocId })
         </div>
     </div>
     <div>
-        @Html.Action("GetList", "BuyFlow", new { id = Model.DocId, sid = Model.DocSid })
+        @Component.InvokeAsync("BuyFlowList", new { id = Model.DocId, sid = Model.DocSid })
     </div>
     <div id="pnlSList">
-        @Html.Action("GetSList", "BuyFlow", new { id = Model.DocId })
+        @Component.InvokeAsync("BuyFlowSList", new { id = Model.DocId })
     </div>
     <div>
-        @Html.Action("NextFlow", "BuyFlow", new { id = Model.DocId, sid = Model.DocSid })
+        @Component.InvokeAsync("BuyFlowNextFlow", new { id = Model.DocId, sid = Model.DocSid })
     </div>
 </fieldset>
 
@@ -219,8 +219,7 @@
 </div>
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Scripts.Render("~/Scripts/VendorChoose.js")
-    @Scripts.Render("~/Scripts/BuyNextFlow.js")
-    @Scripts.Render("~/Scripts/FileChoose2.js")
+    <script src="~/js/BMED/VendorChoose.js" asp-append-version="true"></script>
+    <script src="~/js/BMED/BuyNextFlow.js" asp-append-version="true"></script>
+    <script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>
 }

@@ -13,14 +13,14 @@
                 $('#result').load(function () {                   
                     $('#result').off('load');
                     var msg = $('#result').html();
-                    alert(msg);
+                    //alert(msg);
                     //
-                    var s = $('#Docid').val();
-                    var t = $('#DocTyp').val();
+                    var s = $('#DocId').val();
+                    var t = $('#DocType').val();
                     $.ajax({
                         url: '../AttainFile/List',
-                        data: { id: s, typ: t },
-                        method: "GET",
+                        data: { docid: s, doctyp: t },
+                        method: "POST",
                         dataType: "html", 
                         complete: function (data) {
                             f.html(data.responseText);

@@ -5,6 +5,6 @@
     id="FileChooseLink">夾帶檔案</a>
     </div>
 <div id="@Html.Raw("FileList" + Model.DocId)">
-    @Html.Action("VenderList", "AttainFile", new { id = Model.DocId, typ = "3", uniteno = Model.UniteNo })
+    @Component.InvokeAsync("BMEDAttainFileVendorList", new { id = Model.DocId, typ = "3", uniteno = Model.UniteNo})
 </div>
 

@@ -1,0 +1,67 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyFlowModel
+
+<form asp-action="NextFlow" asp-controller="BuyFlow" asp-area="BMED" method="post">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @Html.HiddenFor(modal => modal.DocId)
+
+    <h2>關卡設定</h2>
+    <table style="width: 100%;">
+        @if (Model.FlowHint != null)
+        {
+            <tr>
+                <td class="head">
+                    <div class="editor-label">
+                        <label asp-for="FlowHint" class="control-title"></label>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: bold; color: darkorange;">
+                        @Html.DisplayFor(model => model.FlowHint)
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    <label asp-for="Opinions" class="control-title"></label>
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.RadioButtonFor(model => model.SelOpin, "同意")同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "不同意")不同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "其他")其他
+                </div>
+                <div class="editor-field">
+                    <textarea asp-for="Opinions" class="form-control" />
+                    <span asp-validation-for="Opinions" class="text-danger"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    <label asp-for="Cls" class="control-title"></label>
+                </div>
+            </td>
+            <td>
+                <div>
+                    <select asp-for="Cls" asp-items="@ViewData["Item"] as SelectList" class="form-control" id="SelectCls">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="Cls" class="text-danger"></span>
+                    <select asp-for="UserId" asp-items="@ViewData["Item2"] as SelectList" class="form-control" id="SelectEng">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <div>
+        <input id="btnSEND" type="submit" value="確定送出" />
+    </div>
+
+</form>

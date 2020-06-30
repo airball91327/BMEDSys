@@ -339,7 +339,7 @@ namespace EDIS.Areas.BMED.Controllers
             return ViewComponent("BMEDAttainFileList3", new { id = id, typ = typ });
         }
 
-        // GET: /AttainFiles/Create
+        // GET: /BMED/AttainFile/Create
         public IActionResult Create(string id = null, string typ = null, string title = null, int? vendorId = null)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();

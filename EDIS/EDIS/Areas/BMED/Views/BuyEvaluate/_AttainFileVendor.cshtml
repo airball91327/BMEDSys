@@ -4,7 +4,7 @@
     <tr>
         <td>
             <div id="FileList">
-                @Html.Action("VenderList", "AttainFile", new { Area = "BMED", id = Model.DocId, typ = "3" })
+                @Component.InvokeAsync("BMEDAttainFileVendorList", new { id = Model.DocId, typ = "3" })
             </div>
         </td>
         <td><a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id=" + Model.DocId + "&typ=3")" 

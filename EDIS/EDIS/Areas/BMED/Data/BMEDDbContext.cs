@@ -109,6 +109,11 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<DelivCodeModel>().HasKey(c => new { c.Code });
             builder.Entity<AssetFileModel>().HasKey(c => new { c.AssetNo, c.SeqNo, c.Fid });
             builder.Entity<NeedFileModel>().HasKey(c => new { c.SeqNo });
+            builder.Entity<BudgetModel>().HasKey(c => new { c.DocId });
+            builder.Entity<BuyEvaluateModel>().HasKey(c => new { c.DocId });
+            builder.Entity<BuyFlowModel>().HasKey(c => new { c.DocId, c.StepId });
+            builder.Entity<BuySFlowModel>().HasKey(c => new { c.DocId, c.StepId, c.DocSid });
+            builder.Entity<BuyVendorModel>().HasKey(c => new { c.DocId, c.VendorNo });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

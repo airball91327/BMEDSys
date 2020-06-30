@@ -4,7 +4,7 @@
         $("#imgLOADING").show();
         $.ajax({
             contentType: "application/json; charset=utf-8",
-            url: '../Budget/TransToBuyEvaluate',
+            url: '../BMED/Budget/TransToBuyEvaluate',
             dataType: "json",
             success: function (data) {
                 $("#imgLOADING").hide();
