@@ -1,13 +1,17 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
 
 @{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "採購評估/新增";
 }
 
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 <script src="~/js/BMED/FileChoose.js" asp-append-version="true"></script>
 <script src="~/js/BMED/BudgetChoose.js" asp-append-version="true"></script>
 
-<h2>採購評估/新增</h2>
+<h2>新增</h2>
+<h4>採購評估</h4>
+<hr />
 
 <form asp-action="Create">
 
@@ -26,32 +30,30 @@
         <div>
             @await Html.PartialAsync("_ChooseBudget")
         </div>
-        <h3>
+        <h4>
             表單編號<br />
             @Model.DocId
-        </h3>
-        <h3>
+        </h4>
+        <h4>
             申請人姓名<br />
             @Model.UserName
-        </h3>
+        </h4>
 
-        <h3>
+        <h4>
             所屬單位<br />
             @Model.Company
-        </h3>
+        </h4>
 
-        <h3>
+        <h4>
             聯絡方式<br />
             @Model.Contact
-        </h3>
+        </h4>
 
         <div class="editor-label">
             <label asp-for="PlantType" class="control-title"></label>
         </div>
         <div class="editor-field form-inline">
-            <select asp-for="PlantType" asp-items="@ViewData["PTYPE"] as SelectList" class="form-control">
-                <option disabled selected>請選擇</option>
-            </select>
+            <select asp-for="PlantType" asp-items="@ViewData["PTYPE"] as SelectList" class="form-control"></select>
             <span asp-validation-for="PlantType" class="text-danger"></span>
         </div>
 
@@ -142,12 +144,14 @@
             <span asp-validation-for="PurchaserId" class="text-danger"></span>
         </div>
 
-        <div class="editor-label">
-            <label asp-for="BudgetId" class="control-title"></label>
-        </div>
-        <div class="editor-field">
-            <input asp-for="BudgetId" class="form-control" />
-            <span asp-validation-for="BudgetId" class="text-danger"></span>
+        <div class="form-group">
+            <div class="editor-label">
+                <label asp-for="BudgetId" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="BudgetId" class="form-control" />
+                <span asp-validation-for="BudgetId" class="text-danger"></span>
+            </div>
         </div>
 
         <div>

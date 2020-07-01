@@ -77,7 +77,7 @@ namespace EDIS.Areas.BMED.Models.BuyEvaluateModels
         public string GetID(ref BMEDDbContext db)
         {
             string str = "";
-            str += "SELECT MAX(DOCID) DocId FROM BMEDBuyEvaluate ";
+            str += "SELECT MAX(DOCID) DocId FROM BMEDBuyEvaluates ";
             var r = db.BuyEvaluates.FromSql(str).Select(d => d.DocId).ToList();
             string did = "";
             int yymm = (System.DateTime.Now.Year - 1911) * 100 + System.DateTime.Now.Month;

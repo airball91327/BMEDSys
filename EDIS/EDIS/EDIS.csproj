@@ -229,6 +229,7 @@
     <Folder Include="wwwroot\Files\BMED\Delivery\" />
     <Folder Include="wwwroot\Files\BMED\Asset\" />
     <Folder Include="wwwroot\Files\BMED\Budget\" />
+    <Folder Include="wwwroot\Files\BMED\BuyEvaluate\" />
     <Folder Include="wwwroot\Files\BMED\Repair\" />
     <Folder Include="wwwroot\Files\Repair\" />
   </ItemGroup>

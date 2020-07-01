@@ -1,16 +1,17 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BudgetModel
 
 @{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "編輯/預算";
 }
 
 <h2>編輯</h2>
 
-<form>
+<form asp-action="Edit" asp-controller="Budget" asp-area="BMED">
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <fieldset>
-        <legend>預算</legend>
+        <legend style="color:white">預算</legend>
 
         @Html.HiddenFor(model => model.DocId)
         <div class="editor-label">
@@ -77,15 +78,17 @@
             <span asp-validation-for="Year" class="text-danger"></span>
         </div>
 
-        <div class="editor-label">
-            <label asp-for="BuyId" class="control-title"></label>
-        </div>
-        <div class="editor-field">
-            <input asp-for="BuyId" class="form-control" />
-            <span asp-validation-for="BuyId" class="text-danger"></span>
+        <div class="form-group">
+            <div class="editor-label">
+                <label asp-for="BuyId" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="BuyId" class="form-control" />
+                <span asp-validation-for="BuyId" class="text-danger"></span>
+            </div>
         </div>
 
-        <div>
+        <div class="form-group">
             <input class="btn btn-primary" type="submit" value="儲存" />
         </div>
     </fieldset>

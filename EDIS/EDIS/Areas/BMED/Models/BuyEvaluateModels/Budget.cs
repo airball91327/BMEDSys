@@ -16,6 +16,9 @@ namespace EDIS.Areas.BMED.Models.BuyEvaluateModels
         public string PlantName { get; set; }
         [Display(Name = "成本中心")]
         public string AccDpt { get; set; }
+        [NotMapped]
+        [Display(Name = "成本中心名稱")]
+        public string AccDptName { get; set; }
         [Display(Name = "通過數量")]
         public int Amt { get; set; }
         [Display(Name = "單價")]

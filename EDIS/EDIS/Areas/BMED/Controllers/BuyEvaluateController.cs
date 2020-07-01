@@ -150,6 +150,8 @@ namespace EDIS.Areas.BMED.Controllers
                     ModelState.AddModelError("", "成本中心無此資料!!");
                     return View(buyevaluate);
                 }
+                buyevaluate.Rtp = user.Id;
+                buyevaluate.Rtt = DateTime.Now;
                 _context.Entry(buyevaluate).State = EntityState.Modified;
                 //
                 BuyFlowModel rf = new BuyFlowModel();
@@ -195,7 +197,7 @@ namespace EDIS.Areas.BMED.Controllers
                 mail.message.Body = body;
                 mail.message.IsBodyHtml = true;
                 //mail.SendMail();
-                return RedirectToAction("Index", "Members");
+                return RedirectToAction("Index", "Home", new { Area = "" });
             }
 
             return View(buyevaluate);

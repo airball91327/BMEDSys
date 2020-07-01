@@ -1,5 +1,5 @@
 ﻿$(function () {
-    var f = $('#FileList');
+    var f = $('#pnlFILES');
     var typ = $('#doctype').val();
     $('#AttainFileDialog').dialog({
         autoOpen: false,

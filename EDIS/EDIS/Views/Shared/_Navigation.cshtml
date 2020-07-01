@@ -60,7 +60,8 @@
                 <a href="#"><span class="nav-label">醫療儀器</span><span class="fa arrow"></span></a>
                 <ul class="nav nav-second-level collapse @Html.IsSelected(area: "BMED", cssClass: "in")">
 
-                    <li class="@Html.IsSelected(controller: "Repair", area: "BMED") @Html.IsSelected(controller: "Keep", area: "BMED")">
+                    <li class="@Html.IsSelected(controller: "Repair", area: "BMED") @Html.IsSelected(controller: "Keep", area: "BMED")
+                               @Html.IsSelected(controller: "Delivery", area: "BMED") @Html.IsSelected(controller: "BuyEvaluate", area: "BMED")">
                         <a href="#"><span class="nav-label">申請表單</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse @Html.IsSelected(controller: "Repair", area: "BMED", cssClass: "in") @Html.IsSelected(controller: "Keep", area: "BMED", cssClass: "in")">
                             <li class="@Html.IsSelected(action: "Create", area: "BMED")">
@@ -71,6 +72,9 @@
                             </li>
                             <li class="@Html.IsSelected(action: "Create", area: "BMED")">
                                 <a href="@Url.Action("Create", "Delivery", new { Area = "BMED" })">驗收單</a>
+                            </li>
+                            <li class="@Html.IsSelected(action: "Create", area: "BMED")">
+                                <a href="@Url.Action("Create", "BuyEvaluate", new { Area = "BMED" })">採購評估單</a>
                             </li>
                         </ul>
                     </li>

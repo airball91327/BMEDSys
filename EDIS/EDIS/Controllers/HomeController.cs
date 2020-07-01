@@ -41,18 +41,24 @@ namespace EDIS.Controllers
         {
             /* Get user details. */
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-
+            //請修案件數
             var BMEDrepairCount = _BMEDcontext.BMEDRepairFlows.Where(f => f.Status == "?")
                                                               .Where(f => f.UserId == ur.Id).Count();
+            //保養案件數
             var BMEDkeepCount = _BMEDcontext.BMEDKeepFlows.Where(f => f.Status == "?")
                                                           .Where(f => f.UserId == ur.Id).Count();
+            //驗收案件數
             var BMEDdeliveryCount = _BMEDcontext.DelivFlows.Where(f => f.Status == "?")
                                                            .Where(f => f.UserId == ur.Id).Count();
+            //採購評估案件數
+            var BMEDbuyCount = _BMEDcontext.BuyFlows.Where(f => f.Status == "?")
+                                                    .Where(f => f.UserId == ur.Id).Count();
 
             UnsignCounts v = new UnsignCounts();
             v.BMEDrepCount = BMEDrepairCount;
             v.BMEDkeepCount = BMEDkeepCount;
             v.BMEDDeliveryCount = BMEDdeliveryCount;
+            v.BMEDBuyEvalateCount = BMEDbuyCount;
 
             //if (fBrowserIsMobile())
             //{

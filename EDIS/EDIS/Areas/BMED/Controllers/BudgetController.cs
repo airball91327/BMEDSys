@@ -54,7 +54,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index2(FormCollection form)
+        public IActionResult Index2(IFormCollection form)
         {
             List<BudgetModel> vm = _context.Budgets.ToList();
             if (form["qtyDOCID"] != "")
@@ -64,6 +64,17 @@ namespace EDIS.Areas.BMED.Controllers
             if (form["qtyACCDPT"] != "")
             {
                 vm = vm.Where(v => v.AccDpt.Contains(form["qtyACCDPT"])).ToList();
+            }
+            foreach(var item in vm)
+            {
+                if (!string.IsNullOrEmpty(item.AccDpt))
+                {
+                    var dpt = _context.Departments.Where(d => d.DptId == item.AccDpt).ToList().FirstOrDefault();
+                    if (dpt != null)
+                    {
+                        item.AccDptName = dpt.Name_C;
+                    }
+                }
             }
             return PartialView("List2", vm);
         }
