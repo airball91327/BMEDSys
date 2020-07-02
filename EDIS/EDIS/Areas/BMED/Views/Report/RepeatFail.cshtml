@@ -1,0 +1,74 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RepeatFailVModel>
+@{
+    Layout = null;
+}
+
+<p>
+    <a class="btn btn-default" href="@Url.Action("ExcelRF", TempData["qry"])">匯出Excel</a>
+</p>
+<table class="table">
+    <tr>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.DocId)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.ApplyDate)
+        </th>
+        <th style="text-align: right">
+            @Html.DisplayNameFor(model => model.CustNam)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th style="width: 100px;">
+            @Html.DisplayNameFor(model => model.TroubleDes)
+        </th>
+        <th style="width: 100px;">
+            @Html.DisplayNameFor(model => model.FailFactor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DealDes)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.DocId)
+            </td>
+            <td style="text-align: right">
+                @item.ApplyDate.ToString("yyyy/MM/dd")
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.CustNam)
+            </td>
+            <td style="text-align: right">
+                @item.AssetNo <br />
+                @item.AssetNam
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TroubleDes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FailFactor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealDes)
+            </td>
+            <td>
+                @item.EndDate.ToString("yyyy/MM/dd")
+            </td>
+        </tr>
+    }
+
+</table>

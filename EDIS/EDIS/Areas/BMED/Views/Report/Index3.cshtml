@@ -1,0 +1,134 @@
+﻿@model EDIS.Areas.BMED.Models.ReportQryVModel
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+}
+
+<script src="~/js/BMED/Report.js" asp-append-version="true"></script>
+
+<script>
+    $(function () {
+        $("#btnQtyAccdpt").click(function () {
+            var keynam = $("#AccdptKeyName").val();
+            $.ajax({
+                contentType: "application/json; charset=utf-8",
+                url: '../Departments/GetDptsByKeyname',
+                type: "GET",
+                data: { keyname: keynam },
+                dataType: "json",
+                success: function (data) {
+                    //var s = '[{"ListKey":"44","ListValue":"test1"},{"ListKey":"87","ListValue":"陳奕軒"}]';
+                    var jsdata = JSON.parse(data);
+                    var appenddata;
+                    appenddata += "<option value = ''>請選擇</option>";
+                    $.each(jsdata, function (key, value) {
+                        appenddata += "<option value = '" + value.dptid + "'>" + value.dptname + " </option>";
+                    });
+                    $('#AccDpt').html(appenddata);
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+        });
+        $("#btnQtyDelivdpt").click(function () {
+            var keynam = $("#DelivdptKeyName").val();
+            $.ajax({
+                contentType: "application/json; charset=utf-8",
+                url: '../Departments/GetDptsByKeyname',
+                type: "GET",
+                data: { keyname: keynam },
+                dataType: "json",
+                success: function (data) {
+                    //var s = '[{"ListKey":"44","ListValue":"test1"},{"ListKey":"87","ListValue":"陳奕軒"}]';
+                    var jsdata = JSON.parse(data);
+                    var appenddata;
+                    appenddata += "<option value = ''>請選擇</option>";
+                    $.each(jsdata, function (key, value) {
+                        appenddata += "<option value = '" + value.dptid + "'>" + value.dptname + " </option>";
+                    });
+                    $('#DelivDpt').html(appenddata);
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+        });
+    });
+</script>
+
+<h2>統計報表</h2>
+
+<form asp-action="Index3" asp-controller="Report" asp-area="BMED" data-ajax="true"
+      data-ajax-update="#pnlREPORT" data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'查詢中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-success="smgREPORT"
+      data-ajax-complete="$.Toast.hideToast()">
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ReportClass, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ReportClass, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ReportClass, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("", "設備類別", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input name="AssetClass1" type="checkbox" value="醫療儀器" />醫療儀器
+                <input name="AssetClass2" type="checkbox" value="工程設施" />工程設施
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssetNo, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AssetNo, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssetNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.AssetName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.AssetName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AssetName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("AccdptKeyName", "成本中心", new { @class = "control-label col-md-2" })
+            <div class="col-md-10 text-left">
+                <div class="form-inline">
+                    @Html.TextBox("AccdptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
+                    <input id="btnQtyAccdpt" type="button" value="查詢" class="btn btn-default">
+                    @Html.DropDownListFor(model => model.AccDpt, ViewData["ACCDPT"] as SelectList, "請選擇", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.Label("DelivdptKeyName", "保管部門", new { @class = "control-label col-md-2" })
+            <div class="col-md-10 text-left">
+                <div class="form-inline">
+                    @Html.TextBox("DelivdptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
+                    <input id="btnQtyDelivdpt" type="button" value="查詢" class="btn btn-default">
+                    @Html.DropDownListFor(model => model.DelivDpt, ViewData["DELIVDPT"] as SelectList, "請選擇", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="查詢" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<hr />
+<div id="pnlREPORT">
+
+</div>

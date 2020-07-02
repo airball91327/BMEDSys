@@ -1,0 +1,70 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RepKeepStokVModel>
+@{
+    Layout = null;
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+@*<p>
+        @Html.ActionLink("匯出Excel", "RepKeepStokExcel")
+    </p>*@
+<input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+       onclick="javascript:exportExcel('tbToExcel')" />
+<table class="table" id="tbToExcel">
+    <tr>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.CustId)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.CustNam)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.KeepAmt)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.RepairAmt)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.TotalAmt)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.KeepCost)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.RepairCost)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.TotalCost)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.CustId)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.CustNam)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.KeepAmt)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.RepairAmt)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.TotalAmt)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.KeepCost)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.RepairCost)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.TotalCost)
+            </td>
+        </tr>
+    }
+
+</table>

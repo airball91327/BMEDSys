@@ -1,0 +1,61 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.MonthFailRateVModel>
+@{
+    Layout = null;
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+<input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+       onclick="javascript:exportExcel('tbFailRate')" />
+<table class="table" id="tbFailRate">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cname)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepairMins)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TotalMins)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FailRate)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssetNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cname)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RepairMins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalMins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FailRate)
+            </td>
+        </tr>
+    }
+
+</table>

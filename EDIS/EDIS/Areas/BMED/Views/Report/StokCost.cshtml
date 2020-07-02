@@ -1,0 +1,151 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.StokCostVModel>
+@{
+    Layout = null;
+}
+
+<p>
+    <a class="btn btn-default" href="@Url.Action("ExcelSC", TempData["qry"])">匯出Excel</a>
+</p>
+<table class="table">
+    <tr>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.DocTyp)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.DocId)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.ApplyDate)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.AssetNam)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.AccDpt)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.AccDptNam)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.TroubleDes)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.FailFactor)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.DealDes)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.StokNo)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.StokNam)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.Qty)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.TotalPrice)
+        </th>
+        @*<th style="width: 100px; text-align: right">
+                @Html.DisplayNameFor(model => model.Cost)
+            </th>*@
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.CloseDate)
+        </th>
+        <th style="width: 100px; text-align: right">
+            @Html.DisplayNameFor(model => model.EngNam)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.DocTyp)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.DocId)
+            </td>
+            <td style="text-align: right">
+                @item.ApplyDate.ToString("yyyy/MM/dd")
+            </td>
+            <td style="text-align: right">
+                @if (@item.EndDate != null)
+                {
+                    @item.EndDate.Value.ToString("yyyy/MM/dd");
+                }
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.AssetNo)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.AssetNam)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.AccDpt)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.AccDptNam)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.TroubleDes)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.FailFactor)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.DealDes)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.StokNo)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.StokNam)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.Qty)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.TotalPrice)
+            </td>
+            @*<td style="text-align: right">
+                    @Html.DisplayFor(modelItem => item.Cost)
+                </td>*@
+            <td style="text-align: right">
+                @if (@item.CloseDate != null)
+                {
+                    @item.CloseDate.Value.ToString("yyyy/MM/dd");
+                }
+            </td>
+            <td style="text-align: right">
+                @Html.DisplayFor(modelItem => item.EngNam)
+            </td>
+        </tr>
+    }
+
+</table>

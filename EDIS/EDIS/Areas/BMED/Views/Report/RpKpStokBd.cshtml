@@ -1,0 +1,82 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RpKpStokBdVModel>
+@{
+    Layout = null;
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+@*<p>
+        @Html.ActionLink("匯出Excel", "RpKpStokBdExcel")
+    </p>*@
+<input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+       onclick="javascript:exportExcel('tbToExcel')" />
+<table class="table" id="tbToExcel">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CustId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocTyp)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StokNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StokNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Amt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Up1000)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dn1000)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CustNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocTyp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StokNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StokNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Up1000)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dn1000)
+            </td>
+        </tr>
+    }
+
+</table>

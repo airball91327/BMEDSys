@@ -1,0 +1,141 @@
+﻿@model EDIS.Areas.BMED.Models.EffectRatio
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "成效指標";
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+<h2>成效指標</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sdate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Sdate, "DateTime", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sdate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Edate, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Edate, "DateTime", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Edate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="查詢" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+<hr />
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.FiveDaysInRepCases, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FiveDaysInRepCases, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FiveDaysInRepCases, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalInRepCases, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TotalInRepCases, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TotalInRepCases, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group has-success">
+        @Html.LabelFor(model => model.FiveInRepRatio, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.FiveInRepRatio, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.FiveInRepRatio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.KpFinishedCases, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.KpFinishedCases, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.KpFinishedCases, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.TotalKeepCases, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.TotalKeepCases, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TotalKeepCases, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group has-success">
+        @Html.LabelFor(model => model.KeepFinishedRatio, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.KeepFinishedRatio, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.KeepFinishedRatio, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-2"></div>
+        <div class="col-md-10">
+            <input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+                   onclick="javascript:exportExcel('tbToExcel')" />
+        </div>
+    </div>
+</div>
+
+
+@*匯出Excel用table*@
+<table class="table" id="tbToExcel" style="display: none">
+    <tr>
+        <td>
+            七日自行維修案件數
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.FiveDaysInRepCases)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            自行維修案件數
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.TotalInRepCases)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            七日自行維修率
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.FiveInRepRatio)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            已完工保養案件數
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.KpFinishedCases)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            保養案件數
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.TotalKeepCases)
+        </td>
+    </tr>
+    <tr>
+        <td>
+            保養完成率
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.KeepFinishedRatio)
+        </td>
+    </tr>
+</table>

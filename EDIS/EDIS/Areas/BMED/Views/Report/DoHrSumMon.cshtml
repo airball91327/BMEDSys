@@ -1,0 +1,82 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.DoHrSumMonVModel>
+@{
+    Layout = null;
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+@*<p>
+        @Html.ActionLink("匯出Excel", "DoHrSumMonExcel")
+    </p>*@
+<input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+       onclick="javascript:exportExcel('tbToExcel')" />
+<table class="table" id="tbToExcel">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.UserId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.UserNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hours)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cases)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OverFive)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OverFiveRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SelfRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Case3M)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fail3MRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Fail1MRate)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UserNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cases)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OverFive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OverFiveRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SelfRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Case3M)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fail3MRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fail1MRate)
+            </td>
+        </tr>
+    }
+
+</table>
