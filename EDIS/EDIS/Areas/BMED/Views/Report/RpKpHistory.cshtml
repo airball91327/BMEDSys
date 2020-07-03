@@ -7,7 +7,7 @@
     <a class="btn btn-default" href="@Url.Action("ExcelRpKpHistory", TempData["qry"])">匯出Excel</a>
 </p>
 <div>
-    @Component.InvokeAsync("AssetView", new { id = ViewData["Ano"] })
+    @await Component.InvokeAsync("AssetView", new { id = ViewData["Ano"] })
 </div>
 <div>
     <h4>維修保養履歷</h4>

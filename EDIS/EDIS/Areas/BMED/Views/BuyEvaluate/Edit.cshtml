@@ -197,20 +197,20 @@
             @Html.ActionLink("修改資料", "Update", new { id = Model.DocId }, new { @class = "button", target = "_blank" })
         </div>
         <div>
-            @Component.InvokeAsync("BuyVendorEdit", new { id = Model.DocId })
+            @await Component.InvokeAsync("BuyVendorEdit", new { id = Model.DocId })
         </div>
         <div id="BuyVendorPanel">
-            @Component.InvokeAsync("BuyVendorIndex", new { id = Model.DocId })
+            @await Component.InvokeAsync("BuyVendorIndex", new { id = Model.DocId })
         </div>
     </div>
     <div>
-        @Component.InvokeAsync("BuyFlowList", new { id = Model.DocId, sid = Model.DocSid })
+        @await Component.InvokeAsync("BuyFlowList", new { id = Model.DocId, sid = Model.DocSid })
     </div>
     <div id="pnlSList">
-        @Component.InvokeAsync("BuyFlowSList", new { id = Model.DocId })
+        @await Component.InvokeAsync("BuyFlowSList", new { id = Model.DocId })
     </div>
     <div>
-        @Component.InvokeAsync("BuyFlowNextFlow", new { id = Model.DocId, sid = Model.DocSid })
+        @await Component.InvokeAsync("BuyFlowNextFlow", new { id = Model.DocId, sid = Model.DocSid })
     </div>
 </fieldset>
 

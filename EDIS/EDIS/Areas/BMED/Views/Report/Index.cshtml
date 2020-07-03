@@ -38,6 +38,7 @@
       'duration':0
       })"
       data-ajax-success="smgREPORT"
+      data-ajax-failure="onFailed"
       data-ajax-complete="$.Toast.hideToast()">
 
     @Html.AntiForgeryToken()
@@ -64,7 +65,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Sdate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Sdate, "Date", new { htmlAttributes = new { @class = "form-control" } })
+                <input asp-for="Sdate" type="date" class="form-control" />
                 @Html.ValidationMessageFor(model => model.Sdate, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -72,7 +73,7 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Edate, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.Edate, "Date", new { htmlAttributes = new { @class = "form-control" } })
+                <input asp-for="Edate" type="date" class="form-control" />
                 @Html.ValidationMessageFor(model => model.Edate, "", new { @class = "text-danger" })
             </div>
         </div>

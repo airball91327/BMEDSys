@@ -6,6 +6,15 @@
         alert(data.error);
     }
 }
+var onFailed = function (data, jqXHR) {
+    console.log(data);
+    console.log(data.error);
+    console.log(jqXHR);
+    alert(data.error);
+    alert(data.responseText);
+    $.Toast.hideToast();
+    $('#imgLOADING_Flow').hide();
+};
 
 $(function () {
     $("#pnlASSETNO").hide();

@@ -64,7 +64,7 @@
                     郵件：@Html.DisplayFor(modelItem => item.email)
                 </td>    
                 <td>
-                    @Component.InvokeAsync("BMEDAttainFileVenderPList", new { id = item.DocId })
+                    @await Component.InvokeAsync("BMEDAttainFileVenderPList", new { id = item.DocId })
                 </td>                            
             </tr>
         }
