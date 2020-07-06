@@ -66,6 +66,7 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<BuyFlowModel> BuyFlows { get; set; }
         public DbSet<BuySFlowModel> BuySFlows { get; set; }
         public DbSet<BuyVendorModel> BuyVendors { get; set; }
+        public DbQuery<UnSignListVModel> UnSignListVModelQuery { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -316,10 +316,24 @@ namespace EDIS.Areas.BMED.Controllers
                 case "保養金額統計表":
                     return PartialView("KeepCost", KeepCost(v));
                 case "工作時數統計表":
+                    if (v.Edate == null && v.Sdate == null)
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入時間區間!" }
+                        };
+                    }
                     return PartialView("DoHrSumMon", DoHrSumMon(v));
                 case "未結案清單":
                     return PartialView("UnSignList", UnSignList(v));
                 case "維修保養履歷":
+                    if (string.IsNullOrEmpty(v.AssetNo))
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入財產編號!" }
+                        };
+                    }
                     ViewData["Ano"] = v.AssetNo;
                     if (v.Edate == null)
                     {
@@ -348,6 +362,13 @@ namespace EDIS.Areas.BMED.Controllers
                             else
                                 ay.RepRatio = 0;
                         }
+                    }
+                    else
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "無此財產!" }
+                        };
                     }
                     double faildays = 0;
                     double d = 0;
@@ -478,7 +499,8 @@ namespace EDIS.Areas.BMED.Controllers
                 pr.Brand = asset.Brand;
                 pr.Type = asset.Type;
                 pr.AccDpt = asset.AccDpt;
-                pr.AccDptNam = _context.Departments.Find(asset.AccDpt).Name_C;
+                var dpt = _context.Departments.Find(asset.AccDpt);
+                pr.AccDptNam = dpt == null ? "" : dpt.Name_C;
                 faildays = 0;
                 dd = 0;
                 cnt = 0;
@@ -1137,17 +1159,18 @@ namespace EDIS.Areas.BMED.Controllers
             //保養
             string str = "";
             str += "SELECT '保養' AS DOCTYP,B.DOCID,B.ASSETNO, B.ASSETNAME,F.TYPE,B.SENTDATE AS APPLYDATE,D.FULLNAME AS CLSEMP,";
-            str += "B.ACCDPT,E.NAME_C AS ACCDPTNAM, C.ENDDATE,C.RESULT AS DEALSTATE,C.INOUT, ";
+            str += "B.ACCDPT,E.NAME_C AS ACCDPTNAM, C.ENDDATE, CONVERT(varchar, C.RESULT) AS DEALSTATE,C.INOUT, ";
+            str += "C.COST, G.KeepEngName AS ENGNAM, C.MEMO AS FAILFACTOR, CONVERT(varchar, B.CYCLE) AS TroubleDes, ";
             str += "C.MEMO AS DEALDES, F.ASSETCLASS ";
             str += "FROM BMEDKEEPFLOWS AS A JOIN BMEDKEEPS AS B ON A.DOCID = B.DOCID ";
             str += "JOIN BMEDKEEPDTLS AS C ON B.DOCID = C.DOCID ";
-            str += "JOIN APPUSER AS D ON A.USERID = D.ID ";
-            str += "JOIN DEPARTMENT AS E ON B.ACCDPT = E.DPTID "; ;
+            str += "JOIN APPUSERS AS D ON A.USERID = D.ID ";
+            str += "JOIN DEPARTMENTS AS E ON B.ACCDPT = E.DPTID "; ;
             str += "LEFT JOIN BMEDASSETS AS F ON B.AssetNo = F.AssetNo ";
             str += "LEFT JOIN BMEDASSETKEEPS AS G ON B.AssetNo = G.AssetNo ";
             str += "WHERE A.STATUS = '?' AND (B.SENTDATE BETWEEN @D1 AND @D2) ";
 
-            sv2 = sv.AsQueryable().FromSql(str,
+            sv2 = _context.UnSignListVModelQuery.FromSql(str,
                 new SqlParameter("D1", v.Sdate),
                 new SqlParameter("D2", v.Edate)).ToList();
             foreach (UnSignListVModel s in sv2)
@@ -2285,8 +2308,11 @@ namespace EDIS.Areas.BMED.Controllers
               {
                   CustId = c.DptId,
                   CustNam = c.Name_C
-              })).Distinct().ToList();
-
+              })).ToList();
+            if (cv.Count() > 0)
+            {
+                cv = cv.GroupBy(g => g.CustId).Select(group => group.FirstOrDefault()).ToList();
+            }
 
             RepKeepStokVModel m;
             int rcnt = 0;
@@ -2374,7 +2400,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<RpKpStokBdVModel> sv = new List<RpKpStokBdVModel>();
             List<RpKpStokBdVModel> sv2 = new List<RpKpStokBdVModel>();
             RpKpStokBdVModel rb;
-            var scv = _context.BMEDRepairDtls.Where(d => d.CloseDate >= v.Sdate &&
+            var scv = _context.BMEDRepairDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDRepairs, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
@@ -2407,7 +2433,7 @@ namespace EDIS.Areas.BMED.Controllers
                     rc.TotalCost
                 })
                 .Union(
-                _context.BMEDKeepDtls.Where(d => d.CloseDate >= v.Sdate &&
+                _context.BMEDKeepDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDKeeps, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
