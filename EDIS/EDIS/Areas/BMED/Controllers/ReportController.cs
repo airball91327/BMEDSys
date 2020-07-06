@@ -293,7 +293,7 @@ namespace EDIS.Areas.BMED.Controllers
                     .AddMinutes(59)
                     .AddSeconds(59);
             }
-            TempData["qry"] = v;
+            //TempData["qry"] = v; //the TempData serializer currently supports only a limited set of data types for simplicity. It supports a few primitive types such as int, string, and bool, and simple containers of those types, such as lists.
             switch (v.ReportClass)
             {
                 case "月故障率統計表":
