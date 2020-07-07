@@ -7,11 +7,12 @@
 
 <script>
     $(function () {
+        var url = '@Url.Content("~/BMED")';
         $("#btnQtyAccdpt").click(function () {
             var keynam = $("#AccdptKeyName").val();
             $.ajax({
                 contentType: "application/json; charset=utf-8",
-                url: '../Departments/GetDptsByKeyname',
+                url: url + '/Department/GetDptsByKeyname',
                 type: "GET",
                 data: { keyname: keynam },
                 dataType: "json",
@@ -34,7 +35,7 @@
             var keynam = $("#DelivdptKeyName").val();
             $.ajax({
                 contentType: "application/json; charset=utf-8",
-                url: '../Departments/GetDptsByKeyname',
+                url: url + '/Department/GetDptsByKeyname',
                 type: "GET",
                 data: { keyname: keynam },
                 dataType: "json",
