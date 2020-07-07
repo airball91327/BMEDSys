@@ -1,6 +1,7 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
 
 @{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "採購評估/編輯";
 }
 
@@ -12,35 +13,35 @@
         @await Html.PartialAsync("_AttainFile", Model)
     </div>
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.DocId)
+        <label asp-for="DocId" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.DocId)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.UserName)
+        <label asp-for="UserName" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.UserName)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Company)
+        <label asp-for="Company" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Company)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Contact)
+        <label asp-for="Contact" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Contact)
     </div>
 
     <div class="display-label">
-        @Html.LabelFor(model => model.AccDpt)
+        <label asp-for="AccDpt" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.AccDpt)
@@ -48,75 +49,75 @@
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantType)
+        <label asp-for="PlantType" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantType)
     </div>
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.BudgetId)
+        <label asp-for="BudgetId" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.BudgetId)
     </div>
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantCnam)
+        <label asp-for="PlantCnam" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantCnam)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantEnam)
+        <label asp-for="PlantEnam" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantEnam)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Amt)
+        <label asp-for="Amt" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Amt)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Unit)
+        <label asp-for="Unit" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Unit)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Price)
+        <label asp-for="Price" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Price)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.TotalPrice)
+        <label asp-for="TotalPrice" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.TotalPrice)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Place)
+        <label asp-for="Place" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Place)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.EngId)
+        <label asp-for="EngId" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.EngName)
     </div>
     <div id="pnlUSUAL">
         <div class="display-label">
-            @Html.DisplayNameFor(model => model.Standard)
+            <label asp-for="Standard" class="control-title"></label>
         </div>
         <div class="display-field">
             <pre>
@@ -126,16 +127,16 @@
     </div>
     <div id="pnlMEDMGR">
         <div class="display-label">
-            @Html.LabelFor(model => model.Standard)
+            <label asp-for="Standard" class="control-title"></label>
         </div>
         <div class="display-field">
-            @Html.TextAreaFor(model => model.Standard, new { @id = "Standard2", @readonly = "readonly" })
+            <textarea asp-for="Standard" class="form-control" rows="3" id="Standard2" readonly></textarea>
         </div>
         <div class="display-label">
-            @Html.LabelFor(model => model.IsAgree)
+            <label asp-for="IsAgree" class="control-title"></label>
         </div>
         <div class="display-field">
-            @Html.CheckBoxFor(model => model.IsAgree)
+            <input asp-for="IsAgree" type="checkbox" class="form-control" />
         </div>
     </div>
     <div id="pnlMEDENG">
@@ -144,26 +145,29 @@
         </h2>
         <div style="margin-left: 20px">
             <div class="editor-label">
-                @Html.LabelFor(model => model.GrpOpin)
+                <label asp-for="GrpOpin" class="control-title"></label>
             </div>
-            <div class="editor-field">
-                @Html.TextAreaFor(model => model.GrpOpin, new { disabled = "disabled" })
-            </div>
-            <div class="editor-label">
-                @Html.LabelFor(model => model.Opinion)
-            </div>
-            <div class="editor-field">
-                @Html.TextAreaFor(model => model.Opinion, new { disabled = "disabled" })
+            <div class="editor-field form-inline">
+                <textarea asp-for="GrpOpin" class="form-control" rows="3" disabled></textarea>
             </div>
             <div class="editor-label">
-                @Html.LabelFor(model => model.Standard)
+                <label asp-for="Opinion" class="control-title"></label>
             </div>
-            <div class="editor-field">
-                @Html.TextAreaFor(model => model.Standard)
-                @Html.ValidationMessageFor(model => model.Standard)
+            <div class="editor-field form-inline">
+                <textarea asp-for="Opinion" class="form-control" rows="3" disabled></textarea>
             </div>
-            <input id="btnSTANDARD" type="button" value="儲存" />
-            <table>
+            <div class="editor-label">
+                <label asp-for="Standard" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <textarea asp-for="Standard" class="form-control" rows="3"></textarea>
+                <span asp-validation-for="Standard" class="text-danger"></span>
+            </div>
+            <div style="padding-top:7px;">
+                <input id="btnSTANDARD" type="button" value="儲存" class="btn btn-primary" />
+            </div>
+
+            <table class="table">
                 <tr>
                     <th>
                         序號
@@ -214,11 +218,12 @@
     </div>
 </fieldset>
 
-<div>
+<div style="padding-top: 7px;">
     @Html.ActionLink("回到列表", "Index", "Home", new { Area = "" })
 </div>
 
 @section Scripts {
+    <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="~/js/BMED/VendorChoose.js" asp-append-version="true"></script>
     <script src="~/js/BMED/BuyNextFlow.js" asp-append-version="true"></script>
     <script src="~/js/BMED/FileChoose2.js" asp-append-version="true"></script>

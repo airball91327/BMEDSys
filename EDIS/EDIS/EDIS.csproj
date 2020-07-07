@@ -38,6 +38,9 @@
     <Content Update="Areas\Admin\Views\_ViewImports.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\BuyEvaluate\_ChooseVendor.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Delivery\_AttainFile.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

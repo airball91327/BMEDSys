@@ -37,7 +37,7 @@ $('#SelectCls').change(function () {
 
 $('#IsAgree').change(function () {
     var c = $(this).is(':checked');
-    var d = $('#Docid').val();
+    var d = $('#DocId').val();
     $.ajax({
         url: '../../BuyEvaluate/UpdAgreeDate',
         type: "POST",
@@ -54,7 +54,7 @@ $('#IsAgree').change(function () {
 });
 
 $('#btnSTANDARD').click(function () {
-    var d = $('#Docid').val();
+    var d = $('#DocId').val();
     var s = $('#Standard').val();
     $.ajax({
         url: '../../BuyEvaluate/UpdStandard',
@@ -77,7 +77,7 @@ $('#btnSEND').click(function (e) {
             type: "POST",
             async: true,
             dataType: "json",
-            data: "id=" + $('#Docid').val() + "&op=" + $('#Opinions').val(),
+            data: "id=" + $('#DocId').val() + "&op=" + $('#Opinions').val(),
             success: function (data) {
                 location.replace('../../Members/Index');
             }

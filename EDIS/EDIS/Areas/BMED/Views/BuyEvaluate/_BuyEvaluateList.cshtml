@@ -15,8 +15,9 @@
                , new { @class = "button" })
     }
 
-    <table style="width: 100%">
+    <table class="table" style="width: 100%">
         <tr>
+            <th></th>
             <th>
                 @Html.DisplayNameFor(model => model.DocType)
             </th>
@@ -44,7 +45,6 @@
             <th>
                 廠商上傳狀況
             </th>
-            <th></th>
         </tr>
 
         @foreach (var item in Model)
@@ -58,39 +58,11 @@
             {
                 s = "#ffffff";
             }
-            <tr style="background-color: @s" }>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DocType)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.DocId)
-                </td>
-                <td style="color: blue">
-                    @Html.DisplayFor(modelItem => item.BudgetId)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CustId)<br />
-                    @Html.DisplayFor(modelItem => item.CustNam)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PlantCnam)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EngName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FlowUname)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AgreeDate)
-                </td>
-                <td>
-                    @await Component.InvokeAsync("BuyVendorStatusList", new { id = item.DocId })
-                </td>
+            <tr @*style="background-color: @s"*@>
                 <td>
                     @if (item.Flg == "?" && UserManager.GetCurrentUserId(User) == item.FlowUid)
                     {
-                        @Html.ActionLink("編輯", "Edit", "BuyEvaluate", new { id = item.DocId, sid = item.DocSid }, null)
+                        @Html.ActionLink("編輯", "Edit", "BuyEvaluate", new { id = item.DocId, sid = item.DocSid}, new { target = "_blank" })
                         if (UserManager.IsInRole(User, "BuyerMgr"))
                         {
                             @Html.Raw("|")
@@ -112,7 +84,34 @@
                             <span class="badge">@item.DelivCount</span>
                         }
                     }
-
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocId)
+                </td>
+                <td style="color: lightblue">
+                    @Html.DisplayFor(modelItem => item.BudgetId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustId)<br />
+                    @Html.DisplayFor(modelItem => item.CustNam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlantCnam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EngName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlowUname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgreeDate)
+                </td>
+                <td>
+                    @await Component.InvokeAsync("BuyVendorStatusList", new { id = item.DocId })
                 </td>
             </tr>
             if (item.Flg == "2")

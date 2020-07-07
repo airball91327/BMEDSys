@@ -836,11 +836,20 @@ namespace EDIS.Areas.BMED.Controllers
                     AgreeDate = j.buyevaluate.AgreeDate == null ? "" : j.buyevaluate.AgreeDate.Value.ToString("yyyy/MM/dd")
                 }));
             //
-            _context.Dispose();
+            //_context.Dispose();
             return rv;
         }
 
-        
+        // GET: BMED/BuyEvaluate/GetBuyEvaluateCounts
+        public JsonResult GetBuyEvaluateCounts()
+        {
+            /* Get user details. */
+            var ur = _userRepo.Find(u => u.UserName == User.Identity.Name).FirstOrDefault();
+            var buyCount = _context.BuyFlows.Where(f => f.Status == "?")
+                                            .Where(f => f.UserId == ur.Id).Count();
+            return Json(buyCount);
+        }
+
 
     }
 }

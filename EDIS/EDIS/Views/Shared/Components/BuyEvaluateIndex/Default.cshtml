@@ -19,8 +19,33 @@
     }
 </style>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.BMEDBuycombobox').combobox();
+        /* Only first visit the page, will submit the form. */
+        var count = 0;
+        $('.nav-tabs a[href="#menu4"]').on('shown.bs.tab', function (event) {
+            if (count == 0) {
+                $("#BuyEvaIndexForm").submit();
+                count++;
+            };
+        });
+    });
+    function BuyEvaReSubmit() {
+        $("#BuyEvaIndexForm").submit();
+        /* Refresh BuyEvaluate count. */
+        $.ajax({
+            url: '@Url.Action("GetBuyEvaluateCounts", "BuyEvaluate", new { Area = "BMED" })',
+            type: "GET",
+            success: function (data) {
+                $("#BMEDbuyCount").html(data);
+            }
+        });
+    }
+</script>
+
 <form asp-action="BuyEvaluateListIndex" asp-controller="BuyEvaluate" asp-area="BMED" data-ajax="true"
-      data-ajax-update="#pnlEVALUATELIST" data-ajax-method="POST" id="BuyEvaluateIndex"
+      data-ajax-update="#pnlEVALUATELIST" data-ajax-method="POST" id="BuyEvaIndexForm"
       data-ajax-begin="$.Toast.showToast({
       'title':'查詢中，請稍待...',
       'icon':'loading',
@@ -43,7 +68,7 @@
                 </div>
                 <div class="form-group">
                     <label for="qtyDPTID" class="control-title">申請部門</label>
-                    <select name="qtyDPTID" asp-items="@ViewData["ApplyDpt"] as SelectList" class="form-control BMEDcombobox">
+                    <select name="qtyDPTID" asp-items="@ViewData["ApplyDpt"] as SelectList" class="form-control BMEDBuycombobox">
                         <option value="">請選擇</option>
                     </select>
                 </div>
@@ -95,5 +120,5 @@
 </form>
 
 <div id="pnlEVALUATELIST" style="margin-top: 20px">
-    @*@Html.Action("BuyEvaluateList", "BuyEvaluate")*@
+
 </div>
