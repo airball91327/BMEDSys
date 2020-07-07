@@ -490,7 +490,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult BuyEvaluateListIndex(FormCollection form)
+        public IActionResult BuyEvaluateListIndex(IFormCollection form)
         {
             List<SelectListItem> listItem = new List<SelectListItem>();
             listItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
