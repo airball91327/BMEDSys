@@ -1,0 +1,63 @@
+﻿
+<form asp-action="DeliveryListIndex" asp-controller="Delivery" asp-area="BMED"
+      data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-update="#pnlDELIVERYLIST">
+
+    <div class="container">
+        <table>
+            <tr>
+                <td>
+                    @Html.Label("", "表單編號")
+                    @Html.TextBox("qtyDOCID")
+                </td>
+                <td>
+                    @Html.Label("", "採購案號")
+                    @Html.TextBox("qtyPURCHASENO")
+                </td>
+                <td>
+                    @Html.Label("", "財產編號")
+                    @Html.TextBox("qtyASSETNO")
+                </td>
+                <td>
+                    @Html.Label("", "成本中心")
+                    @Html.TextBox("qtyACCNO")
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @Html.Label("", "預算編號")
+                    @Html.TextBox("qtyBUDGETID")
+                </td>
+                <td>
+                    @Html.Label("", "合約號碼")
+                    @Html.TextBox("qtyCONTRACTNO")
+                </td>
+                <td>
+                    @Html.Label("", "申請單位")
+                    @Html.TextBox("qtyCUSTID")
+                </td>
+                <td>
+                    @Html.Label("", "流程狀態")
+                    @Html.DropDownList("qtyFLOWTYP", ViewData["Item"] as SelectList)
+                </td>
+            </tr>
+        </table>
+
+        <div class="row">
+            <div style="padding-left: 115px">
+                <input type="submit" id="btnDelivQry" value="查詢" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="pnlDELIVERYLIST">
+    @*@Html.Action("DeliveryList", "Delivery")*@
+</div>

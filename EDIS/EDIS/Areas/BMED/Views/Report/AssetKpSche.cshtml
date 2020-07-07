@@ -1,0 +1,133 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.AssetKpScheVModel>
+@{
+    Layout = null;
+}
+<style type="text/css">
+    .Sche {
+        font-size: 2.5em;
+        text-align: center;
+    }
+
+    .hdtitle {
+        margin-top: 5px;
+    }
+    .table-hover > tbody > tr:hover {
+        background-color: cornflowerblue;
+    }
+</style>
+<p>
+    <a class="btn btn-default" href="@Url.Action("AssetKpScheExcel", TempData["qry2"])">匯出Excel</a>
+</p>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DelivDptName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Jan)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Feb)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Mar)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Apr)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.May)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Jun)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Jul)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Aug)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sep)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Oct)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nov)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Dec)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <p class="hdtitle">@Html.DisplayFor(modelItem => item.AssetNo)</p>
+            </td>
+            <td>
+                <p class="hdtitle">@Html.DisplayFor(modelItem => item.AssetName)</p>
+            </td>
+            <td>
+                <p class="hdtitle">@Html.DisplayFor(modelItem => item.DelivDptName)</p>
+            </td>
+            <td>
+                <p class="hdtitle">@Html.DisplayFor(modelItem => item.Brand)</p>
+            </td>
+            <td>
+                <p class="hdtitle">@Html.DisplayFor(modelItem => item.Type)</p>
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Jan)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Feb)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Mar)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Apr)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.May)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Jun)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Jul)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Aug)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Sep)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Oct)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Nov)
+            </td>
+            <td class="Sche">
+                @Html.DisplayFor(modelItem => item.Dec)
+            </td>
+        </tr>
+    }
+
+</table>

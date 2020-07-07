@@ -142,10 +142,10 @@ $(function () {
     });
 
     $("#modalVENDOR").on("hidden.bs.modal", function () {
-        var vendorName = $("#Vno option:selected").text();
+        var vendorName = $("#Vno option:selected").text().split("(", 1);
         var vendorId = $("#Vno option:selected").val();
 
-        /* includes is not support in IE, so need to user indexOf. */
+        /* includes is not support in IE, so need to use indexOf. */
         if ($("#Vno option:selected").text() == "請選擇" || $("#Vno option:selected").text() == "查無廠商" ||
             $("#Vno option:selected").text().indexOf("請選擇廠商") != -1) {
             $("#VendorName").val("");
@@ -157,17 +157,4 @@ $(function () {
         }
     });
 
-    /* Default settings for qryVendor modal.*/
-    //$("#UniteNo").attr("disabled", "disabled");
-    //$("input[type=radio][name=QryType]").change(function () {
-    //    /* While select query type. */
-    //    if (this.value == '關鍵字') {
-    //        $("#KeyWord").removeAttr("disabled");
-    //        $("#UniteNo").attr("disabled", "disabled");
-    //    }
-    //    else if (this.value == '統一編號') {
-    //        $("#UniteNo").removeAttr("disabled");
-    //        $("#KeyWord").attr("disabled", "disabled");
-    //    }
-    //});
 });

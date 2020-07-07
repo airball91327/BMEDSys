@@ -1,0 +1,94 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DelivFlowModel
+
+<style>
+    .borderless td, .borderless th, .borderless tr {
+        border: none !important;
+    }
+</style>
+
+<form asp-controller="DelivFlow" asp-action="NextFlow" asp-area="BMED" 
+    data-ajax="true" data-ajax-method="POST" id="fmFLOW"
+    data-ajax-begin="$.Toast.showToast({
+    'title':'作業進行中，請稍待...',
+    'icon':'loading',
+    'duration':0
+    })"
+    data-ajax-complete="$.Toast.hideToast()"
+    data-ajax-success="flowmsg" data-ajax-failure="onFailed">
+
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(modal => modal.DocId)
+    <h2>關卡設定</h2>
+    <table style="width: 75%;" class="table borderless">
+        @if (Model.FlowHint != null)
+        {
+            <tr>
+                <td class="head">
+                    <div class="editor-label">
+                        <label asp-for="FlowHint" class="control-title"></label>
+                    </div>
+                </td>
+                <td>
+                    <div style="font-weight: bold; color: darkorange;">
+                        @Html.DisplayFor(model => model.FlowHint)
+                    </div>
+                </td>
+            </tr>
+        }
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    <label asp-for="Opinions" class="control-title"></label>
+                </div>
+            </td>
+            <td>
+                <div>
+                    @Html.RadioButtonFor(model => model.SelOpin, "同意")同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "不同意")不同意
+                    @Html.RadioButtonFor(model => model.SelOpin, "其他")其他
+                </div>
+                <div class="editor-field form-inline">
+                    <textarea asp-for="Opinions" class="form-control" rows="3"></textarea>
+                    <span asp-validation-for="Opinions" class="text-danger"></span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    <label asp-for="Cls" class="control-title"></label>
+                </div>
+            </td>
+            <td>
+                <div class="form-inline">
+                    <select asp-for="Cls" asp-items="@ViewData["Item"] as SelectList" class="form-control" id="SelectCls">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="Cls" class="text-danger"></span>
+                </div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="head">
+                <div class="editor-label">
+                    <label asp-for="UserId" class="control-title"></label>
+                </div>
+            </td>
+            <td>
+                <div class="form-inline">
+                    <select asp-for="UserId" asp-items="@ViewData["Item2"] as SelectList" class="form-control" id="SelectEng">
+                        <option disabled selected>請選擇</option>
+                    </select>
+                    <span asp-validation-for="UserId" class="text-danger"></span>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+    <p>
+        <input id="btnSEND" type="submit" class="btn btn-primary" value="確定送出" />
+        <img id="imgLOADING_flow" src="~/Images/opc-ajax-loader.gif" style="display: none" />
+    </p>
+</form>
+

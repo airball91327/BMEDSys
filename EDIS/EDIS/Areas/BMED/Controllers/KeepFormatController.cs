@@ -5,6 +5,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
 using EDIS.Areas.BMED.Models.KeepModels;
+using EDIS.Models.Identity;
 using EDIS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -33,7 +34,7 @@ namespace EDIS.Areas.BMED.Controllers
         // GET: BMED/KeepFormat/Details/5
         public IActionResult Details(string id = null)
         {
-            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(HtmlEncoder.Default.Encode(id));
+            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(System.Net.WebUtility.HtmlDecode(id));
             if (keepformat == null)
             {
                 return StatusCode(404);
@@ -44,13 +45,19 @@ namespace EDIS.Areas.BMED.Controllers
         // GET: BMED/KeepFormat/Create
         public IActionResult Create()
         {
-            return View();
+            KeepFormatModel kf = new KeepFormatModel()
+            {
+                Plants = "廠牌型號：; 名稱：;"
+            };
+            return View(kf);
         }
 
         // POST: BMED/KeepFormat/Create
         [HttpPost]
         public IActionResult Create(KeepFormatModel keepformat)
         {
+            AppUserModel ur = _context.AppUsers.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
+            keepformat.FormatId = keepformat.FormatId.Trim();
             KeepFormatModel k = _context.BMEDKeepFormats.Find(keepformat.FormatId);
             if (k != null)
             {
@@ -59,6 +66,8 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (ModelState.IsValid)
             {
+                keepformat.Rtp = ur.Id;
+                keepformat.Rtt = DateTime.Now;
                 _context.BMEDKeepFormats.Add(keepformat);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
@@ -70,7 +79,7 @@ namespace EDIS.Areas.BMED.Controllers
         // GET: BMED/KeepFormat/Edit/5
         public IActionResult Edit(string id = null)
         {
-            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(HtmlEncoder.Default.Encode(id));
+            KeepFormatModel keepformat = _context.BMEDKeepFormats.Find(System.Net.WebUtility.HtmlDecode(id));
             if (keepformat == null)
             {
                 return StatusCode(404);
@@ -82,8 +91,11 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public IActionResult Edit(KeepFormatModel keepformat)
         {
+            AppUserModel ur = _context.AppUsers.Where(u => u.UserName == User.Identity.Name).FirstOrDefault();
             if (ModelState.IsValid)
             {
+                keepformat.Rtp = ur.Id;
+                keepformat.Rtt = DateTime.Now;
                 _context.Entry(keepformat).State = EntityState.Modified;
                 _context.SaveChanges();
                 return RedirectToAction("Index");

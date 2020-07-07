@@ -1,0 +1,82 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RepairKeepVModel>
+@{
+    Layout = null;
+}
+<script src="~/js/HtmltoExcel.js"></script>
+
+@*<p>
+        @Html.ActionLink("匯出Excel", "RepairKeepExcel")
+    </p>*@
+<input id="exportExcel" type="button" value="匯出Excel" class="btn btn-default"
+       onclick="javascript:exportExcel('tbToExcel')" />
+<table class="table" id="tbToExcel">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CustId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CustNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepairAmt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RpEndAmt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepFinishedRate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RepCost)
+        </th>
+    </tr>
+    @{
+        int kcnt = 0;
+        int kent = 0;
+        int rcnt = 0;
+        int rent = 0;
+        foreach (var item in Model)
+        {
+            rcnt += item.RepairAmt;
+            rent += item.RpEndAmt;
+            kcnt += item.KeepAmt;
+            kent += item.KpEndAmt;
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustNam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RepairAmt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RpEndAmt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RepFinishedRate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RepCost)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+            <td>維修總件數：@Convert.ToString(rcnt)</td>
+            @if (rcnt != 0)
+            {
+                <td>維修完成率：@decimal.Round(Convert.ToDecimal(rent) / Convert.ToDecimal(rcnt) * 100m, 2)</td>
+            }
+            else
+            {
+                <td>&nbsp;</td>
+            }
+        </tr>
+    }
+
+</table>

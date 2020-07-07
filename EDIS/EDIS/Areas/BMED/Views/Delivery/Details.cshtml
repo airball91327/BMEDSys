@@ -1,0 +1,152 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "驗收/查看";
+}
+
+<style>
+    .setWhiteColor {
+        color: white;
+        /*width:auto;*/
+    }
+    a {
+        color: deepskyblue;
+    }
+</style>
+
+<h2>驗收/查看</h2>
+
+<fieldset>
+    <legend class="setWhiteColor">驗收單</legend>
+
+    <div style="margin-bottom: 10px">
+        @await Html.PartialAsync("_AttainFile", Model)
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="UserId" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="UserId" class="form-control" readonly />
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="UserName" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="UserName" class="form-control" readonly />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="Company" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="Company" class="form-control" readonly />
+        <span asp-validation-for="Company" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="Contact" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="Contact" class="form-control" readonly />
+        <span asp-validation-for="Contact" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="ApplyDate" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="ApplyDate" type="date" class="form-control" readonly />
+        <span asp-validation-for="ApplyDate" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="AccDpt" class="control-title"></label>
+    </div>
+    <div class="editor-field form-inline">
+        <input asp-for="AccDpt" class="form-control" readonly />
+        <input asp-for="AccDptNam" class="form-control" readonly />
+        <span asp-validation-for="AccDpt" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="ContractNo" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="ContractNo" class="form-control" readonly />
+        <span asp-validation-for="ContractNo" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="WartyMon" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="WartyMon" class="form-control" readonly />
+        <span asp-validation-for="WartyMon" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="PurchaseNo" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="PurchaseNo" class="form-control" readonly />
+        <span asp-validation-for="PurchaseNo" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="CrlItemNo" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="CrlItemNo" class="form-control" readonly />
+        <span asp-validation-for="CrlItemNo" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="VendorId" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="VendorNam" class="form-control" readonly />
+        <span asp-validation-for="VendorNam" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="DelivPson" class="control-title"></label>
+    </div>
+    <div class="editor-field form-inline">
+        <input asp-for="DelivPson" class="form-control" readonly />
+        <input asp-for="DelivPsonNam" class="form-control" readonly />
+        <span asp-validation-for="DelivPson" class="text-danger"></span>
+        @if (Model.DelivPson != null)
+        {
+            @await Component.InvokeAsync("UserInfo", new { id = Model.DelivPson })
+        }
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="DelivDateR" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="DelivDateR" type="date" class="form-control" readonly />
+        <span asp-validation-for="DelivDateR" class="text-danger"></span>
+    </div>
+
+    <div class="editor-label">
+        <label asp-for="Memo" class="control-title"></label>
+    </div>
+    <div class="editor-field">
+        <input asp-for="Memo" class="form-control" readonly />
+        <span asp-validation-for="Memo" class="text-danger"></span>
+    </div>
+
+    <div>
+        @await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId })
+    </div>
+    <div>
+        @await Component.InvokeAsync("DelivFlowList", new { id = Model.DocId })
+    </div>
+
+</fieldset>

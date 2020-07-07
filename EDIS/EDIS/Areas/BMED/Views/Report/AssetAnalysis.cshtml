@@ -1,0 +1,37 @@
+﻿@model EDIS.Areas.BMED.Models.AssetAnalysis
+@{
+    Layout = null;
+}
+<div>
+    <h4>總計</h4>
+</div>
+<table class="table table-bordered">
+    <tr>
+        <td>維修時數</td>
+        <td>@Model.RepairHour</td>
+        <td>保養時數</td>
+        <td>@Model.KeepHour</td>
+    </tr>
+    <tr>
+        <td>維修金額</td>
+        <td>@Model.RepCost</td>
+        <td>保養金額</td>
+        <td>@Model.KeepCost</td>
+    </tr>
+    <tr>
+        <td>妥 善 率</td>
+        <td>@Model.ProperRate</td>
+        <td>維 修 比</td>
+        @if (@Model.RepRatio.CompareTo(50m) > 0)
+        {
+            <td style="color:red;">@Model.RepRatio</td>
+        }
+        else
+        {
+            <td>@Model.RepRatio</td>
+        }
+
+    </tr>
+</table>
+<span>**備註：維修比 = 維修總金額/取得金額。當超過50%時會用紅字顯示。</span>
+

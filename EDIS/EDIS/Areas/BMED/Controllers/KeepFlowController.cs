@@ -118,7 +118,7 @@ namespace EDIS.Areas.BMED.Controllers
                             });
                     mail.sto = sto.TrimEnd(new char[] { ',' });
 
-                    mail.message.Subject = "工務智能請修系統[醫工保養案-結案通知]：設備名稱： " + keep.AssetName;
+                    mail.message.Subject = "醫工工務智能保修系統[醫工保養案-結案通知]：設備名稱： " + keep.AssetName;
                     body += "<p>表單編號：" + keep.DocId + "</p>";
                     body += "<p>送單日期：" + keep.SentDate.Value.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + keep.UserName + "</p>";
@@ -134,7 +134,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
                 else if (assign.FlowCls == "廢除")
                 {
@@ -176,7 +176,7 @@ namespace EDIS.Areas.BMED.Controllers
                     u = _context.AppUsers.Find(flow.UserId);
                     mail.to = new System.Net.Mail.MailAddress(u.Email); //u.Email
                                                                         //mail.cc = new System.Net.Mail.MailAddress("99242@cch.org.tw");
-                    mail.message.Subject = "工務智能請修系統[醫工保養案]：設備名稱： " + keep.AssetName;
+                    mail.message.Subject = "醫工工務智能保修系統[醫工保養案]：設備名稱： " + keep.AssetName;
                     body += "<p>表單編號：" + keep.DocId + "</p>";
                     body += "<p>送單日期：" + keep.SentDate.Value.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + keep.UserName + "</p>";
@@ -190,7 +190,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
 
                 return new JsonResult(assign)
@@ -237,6 +237,21 @@ namespace EDIS.Areas.BMED.Controllers
                     break;
                 case "醫工主管":
                     s = roleManager.GetUsersInRole("MedMgr").ToList();
+                    list = new List<SelectListItem>();
+                    foreach (string l in s)
+                    {
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (!string.IsNullOrEmpty(u.DptId))
+                        {
+                            li = new SelectListItem();
+                            li.Text = u.FullName + "(" + u.UserName + ")";
+                            li.Value = u.Id.ToString();
+                            list.Add(li);
+                        }
+                    }
+                    break;
+                case "設備主管":
+                    s = roleManager.GetUsersInRole("MedAssetMgr").ToList();
                     list = new List<SelectListItem>();
                     foreach (string l in s)
                     {

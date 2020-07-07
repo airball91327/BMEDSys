@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -37,6 +38,7 @@ namespace EDIS.Controllers
         private readonly IEmailSender _emailSender;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
+        private int pageSize = 100; //Setting XPageList's pageSize for one page.
 
         public RepairController(ApplicationDbContext context,
                                 IRepository<RepairModel, string> repairRepo,
@@ -84,7 +86,7 @@ namespace EDIS.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(QryRepListData qdata)
+        public ActionResult Index(QryRepListData qdata, int page = 1)
         {
             string docid = qdata.qtyDOCID;     
             string ano = qdata.qtyASSETNO;     
@@ -100,6 +102,7 @@ namespace EDIS.Controllers
             bool searchAllDoc = qdata.qtySearchAllDoc;
             string qtyRepType = qdata.qtyRepType;
             string qtyOrderType = qdata.qtyOrderType;
+            string qtyTroubleDes = qdata.qtyTroubleDes;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -151,32 +154,46 @@ namespace EDIS.Controllers
             //}
 
             var rps = _context.Repairs.ToList();
-            if (!string.IsNullOrEmpty(docid))
+            if (!string.IsNullOrEmpty(docid))   //表單編號
             {
                 docid = docid.Trim();
                 rps = rps.Where(v => v.DocId == docid).ToList();
+                //案件是否為廢除
+                if (rps.Count() > 0)
+                {
+                    var tempLastFlow = _context.RepairFlows.Where(f => f.DocId == rps.First().DocId)
+                                                          .OrderBy(f => f.StepId).LastOrDefault();
+                    if (tempLastFlow.Status == "3")
+                    {
+                        ViewData["IsDocDeleted"] = "Y";
+                    }
+                }
             }
-            if (!string.IsNullOrEmpty(ano))
+            if (!string.IsNullOrEmpty(ano))     //財產編號
             {
                 rps = rps.Where(v => v.AssetNo == ano).ToList();
             }
-            if (!string.IsNullOrEmpty(dptid))
+            if (!string.IsNullOrEmpty(dptid))   //所屬部門編號
             {
                 rps = rps.Where(v => v.DptId == dptid).ToList();
             }
-            if (!string.IsNullOrEmpty(acc))
+            if (!string.IsNullOrEmpty(acc))     //成本中心
             {
                 rps = rps.Where(v => v.AccDpt == acc).ToList();
             }
-            if (!string.IsNullOrEmpty(aname))
+            if (!string.IsNullOrEmpty(aname))   //物品名稱(關鍵字)
             {
                 rps = rps.Where(v => v.AssetName != null)
                         .Where(v => v.AssetName.Contains(aname))
                         .ToList();
             }
-            if (!string.IsNullOrEmpty(qtyRepType))
+            if (!string.IsNullOrEmpty(qtyRepType))  //請修類別
             {
                 rps = rps.Where(v => v.RepType == qtyRepType).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTroubleDes))   //錯誤描述(關鍵字)
+            {
+                rps = rps.Where(v => v.TroubleDes.Contains(qtyTroubleDes)).ToList();
             }
             /* Search date by DateType.(ApplyDate) */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)
@@ -190,7 +207,8 @@ namespace EDIS.Controllers
             /* If no search result. */
             if (rps.Count() == 0)
             {
-                return View("List", rv);
+                if (rv.ToPagedList(page, pageSize).Count <= 0)
+                    return View("List", rv.ToPagedList(1, pageSize));
             }
 
             switch (ftype)
@@ -266,7 +284,7 @@ namespace EDIS.Controllers
                     /* Get all closed repair docs. */
                     List<RepairFlowModel> rf = _context.RepairFlows.Where(f => f.Status == "2").ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") ||
                         userManager.IsInRole(User, "Manager") || userManager.IsInRole(User, "RepEngineer"))
                     {
                         if (userManager.IsInRole(User, "Manager"))
@@ -362,7 +380,7 @@ namespace EDIS.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") ||
                         userManager.IsInRole(User, "RepEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
@@ -450,7 +468,8 @@ namespace EDIS.Controllers
                         EndDate = j.repdtl.EndDate,
                         CloseDate = j.repdtl.CloseDate,
                         IsCharged = j.repdtl.IsCharged,
-                        repdata = j.repair
+                        repdata = j.repair,
+                        ArriveDate = j.flow.Rtt
                     }));
                     break;
             };
@@ -521,24 +540,39 @@ namespace EDIS.Controllers
                 {
                     rv = rv.OrderByDescending(r => r.EndDate).ThenByDescending(r => r.DocId).ToList();
                 }
-                else
+                else if (qtyOrderType == "申請日")
                 {
                     rv = rv.OrderByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                }
+                else
+                {
+                    if (userManager.IsInRole(User, "RepEngineer") == true)
+                    {
+                        rv = rv.OrderByDescending(r => r.ArriveDate).ThenByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                    }
+                    else
+                    {
+                        rv = rv.OrderByDescending(r => r.ApplyDate).ThenByDescending(r => r.DocId).ToList();
+                    }
                 }
             }
 
             /* Search dealStatus. */
-            if (!string.IsNullOrEmpty(qtyDealStatus))
+            if (!string.IsNullOrEmpty(qtyDealStatus))   //處理狀態
             {
                 rv = rv.Where(r => r.DealState == qtyDealStatus).ToList();
             }
             /* Search IsCharged. */
-            if (!string.IsNullOrEmpty(qtyIsCharged))
+            if (!string.IsNullOrEmpty(qtyIsCharged))    //有無費用
             {
                 rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
             }
 
-            return View("List", rv);
+            if (rv.ToPagedList(page, pageSize).Count <= 0)
+                return View("List", rv.ToPagedList(1, pageSize));
+
+            return View("List", rv.ToPagedList(page, pageSize));
+            //return View("List", rv);
         }
         [Authorize]
         public ActionResult Create()
@@ -703,34 +737,37 @@ namespace EDIS.Controllers
                     repair.FloorName = _context.Floors.Where(f => f.BuildingId == Convert.ToInt32(repair.Building) && f.FloorId == repair.Floor).FirstOrDefault().FloorName;
                     repair.AreaName = _context.Places.Where(p => p.BuildingId == Convert.ToInt32(repair.Building) && p.FloorId == repair.Floor && p.PlaceId == repair.Area).FirstOrDefault().PlaceName;
                     //Send Mail 
-                    //To user and the next flow user.
-                    Tmail mail = new Tmail();
-                    string body = "";
-                    var mailToUser = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-                    mail.from = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
-                    mailToUser = _context.AppUsers.Find(flow.UserId);
-                    mail.to = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
-                    //mail.cc = new System.Net.Mail.MailAddress("344027@cch.org.tw");
-                    mail.message.Subject = "工務智能請修系統[請修案]：設備名稱： " + repair.AssetName;
-                    body += "<p>表單編號：" + repair.DocId + "</p>";
-                    body += "<p>申請日期：" + repair.ApplyDate.ToString("yyyy/MM/dd") + "</p>";
-                    body += "<p>申請人：" + repair.UserName + "</p>";
-                    body += "<p>財產編號：" + repair.AssetNo + "</p>";
-                    body += "<p>設備名稱：" + repair.AssetName + "</p>";
-                    body += "<p>故障描述：" + repair.TroubleDes + "</p>";
-                    body += "<p>請修地點：" + repair.PlaceLoc + " " + repair.BuildingName + " " + repair.FloorName + " " + repair.AreaName + "</p>";
-                    //body += "<p>放置地點：" + repair.PlaceLoc + "</p>";
-                    body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login" + "?docId=" + repair.DocId + "&dealType=Edit'" + ">處理案件</a></p>";
-                    body += "<br/>";
-                    body += "<p>使用ＩＥ瀏覽器注意事項：</p>";
-                    body += "<p>「工具」→「相容性檢視設定」→移除cch.org.tw</p>";
-                    body += "<br/>";
-                    body += "<h3>此封信件為系統通知郵件，請勿回覆。</h3>";
-                    body += "<br/>";
-                    body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
-                    mail.message.Body = body;
-                    mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    //To the next flow user, exclude engineers.
+                    if (flow.Cls.Contains("工程師") == false)
+                    {
+                        Tmail mail = new Tmail();
+                        string body = "";
+                        var mailToUser = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+                        mail.from = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
+                        mailToUser = _context.AppUsers.Find(flow.UserId);
+                        mail.to = new System.Net.Mail.MailAddress(mailToUser.Email); //u.Email
+                                                                                     //mail.cc = new System.Net.Mail.MailAddress("344027@cch.org.tw");
+                        mail.message.Subject = "工務智能請修系統[請修案]：設備名稱： " + repair.AssetName;
+                        body += "<p>表單編號：" + repair.DocId + "</p>";
+                        body += "<p>申請日期：" + repair.ApplyDate.ToString("yyyy/MM/dd") + "</p>";
+                        body += "<p>申請人：" + repair.UserName + "</p>";
+                        body += "<p>財產編號：" + repair.AssetNo + "</p>";
+                        body += "<p>設備名稱：" + repair.AssetName + "</p>";
+                        body += "<p>故障描述：" + repair.TroubleDes + "</p>";
+                        body += "<p>請修地點：" + repair.PlaceLoc + " " + repair.BuildingName + " " + repair.FloorName + " " + repair.AreaName + "</p>";
+                        //body += "<p>放置地點：" + repair.PlaceLoc + "</p>";
+                        body += "<p><a href='http://dms.cch.org.tw/EDIS/Account/Login" + "?docId=" + repair.DocId + "&dealType=Edit'" + ">處理案件</a></p>";
+                        body += "<br/>";
+                        body += "<p>使用ＩＥ瀏覽器注意事項：</p>";
+                        body += "<p>「工具」→「相容性檢視設定」→移除cch.org.tw</p>";
+                        body += "<br/>";
+                        body += "<h3>此封信件為系統通知郵件，請勿回覆。</h3>";
+                        body += "<br/>";
+                        body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
+                        mail.message.Body = body;
+                        mail.message.IsBodyHtml = true;
+                        mail.SendMail();
+                    }
 
                     return Ok(repair);
                 }
@@ -1110,8 +1147,9 @@ namespace EDIS.Controllers
                     vm.EngName = "";
                 }
                 var engMgr = _context.RepairFlows.Where(r => r.DocId == DocId)
-                                                 .Where(r => r.Cls.Contains("工務主管") || r.Cls.Contains("營建主管")).ToList();
-                if(engMgr.Count() != 0)
+                                                 .Where(r => r.Cls.Contains("工務主管") || r.Cls.Contains("營建主管"))
+                                                 .Where(r => r.Opinions.Contains("[同意]")).ToList();
+                if (engMgr.Count() != 0)
                 {
                     engMgr = engMgr.GroupBy(e => e.UserId).Select(group => group.FirstOrDefault()).ToList();
                     foreach (var item in engMgr)
@@ -1121,11 +1159,22 @@ namespace EDIS.Controllers
                 }
 
                 var engDirector = _context.RepairFlows.Where(r => r.DocId == DocId)
-                                                      .Where(r => r.Cls.Contains("工務主任") || r.Cls.Contains("營建主任")).LastOrDefault();
-                vm.EngDirector = engDirector == null ? "" : _context.AppUsers.Find(engDirector.UserId).FullName;
+                                                      .Where(r => r.Cls.Contains("工務主任") || r.Cls.Contains("營建主任"))
+                                                      .Where(r => r.Opinions.Contains("[同意]")).LastOrDefault();
+                string firstString = "";
+                if (engDirector != null)
+                {
+                    if (engDirector.Opinions != null)
+                    {
+                        var firstBracketIndex = engDirector.Opinions.IndexOf("]");
+                        firstString = engDirector.Opinions.Substring(0, firstBracketIndex);
+                    }
+                }
+                vm.EngDirector = engDirector == null ? "" : firstString + "]" + _context.AppUsers.Find(engDirector.UserId).FullName;
 
                 var delivMgr = _context.RepairFlows.Where(r => r.DocId == DocId)
-                                                   .Where(r => r.Cls.Contains("單位主管")).ToList();
+                                                   .Where(r => r.Cls.Contains("單位主管"))
+                                                   .Where(r => r.Opinions.Contains("[同意]")).ToList();
                 if (delivMgr.Count() != 0)
                 {
                     delivMgr = delivMgr.GroupBy(e => e.UserId).Select(group => group.FirstOrDefault()).ToList();
@@ -1136,11 +1185,13 @@ namespace EDIS.Controllers
                 }
 
                 var delivDirector = _context.RepairFlows.Where(r => r.DocId == DocId)
-                                                        .Where(r => r.Cls.Contains("單位主任")).LastOrDefault();
+                                                        .Where(r => r.Cls.Contains("單位主任"))
+                                                        .Where(r => r.Opinions.Contains("[同意]")).LastOrDefault();
                 vm.DelivDirector = delivDirector == null ? "" : _context.AppUsers.Find(delivDirector.UserId).FullName;
 
                 var ViceSI = _context.RepairFlows.Where(r => r.DocId == DocId)
-                                                 .Where(r => r.Cls.Contains("副院長")).LastOrDefault();
+                                                 .Where(r => r.Cls.Contains("副院長"))
+                                                 .Where(r => r.Opinions.Contains("[同意]")).LastOrDefault();
                 vm.ViceSuperintendent = ViceSI == null ? "" : _context.AppUsers.Find(ViceSI.UserId).FullName;
 
                 if (flow != null)
@@ -1393,6 +1444,7 @@ namespace EDIS.Controllers
                            Days = DateTime.Now.Subtract(j.repair.ApplyDate).Days,
                            Flg = j.flow.Status,
                            FlowUid = j.flow.UserId,
+                           FlowUidName = _context.AppUsers.Find(j.flow.UserId).FullName,
                            FlowCls = j.flow.Cls,
                            FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                            EndDate = j.repdtl.EndDate,
@@ -1406,7 +1458,7 @@ namespace EDIS.Controllers
                     /* Get all closed repair docs. */
                     List<RepairFlowModel> rf = _context.RepairFlows.Where(f => f.Status == "2").ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") ||
                         userManager.IsInRole(User, "Manager") || userManager.IsInRole(User, "RepEngineer"))
                     {
                         if (userManager.IsInRole(User, "Manager"))
@@ -1471,6 +1523,7 @@ namespace EDIS.Controllers
                         Days = DateTime.Now.Subtract(j.repair.ApplyDate).Days,
                         Flg = j.flow.Status,
                         FlowUid = j.flow.UserId,
+                        FlowUidName = _context.AppUsers.Find(j.flow.UserId).FullName,
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
@@ -1489,7 +1542,7 @@ namespace EDIS.Controllers
                         flow = f
                     }).ToList();
 
-                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") || 
+                    if (userManager.IsInRole(User, "Admin") || userManager.IsInRole(User, "RepAdmin") ||
                         userManager.IsInRole(User, "RepEngineer"))
                     {
                         /* If has other search values, search all RepairDocs which flowCls is in engineer. */
@@ -1544,6 +1597,7 @@ namespace EDIS.Controllers
                         Days = DateTime.Now.Subtract(j.repair.ApplyDate).Days,
                         Flg = j.flow.Status,
                         FlowUid = j.flow.UserId,
+                        FlowUidName = _context.AppUsers.Find(j.flow.UserId).FullName,
                         FlowCls = j.flow.Cls,
                         FlowDptId = _context.AppUsers.Find(j.flow.UserId).DptId,
                         EndDate = j.repdtl.EndDate,
@@ -1654,7 +1708,8 @@ namespace EDIS.Controllers
                     c.CloseDate,
                     c.Cost,
                     c.Days,
-                    c.FlowCls
+                    c.FlowCls,
+                    c.FlowUidName
                 });
 
                 //一個workbook內至少會有一個worksheet,並將資料Insert至這個位於A1這個位置上
@@ -1676,6 +1731,7 @@ namespace EDIS.Controllers
                 ws.Cell(1, 13).Value = "費用";
                 ws.Cell(1, 14).Value = "天數";
                 ws.Cell(1, 15).Value = "關卡";
+                ws.Cell(1, 16).Value = "關卡人員";
 
                 //如果是要塞入Query後的資料該資料一定要變成是data.AsEnumerable()
                 ws.Cell(2, 1).InsertData(data);

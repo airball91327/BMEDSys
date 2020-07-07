@@ -4,7 +4,10 @@
     ViewBag.Title = "修改保養明細";
 }
 
-<script src="~/js/BMED/KeepDtl.js"></script>
+<h4>保養紀錄</h4>
+<hr />
+
+<script src="~/js/BMED/KeepDtl.js" asp-append-version="true"></script>
 
 <form asp-action="Edit" asp-controller="KeepDtl" asp-area="BMED" data-ajax="true" data-ajax-method="POST"
       data-ajax-begin="$.Toast.showToast({
@@ -59,6 +62,20 @@
             </div>
         </div>
         <div class="row">
+            <div class="form-inline">
+                <label asp-for="NotInExceptDevice" class="control-title"></label>
+                @Html.RadioButtonFor(model => model.NotInExceptDevice, "Y") 是
+                @Html.RadioButtonFor(model => model.NotInExceptDevice, "N") 否
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-inline">
+                <label asp-for="IsInstrument" class="control-title"></label>
+                @Html.RadioButtonFor(model => model.IsInstrument, "Y") 是
+                @Html.RadioButtonFor(model => model.IsInstrument, "N") 否
+            </div>
+        </div>
+        <div class="row">
             <div class=form-inline>
                 <div class="form-group">
                     <label asp-for="EndDate" class="control-title"></label>
@@ -69,9 +86,8 @@
         </div>
         <div class="row">
             <div class="form-inline">
-                <label asp-for="NotInExceptDevice" class="control-title"></label>
-                @Html.RadioButtonFor(model => model.NotInExceptDevice, "Y") 是
-                @Html.RadioButtonFor(model => model.NotInExceptDevice, "N") 否
+                <label asp-for="CheckerName" class="control-title"></label>
+                @Html.DisplayFor(model => model.CheckerName)
             </div>
         </div>
 

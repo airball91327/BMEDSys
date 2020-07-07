@@ -85,7 +85,7 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     if (repairDtl.IsCharged == "N")
                     {
-                        _context.BMEDRepairCosts.RemoveRange(_context.BMEDRepairCosts.Where(c => c.DocId == repairDtl.DocId));
+                        //_context.BMEDRepairCosts.RemoveRange(_context.BMEDRepairCosts.Where(c => c.DocId == repairDtl.DocId));
                         repairDtl.Cost = 0;
                     }
                     else
@@ -103,14 +103,15 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     _context.Entry(repairDtl).State = EntityState.Modified;
 
-                    //var repairModel = _context.BMEDRepairs.Find(repairDtl.DocId);
-                    //repairModel.AssetNo = repairDtl.AssetNo;
-                    //var tempAsset = _context.BMEDAssets.Where(a => a.AssetNo == repairDtl.AssetNo).FirstOrDefault();
-                    //if(tempAsset != null)
-                    //{
-                    //    repairModel.AssetName = tempAsset.Cname;
-                    //}
-                    //_context.Entry(repairModel).State = EntityState.Modified;
+                    /* Edit AssetNo if No exist. */
+                    var repairModel = _context.BMEDRepairs.Find(repairDtl.DocId);
+                    repairModel.AssetNo = repairDtl.AssetNo;
+                    var tempAsset = _context.BMEDAssets.Where(a => a.AssetNo == repairDtl.AssetNo).FirstOrDefault();
+                    if (tempAsset != null)
+                    {
+                        repairModel.AssetName = tempAsset.Cname;
+                    }
+                    _context.Entry(repairModel).State = EntityState.Modified;
 
                     _context.SaveChanges();
 

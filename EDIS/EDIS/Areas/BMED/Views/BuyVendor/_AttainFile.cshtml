@@ -1,0 +1,10 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyPriceListVModel
+
+<div style="margin-left: 30px">
+<a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id="+ Model.DocId + "&typ=3&uniteno=" + Model.UniteNo)" 
+    id="FileChooseLink">夾帶檔案</a>
+    </div>
+<div id="@Html.Raw("FileList" + Model.DocId)">
+    @await Component.InvokeAsync("BMEDAttainFileVendorList", new { id = Model.DocId, typ = "3", uniteno = Model.UniteNo})
+</div>
+

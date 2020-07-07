@@ -1,0 +1,39 @@
+﻿@model IEnumerable< EDIS.Areas.BMED.Models.DeliveryModels.AssetFileModel>
+
+@{
+    Layout = "";
+}
+<html>
+<head>
+    <title>儀器附件列表</title>
+</head>
+<body>
+    @if (Model.Count() > 0)
+    {
+        <div style="margin: 10px;">財產編號：@ViewData["PlantNo"]</div>
+        <div style="margin: 10px;">儀器名稱：@ViewData["PlantName"]</div>
+        <table style="width: 450px; margin-left: 10px;">
+            <tr style="background-color: #2a40be">
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FileLink)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Rtp)
+                </th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                <tr id="@item.AssetNo@item.SeqNo">
+                    <td style="width: 200px">@Html.DisplayFor(modelItem => item.Title)</td>
+                    <td style="width: 100px; text-align: center"><a href='@Url.Content("~/Files/BMED/" + item.FileLink)' target="_blank">下載</a></td>
+                    <td style="text-align: right">@Html.DisplayFor(modelItem => item.UserName)</td>
+                </tr>
+            }
+        </table>
+    }
+
+</body>
+</html>

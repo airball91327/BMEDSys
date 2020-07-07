@@ -42,7 +42,8 @@ namespace EDIS.Areas.BMED.Components.KeepFlow
             listItem.Add(new SelectListItem { Text = "維修工程師", Value = "維修工程師" });
             listItem.Add(new SelectListItem { Text = "設備工程師", Value = "設備工程師" });
             listItem.Add(new SelectListItem { Text = "醫工主管", Value = "醫工主管" });
-            listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
+            listItem.Add(new SelectListItem { Text = "設備主管", Value = "設備主管" });
+            //listItem.Add(new SelectListItem { Text = "醫工主任", Value = "醫工主任" });
             listItem.Add(new SelectListItem { Text = "其他", Value = "其他" });
 
             /* Insert values. */
@@ -54,7 +55,7 @@ namespace EDIS.Areas.BMED.Components.KeepFlow
             {
                 assign.Cls = keepFlow.Cls;
 
-                if (keepFlow.Cls == "驗收人" || keepFlow.Cls == "單位主管")
+                if (keepFlow.Cls == "驗收人" || keepFlow.Cls == "醫工主管")    //驗收人 or 醫工主管結案
                 {
                     listItem.Add(new SelectListItem { Text = "結案", Value = "結案" });
                 }

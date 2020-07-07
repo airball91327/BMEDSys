@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
+using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Areas.BMED.Models.KeepModels;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Models.Identity;
+using EDIS.Repositories;
 using EDIS.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,15 +24,18 @@ namespace EDIS.Areas.BMED.Controllers
     public class AssetController : Controller
     {
         private readonly BMEDDbContext _context;
-        private readonly CustomUserManager userManager;
+        private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomRoleManager roleManager;
+        private readonly CustomUserManager userManager;
         private int pageSize = 100;
 
         public AssetController(BMEDDbContext context,
+                               IRepository<AppUserModel, int> userRepo,
                                CustomRoleManager customRoleManager,
                                CustomUserManager customUserManager)
         {
             _context = context;
+            _userRepo = userRepo;
             roleManager = customRoleManager;
             userManager = customUserManager;
         }
@@ -446,5 +451,319 @@ namespace EDIS.Areas.BMED.Controllers
                 Value = new { success = true, error = "" }
             };
         }
+
+        public ActionResult New(string docid, DateTime rdate)
+        {
+            // Get Login User's details.
+            var ur = _userRepo.Find(usr => usr.UserName == User.Identity.Name).FirstOrDefault();
+
+            AssetModel asset = new AssetModel();
+            asset.AccDate = DateTime.Now;
+            asset.BuyDate = DateTime.Now;
+            asset.DisposeKind = "正常";
+            if (docid != null)
+            {
+                DeliveryModel dy = _context.Deliveries.Find(docid);
+                //BuyEvaluate d = db.BuyEvaluates.Find(dy.PurchaseNo);
+                //if (d != null)
+                //{
+                //    asset.Cname = d.PlantCnam;
+                //    asset.Ename = d.PlantEnam;
+                //}
+                if (dy != null)
+                {
+                    asset.AccDpt = dy.AccDpt;
+                    VendorModel vr = _context.BMEDVendors.Where(v => v.UniteNo == dy.VendorId).FirstOrDefault();
+                    asset.VendorId = vr == null ? 0 : vr.VendorId;
+                }
+                asset.Docid = docid;
+            }
+            //asset.DelivUid = 34;
+            //asset.DelivEmp = "張三";
+            //asset.DelivDpt = "8420";
+            asset.KeepYm = (rdate.Year - 1911) * 100 + rdate.Month;
+            AppUserModel u = _context.AppUsers.Find(ur.Id);
+            if (u != null)
+            {
+                asset.DelivUid = u.Id;
+                asset.DelivEmp = u.FullName;
+                asset.DelivDpt = u.DptId;
+
+                if (u.DptId != null)
+                {
+                    asset.AccDpt = u.DptId;
+                    asset.DelivDpt = u.DptId;
+                    DepartmentModel co = _context.Departments.Find(u.DptId);
+                    if (co != null)
+                        asset.LeaveSite = co.Name_C;
+                }
+            }
+            //
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            List<SelectListItem> delivdpt = new List<SelectListItem>();
+            List<SelectListItem> accdpt = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = asset.DelivEmp, Value = asset.DelivUid.Value.ToString() });
+            List<AppUserModel> ul;
+            string gid = "CCH";
+            _context.Departments.ToList()
+                .ForEach(o => {
+                    delivdpt.Add(new SelectListItem
+                    {
+                        Text = o.Name_C,
+                        Value = o.DptId
+                    });
+                    accdpt.Add(new SelectListItem
+                    {
+                        Text = o.Name_C,
+                        Value = o.DptId
+                    });
+                });
+            ViewData["DelivUids"] = new SelectList(listItem, "Value", "Text");
+            ViewData["DelivDpts"] = new SelectList(delivdpt, "Value", "Text", asset.DelivDpt);
+            ViewData["AccDpts"] = new SelectList(accdpt, "Value", "Text", asset.AccDpt);
+
+            return PartialView(asset);
+        }
+
+        [HttpPost]
+        public ActionResult New(AssetModel asset)
+        {
+            if (ModelState.IsValid)
+            {
+                if (asset.AssetNo.Contains(";") || asset.AssetNo.Contains("、") || asset.AssetNo.Contains(","))
+                {
+                    return Content("財產編號只能有一個，請重新輸入!!");
+                }
+                if (_context.BMEDAssets.Where(a => a.AssetNo == asset.AssetNo).Count() > 0)
+                {
+                    return Content("新增失敗，此財產編號已經存在!!");
+                    //return View(asset);
+                }
+                if (string.IsNullOrEmpty(asset.LeaveSite))
+                {
+                    return Content("[放置地點]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.RiskLvl))
+                {
+                    return Content("[風險等級]不可空白!!");
+                }
+                if (asset.KeepYm == null || asset.Cycle == null)
+                {
+                    return Content("[保養起始年月]或[保養週期]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.MakeNo))
+                {
+                    return Content("[製造號碼]不可空白!!");
+                }
+                if (asset.RelDate == null)
+                {
+                    return Content("[製造日期]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.DelivDpt))
+                {
+                    return Content("[保管部門]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.AccDpt))
+                {
+                    return Content("[成本中心]不可空白!!");
+                }
+                // Get Login User's details.
+                var ur = _userRepo.Find(usr => usr.UserName == User.Identity.Name).FirstOrDefault();
+
+                asset.Rtp = ur.Id;
+                asset.Rtt = DateTime.Now;
+                if (asset.DelivUid != null)
+                {
+                    var delivUser = _context.AppUsers.Where(u => u.Id == asset.DelivUid).FirstOrDefault();
+                    asset.DelivEmp = delivUser == null ? "" : delivUser.FullName;
+                }
+                _context.BMEDAssets.Add(asset);
+                AssetKeepModel ak = _context.BMEDAssetKeeps.Find(asset.AssetNo);
+                if (ak == null)
+                {
+                    ak = new AssetKeepModel();
+                    ak.AssetNo = asset.AssetNo;
+                    ak.KeepYm = asset.KeepYm;
+                    ak.Cycle = asset.Cycle;
+                    _context.BMEDAssetKeeps.Add(ak);
+                }
+                else
+                {
+                    ak.KeepYm = asset.KeepYm;
+                    ak.Cycle = asset.Cycle;
+                    _context.Entry(ak).State = EntityState.Modified;
+                }
+                try
+                {
+                    _context.SaveChanges();
+                    return Content("success");
+                }
+                catch (Exception e)
+                {
+                    return Content(e.Message);
+                }
+            }
+            else
+            {
+                string msg = "";
+                foreach (var error in ViewData.ModelState.Values.SelectMany(modelState => modelState.Errors))
+                {
+                    msg += error.ErrorMessage + Environment.NewLine;
+                }
+                return Content(msg);
+            }
+        }
+
+        public IActionResult NewEdit(string id)
+        {
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            AssetKeepModel ak = _context.BMEDAssetKeeps.Find(id);
+            if (ak != null)
+            {
+                asset.KeepYm = ak.KeepYm;
+                asset.Cycle = ak.Cycle;
+            }
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "正常", Value = "正常" });
+            listItem.Add(new SelectListItem { Text = "報廢", Value = "報廢" });
+            ViewData["DKIND"] = new SelectList(listItem, "Value", "Text");
+            //
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            List<SelectListItem> delivdpt = new List<SelectListItem>();
+            List<SelectListItem> accdpt = new List<SelectListItem>();
+            if (asset.DelivUid == null)
+            {
+                asset.DelivUid = null;
+                asset.DelivEmp = "";
+                asset.DelivDpt = "";
+            }
+            listItem2.Add(new SelectListItem { Text = asset.DelivEmp, Value = asset.DelivUid.Value.ToString() });
+            List<AppUserModel> ul;
+            string gid = "CCH";
+            _context.Departments.ToList()
+                .ForEach(d => {
+                    delivdpt.Add(new SelectListItem
+                    {
+                        Text = d.Name_C,
+                        Value = d.DptId
+                    });
+                    accdpt.Add(new SelectListItem
+                    {
+                        Text = d.Name_C,
+                        Value = d.DptId
+                    });
+                });
+            ViewData["DelivUids"] = new SelectList(listItem2, "Value", "Text", asset.DelivUid);
+            ViewData["DelivDpts"] = new SelectList(delivdpt, "Value", "Text", asset.DelivDpt);
+            ViewData["AccDpts"] = new SelectList(accdpt, "Value", "Text", asset.AccDpt);
+
+            return View(asset);
+        }
+
+        [HttpPost]
+        public IActionResult NewEdit(AssetModel asset)
+        {
+            if (ModelState.IsValid)
+            {
+                if (string.IsNullOrEmpty(asset.LeaveSite))
+                {
+                    return Content("[放置地點]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.RiskLvl))
+                {
+                    return Content("[風險等級]不可空白!!");
+                }
+                if (asset.KeepYm == null || asset.Cycle == null)
+                {
+                    return Content("[保養起始年月]或[保養週期]不可空白!!");
+                }
+                if (string.IsNullOrEmpty(asset.MakeNo))
+                {
+                    return Content("[製造號碼]不可空白!!");
+                }
+                //if (asset.RelDate == null)
+                //{
+                //    return Content("[製造日期]不可空白!!");
+                //}
+
+                // Get Login User's details.
+                var ur = _userRepo.Find(usr => usr.UserName == User.Identity.Name).FirstOrDefault();
+
+                asset.Rtp = ur.Id;
+                asset.Rtt = DateTime.Now;
+                _context.Entry(asset).State = EntityState.Modified;
+                //
+                AssetKeepModel ak = _context.BMEDAssetKeeps.Find(asset.AssetNo);
+                if (ak == null)
+                {
+                    ak = new AssetKeepModel();
+                    ak.AssetNo = asset.AssetNo;
+                    ak.KeepYm = asset.KeepYm;
+                    ak.Cycle = asset.Cycle;
+                    _context.BMEDAssetKeeps.Add(ak);
+                }
+                else
+                {
+                    ak.KeepYm = asset.KeepYm;
+                    ak.Cycle = asset.Cycle;
+                    _context.Entry(ak).State = EntityState.Modified;
+                }
+                try
+                {
+                    _context.SaveChanges();
+                    return Content("success");
+                }
+                catch (Exception e)
+                {
+                    return Content(e.Message);
+                }
+            }
+            else
+            {
+                string msg = "";
+                foreach (var error in ViewData.ModelState.Values.SelectMany(modelState => modelState.Errors))
+                {
+                    msg += error.ErrorMessage + Environment.NewLine;
+                }
+                return Content(msg);
+            }
+        }
+
+        public IActionResult BuyEvaluateListItem(string id = null, string upload = null, int page = 1)
+        {
+            return ViewComponent("BuyEvaluateAssetListItem", new { id = id, upload = upload, page = page });
+        }
+
+        public IActionResult Delete2(string id = null)
+        {
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            if (asset == null)
+            {
+                return NotFound();
+            }
+            return View(asset);
+        }
+
+        [HttpPost]
+        public JavaScriptResult DeleteById(string id)
+        {
+            AssetModel asset = _context.BMEDAssets.Find(id);
+            _context.BMEDAssets.Remove(asset);
+            AssetKeepModel keep = _context.BMEDAssetKeeps.Find(id);
+            _context.BMEDAssetKeeps.Remove(keep);
+            _context.SaveChanges();
+
+            return new JavaScriptResult("alert('刪除成功!');window.opener.location.reload();close();");
+        }
+
+        public class JavaScriptResult : ContentResult
+        {
+            public JavaScriptResult(string script)
+            {
+                this.Content = script;
+                this.ContentType = "application/javascript";
+            }
+        }
+
     }
 }

@@ -1,0 +1,93 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.MonthRepairVModel>
+@{
+    Layout = null;
+}
+
+<p>
+    <a class="btn btn-default" href="@Url.Action("ExcelMR", TempData["qry"])">匯出Excel</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplyDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccDpt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TroubleDes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FailFactor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DealState)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DealDes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EngNam)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hour)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocId)
+            </td>
+            <td>
+                @item.ApplyDate.ToString("yyyy/MM/dd")
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssetNo)<br />
+                @Html.DisplayFor(modelItem => item.AssetNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccDpt)<br />
+                @Html.DisplayFor(modelItem => item.AccDptNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TroubleDes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FailFactor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealState)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealDes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EngNam)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hour)
+            </td>
+        </tr>
+    }
+
+</table>

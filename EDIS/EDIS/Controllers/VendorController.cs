@@ -191,33 +191,39 @@ namespace EDIS.Controllers
         }
 
         [HttpPost]
-        public ActionResult QryVendor(QryVendor qryVendor)
+        public IActionResult QryVendor(QryVendor qryVendor)
         {
             List<SelectListItem> items = new List<SelectListItem>();
             items.Add(new SelectListItem() { Text = "", Value = "" });
             if (qryVendor.QryType == "關鍵字")
             {
-                _context.Vendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord.Trim()))
+                if(qryVendor.KeyWord != null)
+                {
+                    _context.Vendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord.Trim()))
                         .ToList()
                         .ForEach(v => {
                             items.Add(new SelectListItem()
                             {
-                                Text = v.VendorName,
+                                Text = v.VendorName + "(" + v.UniteNo + ")",
                                 Value = v.VendorId.ToString()
                             });
                         });
+                }
             }
             else if (qryVendor.QryType == "統一編號")
             {
-                _context.Vendors.Where(v => v.UniteNo == qryVendor.UniteNo)
-                        .ToList()
-                        .ForEach(v => {
-                            items.Add(new SelectListItem()
-                            {
-                                Text = v.VendorName,
-                                Value = v.VendorId.ToString()
+                if (qryVendor.UniteNo != null)
+                {
+                    _context.Vendors.Where(v => v.UniteNo == qryVendor.UniteNo)
+                            .ToList()
+                            .ForEach(v => {
+                                items.Add(new SelectListItem()
+                                {
+                                    Text = v.VendorName + "(" + v.UniteNo + ")",
+                                    Value = v.VendorId.ToString()
+                                });
                             });
-                        });
+                }
             }
 
             if (items.Count() == 1) //No search result.

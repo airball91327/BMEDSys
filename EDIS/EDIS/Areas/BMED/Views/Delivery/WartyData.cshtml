@@ -1,0 +1,131 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DelivDataVModel
+
+@using (Html.BeginForm("", "", FormMethod.Post, new { @id = "WartyDataForm" }))
+{
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input asp-for="DocId" type="hidden" />
+
+    <div id="pnlTODO">
+        <h2>設備經辦專區</h2>
+        <div style="padding-left: 20px">
+
+            <div class="editor-label">
+                <label asp-for="WartyNt" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="WartyNt" class="form-control" />
+                <span asp-validation-for="WartyNt" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="AcceptDate" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="AcceptDate" type="date" class="form-control" />
+                <span asp-validation-for="AcceptDate" class="text-danger"></span>
+            </div>
+
+        </div>
+    </div>
+    <div id="pnlMEDMGR">
+        <h2>設備主管專區</h2>
+        <div style="padding-left: 20px">
+
+            <div class="editor-label">
+                <label asp-for="WartySt" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="WartySt" type="date" class="form-control" />
+                <span asp-validation-for="WartySt" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="WartyEd" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="WartyEd" type="date" class="form-control" />
+                <span asp-validation-for="WartyEd" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="FileTestDate" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="FileTestDate" type="date" class="form-control" />
+                <span asp-validation-for="FileTestDate" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Stype2" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="Stype2" asp-items="@ViewData["Stype2"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="Stype2" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Code" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="Code" asp-items="@ViewData["Code"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="OrderDate" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="OrderDate" type="date" class="form-control" />
+                <span asp-validation-for="OrderDate" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="OpenDate" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="OpenDate" type="date" class="form-control" />
+                <span asp-validation-for="OpenDate" class="text-danger"></span>
+            </div>
+
+            <div>
+                <table style="width: 100%">
+                    <tr>
+                        <th>財產編號</th>
+                        <th>儀器名稱</th>
+                        <th>起始年月</th>
+                        <th>保養週期</th>
+                        <th>保養方式</th>
+                        <th>工時</th>
+                        <th>費用</th>
+                        <th></th>
+                    </tr>
+                    @foreach (var item in Model.ak)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.AssetNo)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cname)</td>
+                            <td>@Html.DisplayFor(modelItem => item.KeepYm)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cycle)</td>
+                            <td>@Html.DisplayFor(modelItem => item.InOut)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Hours)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Cost)</td>
+                            <td>@Html.ActionLink("編輯", "EditData", "AssetKeep", new { Area = "BMED", ano = item.AssetNo, id = Model.DocId }, new { target = "_blank" })</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">
+                                <div>
+                                    @await Component.InvokeAsync("AssetFileAssetList", new { id = item.AssetNo })
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+}

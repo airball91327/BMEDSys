@@ -1,0 +1,330 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "驗收單/新增";
+}
+
+<h2>驗收單/新增</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        @Html.HiddenFor(model => model.DocId)
+        <div class="editor-label">
+            <label asp-for="UserId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <input asp-for="UserId" class="form-control" readonly />
+            <input asp-for="UserName" class="form-control" readonly />
+            <span asp-validation-for="UserId" class="text-danger"></span>
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="Company" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Company" class="form-control" readonly />
+            <span asp-validation-for="Company" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Contact" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Contact" class="form-control" />
+            <span asp-validation-for="Contact" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="ApplyDate" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="ApplyDate" type="date" class="form-control" readonly />
+            <span asp-validation-for="ApplyDate" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="AccDpt" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <input asp-for="AccDpt" class="form-control" />
+            <input asp-for="AccDptNam" class="form-control" />
+            <span asp-validation-for="AccDpt" class="text-danger"></span>
+            <span asp-validation-for="AccDptNam" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="ContractNo" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="ContractNo" class="form-control" />
+            <span asp-validation-for="ContractNo" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="WartyMon" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="WartyMon" class="form-control" />
+            <span asp-validation-for="WartyMon" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="WartyNt" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="WartyNt" class="form-control" />
+            <span asp-validation-for="WartyNt" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="AcceptDate" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="AcceptDate" type="date" class="form-control" />
+            <span asp-validation-for="AcceptDate" class="text-danger"></span>
+        </div>
+        <div class="editor-label">
+            <label asp-for="BudgetId" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="BudgetId" class="form-control" />
+            <span asp-validation-for="BudgetId" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="PurchaseNo" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="PurchaseNo" class="form-control" />
+            <span asp-validation-for="PurchaseNo" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="CrlItemNo" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="CrlItemNo" class="form-control" />
+            <span asp-validation-for="CrlItemNo" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="DelivDateR" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="DelivDateR" type="date" class="form-control" />
+            <span asp-validation-for="DelivDateR" class="text-danger"></span>
+        </div>
+
+        <div class="display-label">
+            <label asp-for="EngId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="EngId" asp-items="@ViewData["ENG"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="EngId" class="text-danger"></span>
+        </div>
+
+        <div class="display-label">
+            <label asp-for="PurchaserId" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <div class="form-inline">
+                <input type="text" placeholder="輸入關鍵字查詢" class="form-control" id="PurchaserKeyName" />
+                <button type="button" class="btn btn-default" id="btnQtyPurchaser">查詢</button>
+                <select asp-for="PurchaserId" asp-items="@ViewData["PUR"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="PurchaserId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="editor-label">
+            <label class="control-title">得標廠商</label>
+        </div>
+        <div class="editor-field">
+            @Html.HiddenFor(model => model.VendorId)
+            <div class="form-inline">
+                <input asp-for="VendorNam" class="form-control" />
+                <input type="button" value="選擇" class="btn btn-default" data-toggle="modal" data-target="#modalVENDOR" />
+                <span asp-validation-for="VendorNam" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="display-label">
+            <label asp-for="DelivPson" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <div class="form-inline">
+                <input type="text" placeholder="輸入關鍵字查詢" class="form-control" id="DelivPsonKeyName" />
+                <button type="button" class="btn btn-default" id="btnQtyDelivPson">查詢</button>
+                <select asp-for="DelivPson" asp-items="@ViewData["Item2"] as SelectList" class="form-control" required>
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="DelivPson" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="display-label">
+            <label class="control-title">使用單位人員</label>
+        </div>
+        <div class="editor-field">
+            <div class="form-inline">
+                <input type="text" placeholder="輸入關鍵字查詢" class="form-control" id="UserDptKeyName" />
+                <button type="button" class="btn btn-default" id="btnQtyUserDpt">查詢</button>
+                <select asp-for="UserDpt" asp-items="@ViewData["Users"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="UserDpt" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Memo" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <textarea asp-for="Memo" class="form-control" rows="3"></textarea>
+            <span asp-validation-for="Memo" class="text-danger"></span>
+        </div>
+
+        @*<div class="editor-label">
+            <label class="control-title">儀器列表</label>
+        </div>
+        <div style="padding-left: 20px; color: whitesmoke">
+            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = false })
+        </div>*@
+
+        <div style="padding-top: 20px;">
+            <input class="btn btn-primary" id="btnSEND" type="submit" value="確定送出" />
+        </div>
+    </fieldset>
+}
+
+<div style="padding-top:20px;">
+    <a asp-action="Index" asp-controller="Home" asp-area="" style="color:deepskyblue">回到列表</a>
+</div>
+
+<!-- 廠商 Modal -->
+<div id="modalVENDOR" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1D3C4C">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="color:#fff">&times;</button>
+                <h4 class="modal-title">選擇廠商</h4>
+            </div>
+            <div id="pnlSELECTVENDOR" class="modal-body">
+                @await Component.InvokeAsync("BMEDQryVendor")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(function () {
+            var url = '@Url.Action("", "AppUser", new { Area = "" })';
+            /* Prevent submit for pressing Enter. */
+            $('input').keypress(function (e) {
+                code = e.keyCode ? e.keyCode : e.which; // in case of browser compatibility
+                if (code == 13) {
+                    e.preventDefault();
+                    // do something
+                    /* also can use return false; instead. */
+                }
+            });
+
+            $("#btnQtyPurchaser").click(function () {
+                var keynam = $("#PurchaserKeyName").val();
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    url: url + '/GetUsersByKeyname',
+                    type: "GET",
+                    data: { keyname: keynam },
+                    dataType: "json",
+                    success: function (data) {
+                        var jsdata = JSON.parse(data);
+                        var appenddata;
+                        appenddata += "<option value = ''>請選擇</option>";
+                        $.each(jsdata, function (key, value) {
+                            appenddata += "<option value = '" + value.uid + "'>" + value.uname + " </option>";
+                        });
+                        $('#PurchaserId').html(appenddata);
+                    },
+                    error: function (msg) {
+                        alert(msg);
+                    }
+                });
+            });
+
+            $("#btnQtyDelivPson").click(function () {
+                var keynam = $("#DelivPsonKeyName").val();
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    url: url + '/GetUsersByKeyname',
+                    type: "GET",
+                    data: { keyname: keynam },
+                    dataType: "json",
+                    success: function (data) {
+                        var jsdata = JSON.parse(data);
+                        var appenddata;
+                        appenddata += "<option value = ''>請選擇</option>";
+                        $.each(jsdata, function (key, value) {
+                            appenddata += "<option value = '" + value.uid + "'>" + value.uname + " </option>";
+                        });
+                        $('#DelivPson').html(appenddata);
+                    },
+                    error: function (msg) {
+                        alert(msg);
+                    }
+                });
+            });
+
+            $("#btnQtyUserDpt").click(function () {
+                var keynam = $("#UserDptKeyName").val();
+                $.ajax({
+                    contentType: "application/json; charset=utf-8",
+                    url: url + '/GetUsersByKeyname',
+                    type: "GET",
+                    data: { keyname: keynam },
+                    dataType: "json",
+                    success: function (data) {
+                        var jsdata = JSON.parse(data);
+                        var appenddata;
+                        appenddata += "<option value = ''>請選擇</option>";
+                        $.each(jsdata, function (key, value) {
+                            appenddata += "<option value = '" + value.uid + "'>" + value.uname + " </option>";
+                        });
+                        $('#UserDpt').html(appenddata);
+                    },
+                    error: function (msg) {
+                        alert(msg);
+                    }
+                });
+            });
+
+            $("#modalVENDOR").on("hidden.bs.modal", function () {
+                var vendorName = $("#Vno option:selected").text();
+                var vendorId = $("#Vno option:selected").val();
+
+                /* includes is not support in IE, so need to use indexOf. */
+                if ($("#Vno option:selected").text() == "請選擇" || $("#Vno option:selected").text() == "查無廠商" ||
+                    $("#Vno option:selected").text().indexOf("請選擇廠商") != -1) {
+                    $("#VendorNam").val("");
+                    $("#VendorId").val("");
+                }
+                else {
+                    $("#VendorNam").val(vendorName);
+                    $("#VendorId").val(vendorId);
+                }
+            });
+
+        });
+    </script>
+}

@@ -1,0 +1,108 @@
+﻿@using EDIS.Models.Identity
+
+@inject CustomUserManager UserManager
+@{ 
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+}
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('.DelivCombobox').combobox();
+    });
+</script>
+
+<h3>驗收案查詢 - 全院</h3>
+<h4>醫療儀器</h4>
+
+<form asp-controller="Search" asp-action="GetDelivQryList" asp-area="BMED" data-ajax="true"
+      data-ajax-update="#pnlDELIVERYLIST" data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'查詢中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()">
+
+    <div class="container">
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyDOCID" class="control-title">表單編號</label>
+                    @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyPURCHASENO" class="control-title">採購案號</label>
+                    @Html.TextBox("qtyPURCHASENO", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyASSETNO" class="control-title">財產編號</label>
+                    @Html.TextBox("qtyASSETNO", "", new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyASSETNAME" class="control-title">儀器名稱<br />(關鍵字)</label>
+                    @Html.TextBox("qtyASSETNAME", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyVENDOR" class="control-title">廠商<br />(關鍵字)</label>
+                    @Html.TextBox("qtyVENDOR", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyACCDPT" class="control-title">成本中心</label>
+                    @Html.DropDownList("qtyACCDPT", ViewData["ACCDPT"] as SelectList, "請選擇", new { @class = "form-control DelivCombobox" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyBUDGETID" class="control-title">預算編號</label>
+                    @Html.TextBox("qtyBUDGETID", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyCONTRACTNO" class="control-title">合約號碼</label>
+                    @Html.TextBox("qtyCONTRACTNO", "", new { @class = "form-control" })
+                </div>
+                <div class="form-group">
+                    <label for="qtyDPTID" class="control-title">申請部門</label>
+                    @Html.DropDownList("qtyDPTID", ViewData["APPLYDPT"] as SelectList, "請選擇", new { @class = "form-control DelivCombobox" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyFLOWTYP" class="control-title">流程狀態</label>
+                    <select name="qtyFLOWTYP" asp-items="@ViewData["FLOWTYP"] as SelectList" class="form-control-s">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <div style="margin-left:115px">
+                        <input id="btnQTY" type="submit" value="查詢" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+
+<div id="pnlDELIVERYLIST" style="margin: 20px 0">
+
+</div>

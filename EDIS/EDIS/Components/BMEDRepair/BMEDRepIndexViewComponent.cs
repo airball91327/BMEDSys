@@ -1,5 +1,6 @@
 ﻿using EDIS.Areas.BMED.Data;
 using EDIS.Areas.BMED.Models.RepairModels;
+using EDIS.Models.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -12,10 +13,13 @@ namespace EDIS.Components.BMEDRepair
     public class BMEDRepIndexViewComponent : ViewComponent
     {
         private readonly BMEDDbContext _context;
+        private readonly CustomRoleManager roleManager;
 
-        public BMEDRepIndexViewComponent(BMEDDbContext context)
+        public BMEDRepIndexViewComponent(BMEDDbContext context,
+                                         CustomRoleManager customRoleManager)
         {
             _context = context;
+            roleManager = customRoleManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
@@ -66,6 +70,23 @@ namespace EDIS.Components.BMEDRepair
             listItem4.Add(new SelectListItem { Text = "完工日", Value = "完工日" });
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["BMEDDateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
+
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
 
             QryRepListData data = new QryRepListData();
 

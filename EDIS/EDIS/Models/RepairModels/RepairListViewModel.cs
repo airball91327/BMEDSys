@@ -46,6 +46,8 @@ namespace EDIS.Models.RepairModels
         public int? Days { get; set; }
         public string Flg { get; set; }
         public int FlowUid { get; set; }
+        [Display(Name = "關卡人員")]
+        public string FlowUidName { get; set; }
         public string FlowCls { get; set; }
         public string FlowDptId { get; set; }
         [Display(Name = "申請日期")]
@@ -59,6 +61,9 @@ namespace EDIS.Models.RepairModels
         public DateTime? CloseDate { get; set; }
         [Display(Name = "[有][無]費用")]
         public string IsCharged { get; set; }
+        [Display(Name = "到件日期")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}")]
+        public DateTime? ArriveDate { get; set; }
         public RepairModel repdata { get; set; }
     }
 }

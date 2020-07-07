@@ -1,0 +1,104 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.RpKpHistoryVModel>
+@{
+    Layout = null;
+}
+
+<p>
+    <a class="btn btn-default" href="@Url.Action("ExcelRpKpHistory", TempData["qry"])">匯出Excel</a>
+</p>
+<div>
+    @await Component.InvokeAsync("AssetView", new { id = ViewData["Ano"] })
+</div>
+<div>
+    <h4>維修保養履歷</h4>
+</div>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.DocType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DocId)
+        </th>
+        @*<th>
+                @Html.DisplayNameFor(model => model.AssetNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AssetName)
+            </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.ApplyDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EngName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hours)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Cost)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TroubleDes)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DealDes)
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DocType)
+            </td>
+            <td>
+                @if (item.DocType == "請修")
+                {
+                    @Html.ActionLink(item.DocId, "Views", "Repairs", new { id = item.DocId }, new { target = "_blank" })
+                }
+                else
+                {
+                    @Html.ActionLink(item.DocId, "Views", "Keeps", new { id = item.DocId }, new { target = "_blank" })
+                }
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.AssetNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AssetName)
+                </td>*@
+            <td>
+                @item.ApplyDate.ToString("yyyy/MM/dd")
+            </td>
+            <td>
+                @if (@item.EndDate != null)
+                {
+                    @item.EndDate.Value.ToString("yyyy/MM/dd");
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EngName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Hours)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TroubleDes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DealDes)
+            </td>
+        </tr>
+    }
+
+</table>
+<div>
+    @await Html.PartialAsync("AssetAnalysis", ViewData["Analysis"] as EDIS.Areas.BMED.Models.AssetAnalysis)
+</div>

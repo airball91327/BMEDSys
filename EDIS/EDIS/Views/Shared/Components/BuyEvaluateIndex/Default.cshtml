@@ -1,0 +1,99 @@
+﻿
+@using EDIS.Models.Identity
+@inject CustomUserManager UserManager
+
+<style>
+    /* Style the scale of radio. */
+    input[type=radio] {
+        -ms-transform: scale(1.5); /* IE */
+        -moz-transform: scale(1.5); /* FireFox */
+        -webkit-transform: scale(1.5); /* Safari and Chrome */
+        -o-transform: scale(1.5); /* Opera */
+    }
+    /* Style the scale of checkbox. */
+    input[type=checkbox] {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FireFox */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
+    }
+</style>
+
+<form asp-action="BuyEvaluateIndex" asp-controller="BuyEvaluate" asp-area="BMED" data-ajax="true"
+      data-ajax-update="#pnlEVALUATELIST" data-ajax-method="POST" id="BuyEvaluateIndex"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'查詢中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()">
+
+    <h4>查詢條件 - 個人案件</h4>
+
+    <div class="container">
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyDOCID" class="control-title">表單編號</label>
+                    <input name="qtyDOCID" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="qtyBUDGETID" class="control-title">預算編號</label>
+                    <input name="qtyBUDGETID" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="qtyDPTID" class="control-title">申請部門</label>
+                    <select name="qtyDPTID" asp-items="@ViewData["ApplyDpt"] as SelectList" class="form-control BMEDcombobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyCNAME" class="control-title">設備名稱<br />(關鍵字)</label>
+                    <input name="qtyCNAME" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="BqtyFLOWTYPE" class="control-title">流程狀態</label>
+                    <select name="BqtyFLOWTYPE" asp-items="@ViewData["Item"] as SelectList" class="form-control"></select>
+                </div>
+                <div class="form-group">
+                    <label for="BMEDqtyFLOWTYPE" class="control-title">規格已確定</label>
+                    @Html.CheckBox("qtySTANDARD")
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="qtyAGREEDATE1" class="control-title">規格日期查詢</label>
+                    <input type="date" name="qtyAGREEDATE1" class="form-control" />
+                    <span> ~ </span>
+                    <input type="date" name="qtyAGREEDATE2" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group col-md-offset-1 col-md-1">
+                    <div>
+                        <input id="btnQTY" type="submit" value="查詢" class="btn btn-default btn-group-justified" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    @*<div>
+                        <input type="button" class="btn btn-primary" id="BMEDexportExcelBtn" value="匯出Excel" />
+                    </div>*@
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<div id="pnlEVALUATELIST" style="margin-top: 20px">
+    @*@Html.Action("BuyEvaluateList", "BuyEvaluate")*@
+</div>

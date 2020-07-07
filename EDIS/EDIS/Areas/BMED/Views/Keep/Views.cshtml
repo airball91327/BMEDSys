@@ -24,34 +24,29 @@
     @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "2", viewType = "Views" })
 </div>
 
+<div>
+    @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
+</div>
+
 <ul class="nav nav-pills" style="font-size:120%">
-    <li role="presentation" class="active"><a href="#keep" data-toggle="tab" style="padding-left:20px">申請資料</a></li>
-    <li role="presentation"><a href="#keepdtl" data-toggle="tab" style="padding-left:20px">保養紀錄</a></li>
+    <li role="presentation" class="active"><a href="#keepdtl" data-toggle="tab" style="padding-left:20px">保養紀錄與工時</a></li>
     <li role="presentation"><a href="#keeprecord" data-toggle="tab" style="padding-left:20px">保養項目登錄</a></li>
-    <li role="presentation"><a href="#keepemp" data-toggle="tab" style="padding-left:20px">工程師工時</a></li>
     <li role="presentation"><a href="#keepcost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
     <li role="presentation"><a href="#flowlist" data-toggle="tab" style="padding-left:20px">流程紀錄</a></li>
 </ul>
 <hr />
 <div class="tab-content">
-    <div id="keep" class="tab-pane fade in active">
-        <div>
-            @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
-        </div>
-    </div>
-    <div id="keepdtl" class="tab-pane fade">
+    <div id="keepdtl" class="tab-pane fade in active">
         <p>
             @await Component.InvokeAsync("BMEDKeepDtlDetail", new { id = Model.DocId })
+        </p>
+        <p>
+            @await Component.InvokeAsync("BMEDKeepEmpList", new { id = Model.DocId, viewType = "Views" })
         </p>
     </div>
     <div id="keeprecord" class="tab-pane fade">
         <p>
             @await Component.InvokeAsync("BMEDKeepRecordDetail", new { id = Model.DocId })
-        </p>
-    </div>
-    <div id="keepemp" class="tab-pane fade">
-        <p>
-            @await Component.InvokeAsync("BMEDKeepEmpList", new { id = Model.DocId, viewType = "Views" })
         </p>
     </div>
     <div id="keepcost" class="tab-pane fade">

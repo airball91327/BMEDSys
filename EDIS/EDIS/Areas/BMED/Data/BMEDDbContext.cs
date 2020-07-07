@@ -7,7 +7,9 @@ using Microsoft.EntityFrameworkCore;
 using EDIS.Areas.BMED.Models;
 using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Areas.BMED.Models.KeepModels;
+using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Models.Identity;
+using EDIS.Areas.BMED.Models.BuyEvaluateModels;
 
 namespace EDIS.Areas.BMED.Data
 {
@@ -54,6 +56,18 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<DeviceClassCode> BMEDDeviceClassCodes { get; set; }
         public DbSet<ExceptDeviceModel> ExceptDevice { get; set; }
 
+        public DbSet<DeliveryModel> Deliveries { get; set; }
+        public DbSet<DelivFlowModel> DelivFlows { get; set; }
+        public DbSet<DelivCodeModel> DelivCodes { get; set; }
+        public DbSet<AssetFileModel> AssetFiles { get; set; }
+        public DbSet<NeedFileModel> NeedFiles { get; set; }
+        public DbSet<BudgetModel> Budgets { get; set; }
+        public DbSet<BuyEvaluateModel> BuyEvaluates { get; set; }
+        public DbSet<BuyFlowModel> BuyFlows { get; set; }
+        public DbSet<BuySFlowModel> BuySFlows { get; set; }
+        public DbSet<BuyVendorModel> BuyVendors { get; set; }
+        public DbQuery<UnSignListVModel> UnSignListVModelQuery { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -90,6 +104,17 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<AssetKeepModel>().HasKey(c => new { c.AssetNo });
             builder.Entity<DeviceClassCode>().HasKey(c => new { c.M_code });
             builder.Entity<ExceptDeviceModel>().HasKey(c => new { c.AssetNo });
+
+            builder.Entity<DeliveryModel>().HasKey(c => new { c.DocId });
+            builder.Entity<DelivFlowModel>().HasKey(c => new { c.DocId, c.StepId });
+            builder.Entity<DelivCodeModel>().HasKey(c => new { c.Code });
+            builder.Entity<AssetFileModel>().HasKey(c => new { c.AssetNo, c.SeqNo, c.Fid });
+            builder.Entity<NeedFileModel>().HasKey(c => new { c.SeqNo });
+            builder.Entity<BudgetModel>().HasKey(c => new { c.DocId });
+            builder.Entity<BuyEvaluateModel>().HasKey(c => new { c.DocId });
+            builder.Entity<BuyFlowModel>().HasKey(c => new { c.DocId, c.StepId });
+            builder.Entity<BuySFlowModel>().HasKey(c => new { c.DocId, c.StepId, c.DocSid });
+            builder.Entity<BuyVendorModel>().HasKey(c => new { c.DocId, c.VendorNo });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

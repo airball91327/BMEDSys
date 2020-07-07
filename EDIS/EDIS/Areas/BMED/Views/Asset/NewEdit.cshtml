@@ -1,0 +1,230 @@
+﻿@model EDIS.Areas.BMED.Models.RepairModels.AssetModel
+
+@{
+    Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
+}
+
+<div id="body">
+    <section class="content-wrapper main-content clear-fix">
+        <form asp-action="NewEdit" asp-controller="Asset" asp-area="BMED" data-ajax="true"
+              method="post" enctype="multipart/form-data" id="filepost"
+              data-ajax-success="OnSuccess"
+              data-ajax-failure="OnFailure">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <table>
+                <tr>
+                    @Html.HiddenFor(model => model.AssetNo)
+                    <td>
+                        <div class="editor-label">
+                            <label asp-for="Cname" class="control-title"></label>
+                        </div>
+                        <div class="editor-field">
+                            <input asp-for="Cname" class="form-control" />
+                            <span asp-validation-for="Cname" class="text-danger"></span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div class="editor-label">
+                <label asp-for="Ename" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Ename" class="form-control" />
+                <span asp-validation-for="Ename" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="AssetClass" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                @Html.RadioButton("AssetClass", "醫療儀器")醫療儀器
+                @Html.RadioButton("AssetClass", "工程設施")工程設施
+                <span asp-validation-for="AssetClass" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(model => model.AccDate)
+
+            <div class="editor-label">
+                <label asp-for="RelDate" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="RelDate" class="form-control" />
+                <span asp-validation-for="RelDate" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Brand" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Brand" class="form-control" />
+                <span asp-validation-for="Brand" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Type" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Type" class="form-control" />
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(model => model.VendorId)
+            @Html.HiddenFor(model => model.DisposeKind)
+
+            <div class="editor-label">
+                <label asp-for="DelivDpt" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="DelivDpt" asp-items="@ViewData["DelivDpts"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="DelivDpt" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="DelivEmp" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="DelivUid" asp-items="@ViewData["DelivUids"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="DelivUid" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="LeaveSite" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="LeaveSite" class="form-control" />
+                <span asp-validation-for="LeaveSite" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="AccDpt" class="control-title"></label>
+            </div>
+            <div class="editor-field form-inline">
+                <select asp-for="AccDpt" asp-items="@ViewData["AccDpts"] as SelectList" class="form-control">
+                    <option disabled selected>請選擇</option>
+                </select>
+                <span asp-validation-for="AccDpt" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Cost" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Cost" class="form-control" />
+                <span asp-validation-for="Cost" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="RiskLvl" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                @Html.RadioButtonFor(model => model.RiskLvl, "1")I
+                @Html.RadioButtonFor(model => model.RiskLvl, "2")II
+                @Html.RadioButtonFor(model => model.RiskLvl, "3")III
+                @Html.RadioButtonFor(model => model.RiskLvl, "0")無
+                <span asp-validation-for="RiskLvl" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="IpAddr" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="IpAddr" class="form-control" />
+                <span asp-validation-for="IpAddr" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="MacAddr" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="MacAddr" class="form-control" />
+                <span asp-validation-for="MacAddr" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="MakeNo" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="MakeNo" class="form-control" />
+                <span asp-validation-for="MakeNo" class="text-danger"></span>
+            </div>
+
+            <div class="editor-label">
+                <label asp-for="Note" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Note" class="form-control" />
+                <span asp-validation-for="Note" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(model => model.KeepYm)
+
+            <div class="editor-label">
+                <label asp-for="Cycle" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="Cycle" class="form-control" />
+                <span asp-validation-for="Cycle" class="text-danger"></span>
+            </div>
+            @Html.HiddenFor(model => model.Docid)
+
+            <div style="padding-top:7px;">
+                <input class="btn btn-primary" type="submit" value="確定送出" />
+            </div>
+
+        </form>
+    </section>
+</div>
+<div id="pnlASSETLIST"></div>
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        var url = '@Url.Action("GetUsersInDpt", "AppUser", new { Area = "" })';
+        $("#DelivDpt").change(function () {
+            var s = $(this).val();
+            $.ajax({
+                contentType: "application/json; charset=utf-8",
+                url: url,
+                type: "GET",
+                data: "id=" + s,
+                dataType: "json",
+                success: function (data) {
+                    var jsdata = JSON.parse(data);
+                    var appenddata;
+                    appenddata += "<option value = ''>請選擇</option>";
+                    $.each(jsdata, function (key, value) {
+                        appenddata += "<option value = '" + value.uid + " '>" + value.uname + " </option>";
+                    });
+                    $('#DelivUid').html(appenddata);
+                },
+                error: function (msg) {
+                    alert(msg);
+                }
+            });
+        });
+    });
+
+    $(window).on('beforeunload', function () {
+        var s = $("#Docid").val();
+        var v = "<img src='../../images/opc-ajax-loader.gif' id='imgLOADING' />";
+        window.opener.$("#gvASSETLIST").html(v)
+            .load(encodeURI('../../Asset/BuyEvaluateListItem?id=' + s + '&upload=' + '得標廠商'));
+        return '確定要離開此頁面嗎?';
+    });
+
+    function OnSuccess(data) {
+        if (data == "success") {
+            alert('儲存成功');
+            window.opener.location.reload();
+            close();
+        }
+        else
+            alert(data);
+    }
+
+    function OnFailure(xhr, status) {
+        alert('Error: ' + xhr.statusText);
+    }
+</script>

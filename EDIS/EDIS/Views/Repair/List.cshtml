@@ -1,7 +1,11 @@
-﻿@model IEnumerable<EDIS.Models.RepairModels.RepairListVModel>
+﻿@model X.PagedList.IPagedList<EDIS.Models.RepairModels.RepairListVModel>
 @using System.Security.Claims
 @using Microsoft.AspNetCore.Identity
 @using EDIS.Models.Identity
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Common;
+
+<link href="~/css/PagedList.css" rel="stylesheet" type="text/css" />
 
 @inject CustomUserManager UserManager
 @{
@@ -29,51 +33,70 @@
     td a {
         color: deepskyblue;
     }
+    .printLink:visited {
+        color: mediumpurple;
+    }
+    .table-striped > tbody > tr:nth-child(2n+1) > td,
+    .table-striped > tbody > tr:nth-child(2n+1) > th {
+        background-color: #337ab7;
+    }
 </style>
 @if (Model.Count() <= 0)
 {
-    <p class="text-danger">無任何資料!</p>
-
+    if (ViewData["IsDocDeleted"] != null)
+    {
+        <p class="text-danger">此案件已廢除!</p>
+    }
+    else
+    {
+        <p class="text-danger">無任何資料!</p>
+    }
 }
 else
 {
     if (countUserDoc > 0)
     {
         <h4>您應簽核案件</h4>
-        <table class="table">
+        <table class="table table-striped">
             <tr>
                 <th></th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RepType)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RepType)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DocId)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DocId)
                     <br />
-                    @Html.DisplayNameFor(model => model.ApplyDate)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ApplyDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AccDptName)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AccDptName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AssetName)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AssetName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PlaceLoc)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().PlaceLoc)
                 </th>
                 <th style="width: 300px;">
-                    @Html.DisplayNameFor(model => model.TroubleDes)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TroubleDes)
                     <br />
-                    @Html.DisplayNameFor(model => model.DealDes)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DealDes)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DealState)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DealState)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Cost)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Cost)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Days)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Days)
                 </th>
+                @if (UserManager.IsInRole(User, "RepEngineer") == true)
+                {
+                    <th>
+                        @Html.DisplayNameFor(model => model.FirstOrDefault().ArriveDate)
+                    </th>
+                }
             </tr>
             @foreach (var item in Model)
             {
@@ -121,7 +144,7 @@ else
                                 @Html.ActionLink("預覽", "Views", "Repair", new { Area = "", id = item.DocId })
                                 @Html.Raw(" |")
                             }
-                            @Html.ActionLink("列印", "PrintRepairDoc", "Repair", new { Area = "", DocId = item.DocId }, new { target = "_blank" })
+                            @Html.ActionLink("列印", "PrintRepairDoc", "Repair", new { Area = "", DocId = item.DocId }, new { target = "_blank", @class = "printLink"})
                             @* /* 該單的申請人 */ *@
                             @if (item.Flg == "?" && item.FlowUid == UserManager.GetCurrentUserId(User) && item.FlowCls == "申請人")
                             {
@@ -165,7 +188,7 @@ else
                             <br />
                             @Html.DisplayFor(modelItem => item.Location2)
                         </td>
-                        <td>
+                        <td style="max-width:450px; word-wrap: break-word;">
                             @Html.DisplayFor(modelItem => item.TroubleDes)
                             <br />
                             @Html.DisplayFor(modelItem => item.DealDes)
@@ -182,6 +205,12 @@ else
                                 @Html.DisplayFor(modelItem => item.Days)
                             }
                         </td>
+                        <td>
+                            @if (item.Flg == "?" && UserManager.IsInRole(User, "RepEngineer") == true)
+                            {
+                                @Html.DisplayFor(modelItem => item.ArriveDate)
+                            }
+                        </td>
                     </tr>
                 }
             }
@@ -195,35 +224,35 @@ else
             <tr>
                 <th></th>
                 <th>
-                    @Html.DisplayNameFor(model => model.RepType)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RepType)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DocId)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DocId)
                     <br />
-                    @Html.DisplayNameFor(model => model.ApplyDate)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ApplyDate)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AccDptName)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AccDptName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.AssetName)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().AssetName)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.PlaceLoc)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().PlaceLoc)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.TroubleDes)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TroubleDes)
                     <br />
-                    @Html.DisplayNameFor(model => model.DealState)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DealState)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.DealDes)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().DealDes)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Cost)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Cost)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.Days)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Days)
                 </th>
             </tr>
             @foreach (var item in Model)
@@ -236,7 +265,7 @@ else
                         <td width="100px">
                             @Html.ActionLink("結案", "Edit", "Repair", new { Area = "", id = item.DocId, page = 5 }, new { target = "_blank" })
                             @Html.Raw(" |")
-                            @Html.ActionLink("列印", "PrintRepairDoc", "Repair", new { Area = "", DocId = item.DocId }, new { target = "_blank" })
+                            @Html.ActionLink("列印", "PrintRepairDoc", "Repair", new { Area = "", DocId = item.DocId }, new { target = "_blank", @class = "printLink" })
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => item.RepType)
@@ -262,7 +291,7 @@ else
                         <td>
                             @Html.DisplayFor(modelItem => item.PlaceLoc)
                         </td>
-                        <td>
+                        <td style="max-width:450px; word-wrap: break-word;">
                             @Html.DisplayFor(modelItem => item.TroubleDes)
                             <br />
                             @Html.DisplayFor(modelItem => item.DealDes)
@@ -286,3 +315,34 @@ else
     }
 
 }
+
+<script>
+    $(function () {
+        var s = $('#repSearchForm').serialize();
+        $('#pnlREPLIST .pagination li a').each(function (i, item) {
+            var hyperLinkUrl = $(item).attr('href') + "&" + s;
+            $(this).attr('href', hyperLinkUrl);
+        });
+    });
+    function beginLoading() {
+        $.Toast.showToast({
+            'title': '作業進行中，請稍待...',
+            'icon': 'loading',
+            'duration': 0
+        })
+    }
+    function stopLoading() {
+        $.Toast.hideToast();
+    }
+</script>
+
+<div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", "Repair", new { page }),
+        PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions
+        {
+            HttpMethod = "POST",
+            UpdateTargetId = "pnlREPLIST",
+            OnBegin = "beginLoading",
+            OnComplete = "stopLoading"
+        }))
+</div>

@@ -57,6 +57,10 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public DateTime? CloseDate { get; set; }
         [Display(Name = "[有][無]費用")]
         public string IsCharged { get; set; }
+        [Display(Name = "CheckBox選取")]
+        public Boolean IsSelected { get; set; }
         public RepairModel repdata { get; set; }
+        public int? ExFlowUid { get; set; }
+        public string ExFlowCls { get; set; }
     }
 }

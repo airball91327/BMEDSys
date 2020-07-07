@@ -57,11 +57,22 @@ namespace EDIS.Areas.BMED.Components.KeepDtl
             KeepDtlModel keepDtl = _context.BMEDKeepDtls.Find(id);
             KeepFlowModel kf = _context.BMEDKeepFlows.Where(f => f.DocId == id)
                                                      .Where(f => f.Status == "?").FirstOrDefault();
-            if (kf.Cls.Contains("工程師") && kf.UserId == ur.Id)
+
+            /* Get CheckerName from Repair table. */
+            var checkerId = _context.BMEDKeeps.Find(id).CheckerId;
+            keepDtl.CheckerName = checkerId == 0 ? "" : _context.AppUsers.Find(checkerId).FullName;
+
+            var isEngineer = _context.UsersInRoles.Where(u => u.AppRoles.RoleName == "MedEngineer" &&
+                                                              u.UserId == ur.Id).FirstOrDefault();
+            if (kf.Cls.Contains("工程師") && kf.UserId == ur.Id)  /* 流程 => 工程師，Login User => 負責之工程師 */
             {
                 return View(keepDtl);
             }
-            else
+            else if (kf.Cls.Contains("工程師") && isEngineer != null)  /* 流程 => 工程師，Login User => 非負責之工程師 */
+            {
+                return View(keepDtl);
+            }
+            else  /* 流程 => 其他 */
             {
                 switch (keepDtl.InOut)
                 {

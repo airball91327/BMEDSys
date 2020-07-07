@@ -88,12 +88,15 @@ $(function () {
             $("#pnlACCDATE").show();
             $("#CVendor").show();
             $("#pnlTICKET").show();
+            $("#pnlPETTY").show();
             $('label[for="AccountDate"]').text("發票日期");
         }
         else if (item === "3") {        // 點選"簽單"
             $('#btnQtyStock').hide();
             $("#TicketDtl_TicketDtlNo").val('');
             $("#pnlTICKET").hide();
+            $("#pnlPETTY").hide();
+            $('#IsPettyN').prop("checked", true);
             $("#pnlACCDATE").show();
             $("#pnlSIGN").show();
             $('label[for="AccountDate"]').text("簽單日期");
@@ -106,6 +109,8 @@ $(function () {
             $('#Price').attr('readonly', true);
             $("#CVendor").hide();
             $("#pnlTICKET").hide();
+            $("#pnlPETTY").hide();
+            $('#IsPettyN').prop("checked", true);
             $("#pnlSIGN").hide();
             $("#pnlACCDATE").hide();
         }
@@ -143,7 +148,18 @@ $(function () {
 
     $("#modalVENDOR").on("hidden.bs.modal", function () {
         var vendorName = $("#Vno option:selected").text();
-        $("#VendorName").val(vendorName);
+        var vendorId = $("#Vno option:selected").val();
+
+        /* includes is not support in IE, so need to use indexOf. */
+        if ($("#Vno option:selected").text() == "請選擇" || $("#Vno option:selected").text() == "查無廠商" ||
+            $("#Vno option:selected").text().indexOf("請選擇廠商") != -1) {
+            $("#VendorName").val("");
+            $("#VendorId").val("");
+        }
+        else {
+            $("#VendorName").val(vendorName);
+            $("#VendorId").val(vendorId);
+        }
     });
 
     /* Default settings.*/

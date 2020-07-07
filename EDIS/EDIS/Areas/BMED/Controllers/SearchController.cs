@@ -8,6 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EDIS.Models.Identity;
+using Microsoft.EntityFrameworkCore;
+using EDIS.Areas.BMED.Models.DeliveryModels;
+using Microsoft.AspNetCore.Http;
+using EDIS.Repositories;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -16,12 +21,25 @@ namespace EDIS.Areas.BMED.Controllers
     public class SearchController : Controller
     {
         private readonly BMEDDbContext _context;
+        private readonly IRepository<AppUserModel, int> _userRepo;
+        private readonly CustomUserManager userManager;
+        private readonly CustomRoleManager roleManager;
 
-        public SearchController(BMEDDbContext context)
+        public SearchController(BMEDDbContext context,
+                                IRepository<AppUserModel, int> userRepo,
+                                CustomUserManager customUserManager,
+                                CustomRoleManager customRoleManager)
         {
             _context = context;
+            _userRepo = userRepo;
+            userManager = customUserManager;
+            roleManager = customRoleManager;
         }
 
+        /// <summary>
+        /// The Index of searching all repair docs.
+        /// </summary>
+        /// <returns></returns>
         // GET: BMED/Search/RepIndex
         public IActionResult RepIndex()
         {
@@ -59,6 +77,12 @@ namespace EDIS.Areas.BMED.Controllers
             }
             ViewData["DealStatus"] = new SelectList(listItem2, "Value", "Text");
 
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["IsCharged"] = new SelectList(listItem3, "Value", "Text");
+
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
             listItem4.Add(new SelectListItem { Text = "申請日", Value = "申請日" });
@@ -66,11 +90,32 @@ namespace EDIS.Areas.BMED.Controllers
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["DateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
 
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
+
             QryRepListData data = new QryRepListData();
 
             return View(data);
         }
 
+        /// <summary>
+        /// The Index of searching all keep docs.
+        /// </summary>
+        /// <returns></returns>
         // GET: BMED/Search/KeepIndex
         public IActionResult KeepIndex()
         {
@@ -95,7 +140,7 @@ namespace EDIS.Areas.BMED.Controllers
             ViewData["ACCDPT"] = new SelectList(listItem, "Value", "Text");
             ViewData["APPLYDPT"] = new SelectList(listItem, "Value", "Text");
 
-            /* 處理狀態的下拉選單 */
+            /* 處理保養狀態的下拉選單 */
             var keepResults = _context.BMEDKeepResults.ToList();
             List<SelectListItem> listItem2 = new List<SelectListItem>();
             foreach (var item in keepResults)
@@ -108,6 +153,12 @@ namespace EDIS.Areas.BMED.Controllers
             }
             ViewData["KeepResults"] = new SelectList(listItem2, "Value", "Text");
 
+            /* 處理有無費用的下拉選單 */
+            List<SelectListItem> listItem3 = new List<SelectListItem>();
+            listItem3.Add(new SelectListItem { Text = "有", Value = "Y" });
+            listItem3.Add(new SelectListItem { Text = "無", Value = "N" });
+            ViewData["IsCharged"] = new SelectList(listItem3, "Value", "Text");
+
             /* 處理日期查詢的下拉選單 */
             List<SelectListItem> listItem4 = new List<SelectListItem>();
             listItem4.Add(new SelectListItem { Text = "送單日", Value = "送單日" });
@@ -115,11 +166,76 @@ namespace EDIS.Areas.BMED.Controllers
             listItem4.Add(new SelectListItem { Text = "結案日", Value = "結案日" });
             ViewData["DateType"] = new SelectList(listItem4, "Value", "Text", "申請日");
 
+            /* 處理工程師查詢的下拉選單 */
+            var engs = roleManager.GetUsersInRole("MedEngineer").ToList();
+            List<SelectListItem> listItem5 = new List<SelectListItem>();
+            foreach (string l in engs)
+            {
+                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                if (u != null)
+                {
+                    listItem5.Add(new SelectListItem
+                    {
+                        Text = u.FullName + "(" + u.UserName + ")",
+                        Value = u.Id.ToString()
+                    });
+                }
+            }
+            ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
+
             QryKeepListData data = new QryKeepListData();
 
             return View(data);
         }
 
+        /// <summary>
+        /// The Index of searching all delivery docs.
+        /// </summary>
+        /// <returns></returns>
+        // GET: BMED/Search/DelivIndex
+        public IActionResult DelivIndex()
+        {
+            //
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "所有", Value = "所有" });
+            listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
+            listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
+            ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "所有");
+            //
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            SelectListItem li;
+            _context.Departments.ToList()
+                .ForEach(d =>
+                {
+                    li = new SelectListItem();
+                    li.Text = d.Name_C;
+                    li.Value = d.DptId;
+                    listItem2.Add(li);
+
+                });
+            ViewData["ACCDPT"] = new SelectList(listItem2, "Value", "Text");
+            if (userManager.IsInRole(User, "Usual"))
+            {
+                //listItem2.Clear();
+                //AppUserModel u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                //if (u != null)
+                //{
+                //    li = new SelectListItem();
+                //    li.Text = _context.Departments.Find(u.DptId).Name_C;
+                //    li.Value = u.DptId;
+                //    listItem2.Add(li);
+                //}
+            }
+            ViewData["APPLYDPT"] = new SelectList(listItem2, "Value", "Text");
+
+            return View();
+        }
+
+        /// <summary>
+        /// Get the query result list of repair docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
         // POST: BMED/Search/GetRepQryList
         [HttpPost]
         public IActionResult GetRepQryList(QryRepListData qdata)
@@ -128,12 +244,16 @@ namespace EDIS.Areas.BMED.Controllers
             string ano = qdata.BMEDqtyASSETNO;
             string acc = qdata.BMEDqtyACCDPT;
             string aname = qdata.BMEDqtyASSETNAME;
+            string ftype = qdata.BMEDqtyFLOWTYPE;
             string dptid = qdata.BMEDqtyDPTID;
             string qtyDate1 = qdata.BMEDqtyApplyDateFrom;
             string qtyDate2 = qdata.BMEDqtyApplyDateTo;
-            string ftype = qdata.BMEDqtyFLOWTYPE;
+            string qtyIsCharged = qdata.BMEDqtyIsCharged;
             string qtyDealStatus = qdata.BMEDqtyDealStatus;
             string qtyDateType = qdata.BMEDqtyDateType;
+            string qtyEngCode = qdata.BMEDqtyEngCode;
+            string qtyTicketNo = qdata.BMEDqtyTicketNo;
+            string qtyVendor = qdata.BMEDqtyVendor;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -199,6 +319,29 @@ namespace EDIS.Areas.BMED.Controllers
                 rps = rps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname)).ToList();
             }
+            if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => rc.VendorName.Contains(qtyVendor))
+                                                           .Select(rc => rc.DocId).Distinct();
+                rps = (from r in rps
+                       where resultDocIds.Any(val => r.DocId.Contains(val))
+                       select r).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyEngCode))     //負責工程師
+            {
+                rps = rps.Where(v => v.EngId == Convert.ToInt32(qtyEngCode)).ToList();
+            }
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false)  //申請日
             {
                 if (qtyDateType == "申請日")
@@ -228,6 +371,10 @@ namespace EDIS.Areas.BMED.Controllers
             if (!string.IsNullOrEmpty(qtyDealStatus))   //處理狀態
             {
                 repairDtls = repairDtls.Where(r => r.DealState == Convert.ToInt32(qtyDealStatus)).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyIsCharged))    //有無費用
+            {
+                repairDtls = repairDtls.Where(r => r.IsCharged == qtyIsCharged).ToList();
             }
 
             /* If no search result. */
@@ -279,6 +426,7 @@ namespace EDIS.Areas.BMED.Controllers
                     FlowUidName = _context.AppUsers.Find(j.flow.UserId).FullName,
                     EndDate = j.repdtl.EndDate,
                     CloseDate = j.repdtl.CloseDate,
+                    IsCharged = j.repdtl.IsCharged,
                     repdata = j.repair
                 }));
 
@@ -336,6 +484,11 @@ namespace EDIS.Areas.BMED.Controllers
             return View("RepQryList", rv);
         }
 
+        /// <summary>
+        /// Get the query result list of keep docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
         // POST: BMED/Search/GetKeepQryList
         [HttpPost]
         public IActionResult GetKeepQryList(QryKeepListData qdata)
@@ -348,8 +501,13 @@ namespace EDIS.Areas.BMED.Controllers
             string dptid = qdata.BMEDKqtyDPTID;
             string qtyDate1 = qdata.BMEDKqtyApplyDateFrom;
             string qtyDate2 = qdata.BMEDKqtyApplyDateTo;
+            string qtyKeepResult = qdata.BMEDKqtyKeepResult;
+            string qtyIsCharged = qdata.BMEDKqtyIsCharged;
             string qtyDateType = qdata.BMEDKqtyDateType;
             bool searchAllDoc = qdata.BMEDKqtySearchAllDoc;
+            string qtyEngCode = qdata.BMEDKqtyEngCode;
+            string qtyTicketNo = qdata.BMEDKqtyTicketNo;
+            string qtyVendor = qdata.BMEDKqtyVendor;
 
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
@@ -415,6 +573,29 @@ namespace EDIS.Areas.BMED.Controllers
                 kps = kps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
+            {
+                qtyTicketNo = qtyTicketNo.ToUpper();
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.TicketDtl.TicketDtlNo == qtyTicketNo)
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
+            {
+                var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => kc.VendorName.Contains(qtyVendor))
+                                                         .Select(kc => kc.DocId).Distinct();
+                kps = (from k in kps
+                       where resultDocIds.Any(val => k.DocId.Contains(val))
+                       select k).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyEngCode))     //負責工程師
+            {
+                kps = kps.Where(v => v.EngId == Convert.ToInt32(qtyEngCode)).ToList();
             }
             /* Search date by DateType.(ApplyDate) */
             if (string.IsNullOrEmpty(qtyDate1) == false || string.IsNullOrEmpty(qtyDate2) == false) //送單日
@@ -509,6 +690,7 @@ namespace EDIS.Areas.BMED.Controllers
                     SentDate = j.keep.SentDate,
                     EndDate = j.keepdtl.EndDate,
                     CloseDate = j.keepdtl.CloseDate,
+                    IsCharged = j.keepdtl.IsCharged,
                     keepdata = j.keep
                 }));
 
@@ -542,18 +724,192 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
 
-            /* Search dealStatus. */
-            //if (!string.IsNullOrEmpty(qtyDealStatus))
-            //{
-            //    rv = rv.Where(r => r.DealState == qtyDealStatus).ToList();
-            //}
+            /* Search KeepResults. */
+            if (!string.IsNullOrEmpty(qtyKeepResult))
+            {
+                kv = kv.Where(r => r.Result == _context.BMEDKeepResults.Find(Convert.ToInt32(qtyKeepResult)).Title).ToList();
+            }
             /* Search IsCharged. */
-            //if (!string.IsNullOrEmpty(qtyIsCharged))
-            //{
-            //    rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
-            //}
+            if (!string.IsNullOrEmpty(qtyIsCharged))
+            {
+                kv = kv.Where(r => r.IsCharged == qtyIsCharged).ToList();
+            }
 
             return View("KeepQryList", kv);
+        }
+
+        /// <summary>
+        /// Get the query result list of delivery docs.
+        /// </summary>
+        /// <param name="qdata"></param>
+        /// <returns></returns>
+        // POST: BMED/Search/GetDelivQryList
+        [HttpPost]
+        public IActionResult GetDelivQryList(IFormCollection form)
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            listItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
+            listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
+            listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
+            ViewData["FLOWTYP"] = new SelectList(listItem, "Value", "Text", "待處理");
+            //
+            List<DeliveryListVModel> vm;
+            vm = GetDeliveryList(form["qtyFLOWTYP"]);
+            if (!string.IsNullOrEmpty(form["qtyDOCID"]))
+            {
+                vm = vm.Where(m => m.DocId == form["qtyDOCID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyPURCHASENO"]))
+            {
+                vm = vm.Where(m => m.PurchaseNo == form["qtyPURCHASENO"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyDPTID"]))
+            {
+                vm = vm.Where(m => m.Company == form["qtyDPTID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyACCDPT"]))
+            {
+                vm = vm.Where(m => m.AccDpt == form["qtyACCDPT"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyBUDGETID"]))
+            {
+                vm = vm.Where(m => m.BudgetId == form["qtyBUDGETID"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyCONTRACTNO"]))
+            {
+                vm = vm.Where(m => m.ContractNo == form["qtyCONTRACTNO"]).ToList();
+            }
+            if (!string.IsNullOrEmpty(form["qtyASSETNO"]))
+            {
+                AssetModel at = _context.BMEDAssets.Find(form["qtyASSETNO"]);
+                if (at != null)
+                {
+                    vm = vm.Where(m => m.DocId == at.Docid).ToList();
+                }
+                else
+                    vm.Clear();
+            }
+            foreach (var item in vm)
+            {
+                var u = _context.AppUsers.Find(item.UserId);
+                item.Contact = u == null ? "" : u.Ext;
+                u = _context.AppUsers.Find(item.FlowUid);
+                item.FlowUname = u == null ? "" : u.FullName;
+                item.CompanyNam = _context.Departments.Find(item.Company) == null ? "" : _context.Departments.Find(item.Company).Name_C;
+            }
+            return PartialView("DelivQryList", vm);
+        }
+
+        public List<DeliveryListVModel> GetDeliveryList(string cls = null)
+        {
+            List<DeliveryListVModel> dv = new List<DeliveryListVModel>();
+            List<DelivFlowModel> rf = new List<DelivFlowModel>();
+            List<DelivFlowModel> rf2;
+            // Get Login User's details.
+            var ur = _userRepo.Find(usr => usr.UserName == User.Identity.Name).FirstOrDefault();
+            switch (cls)
+            {
+                case "已處理":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "?")
+                                             .Where(m => m.UserId != ur.Id).ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+
+                    break;
+                case "已結案":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "2").ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+                    break;
+                case "所有":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "2" || df.Status == "?").ToList();
+                    if (!userManager.IsInRole(User, "Usual"))
+                    {
+                        rf.AddRange(rf2);
+                    }
+                    else
+                    {
+                        foreach (DelivFlowModel f in rf2)
+                        {
+                            if (_context.DelivFlows.Where(m => m.DocId == f.DocId).Where(m => m.UserId == ur.Id).Count() > 0)
+                            {
+                                rf.Add(f);
+                            }
+                        }
+                    }
+                    break;
+                case "查詢":
+                    rf2 = _context.DelivFlows.Where(df => df.Status == "?").ToList();
+                    DeliveryModel r;
+                    foreach (DelivFlowModel f in rf2)
+                    {
+                        r = _context.Deliveries.Find(f.DocId);
+                        rf.Add(f);
+                    }
+                    break;
+                default:
+                    rf = _context.DelivFlows.Where(df => df.Status == "?")
+                                            .Where(m => m.UserId == ur.Id).ToList();
+                    break;
+            }
+            rf.OrderByDescending(m => m.Rtt);
+            DeliveryListVModel i;
+            foreach (DelivFlowModel f in rf)
+            {
+                DeliveryModel r = _context.Deliveries.Find(f.DocId);
+                AppUserModel p = _context.AppUsers.Find(r.UserId);
+                DepartmentModel c = _context.Departments.Find(p.DptId);
+                //BuyEvaluate b = db.BuyEvaluates.Find(r.PurchaseNo);
+                i = new DeliveryListVModel();
+                i.DocType = "驗收";
+                i.DocId = r.DocId;
+                i.UserId = r.UserId;
+                i.UserName = r.UserName;
+                if (p != null && p.DptId != null)
+                {
+                    i.Company = p.DptId;
+                    i.CompanyNam = c == null ? "" : c.Name_C;
+                }
+                i.ContractNo = r.ContractNo;
+                i.PurchaseNo = r.PurchaseNo;
+                i.CrlItemNo = r.CrlItemNo;
+                i.AccDpt = r.AccDpt;
+                i.AccDptNam = _context.Departments.Find(r.AccDpt) == null ? "" : _context.Departments.Find(r.AccDpt).Name_C;
+                i.BudgetId = "";
+                if (f.Status == "?")
+                    i.Days = DateTime.Now.Subtract(r.ApplyDate.GetValueOrDefault()).Days;
+                else
+                    i.Days = null;
+                i.Flg = f.Status;
+                i.FlowUid = f.UserId;
+                dv.Add(i);
+            }
+            //
+            return dv;
         }
 
     }

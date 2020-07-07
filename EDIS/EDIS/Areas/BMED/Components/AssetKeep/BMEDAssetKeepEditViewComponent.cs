@@ -77,7 +77,7 @@ namespace EDIS.Areas.BMED.Components.AssetKeep
                 _context.BMEDKeepFormats.ToList()
                     .ForEach(x =>
                     {
-                        listItem3.Add(new SelectListItem { Text = x.FormatId, Value = x.FormatId });
+                        listItem3.Add(new SelectListItem { Text = x.FormatId + "(" + x.Plants + ")", Value = x.FormatId });
                     });
                 ViewData["FormatId"] = new SelectList(listItem3, "Value", "Text", "");
                 //

@@ -13,6 +13,7 @@ using EDIS.Models.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using System.Data.SqlClient;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -41,14 +42,14 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public ActionResult List(string docid = null, string doctyp = null)
+        public IActionResult List(string docid = null, string doctyp = null)
         {
             return ViewComponent("BMEDAttainFileList", new { id = docid, typ = doctyp, viewType="Edit" });
         }
 
         // Called by Ajax Upload method.
         [HttpPost]
-        public ActionResult List3(string docid = null, string doctyp = null)
+        public IActionResult List3(string docid = null, string doctyp = null)
         {
             return ViewComponent("BMEDAttainFileList", new { id = docid, typ = doctyp, viewType = "AjaxView" });
         }
@@ -269,7 +270,7 @@ namespace EDIS.Areas.BMED.Controllers
             };
         }
 
-        public ActionResult Delete(string id = null, int seq = 0, string typ = null)
+        public IActionResult Delete(string id = null, int seq = 0, string typ = null)
         {
             string WebRootPath = _hostingEnvironment.WebRootPath;
             string path1 = Path.Combine(WebRootPath + "/Files/BMED/");
@@ -304,7 +305,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         /* For Create View's scale.*/
-        public ActionResult Delete3(string id = null, int seq = 0, string typ = null)
+        public IActionResult Delete3(string id = null, int seq = 0, string typ = null)
         {
             string WebRootPath = _hostingEnvironment.WebRootPath;
             string path1 = Path.Combine(WebRootPath + "/Files/BMED/");
@@ -336,6 +337,141 @@ namespace EDIS.Areas.BMED.Controllers
                                                                .Where(f => f.DocType == typ).ToList();
 
             return ViewComponent("BMEDAttainFileList3", new { id = id, typ = typ });
+        }
+
+        // GET: /BMED/AttainFile/Create
+        public IActionResult Create(string id = null, string typ = null, string title = null, int? vendorId = null)
+        {
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            AttainFileModel a = new AttainFileModel();
+            a.DocType = typ;
+            a.DocId = id;
+            a.Title = title;
+            if (typ == "3" && vendorId != null)
+                a.Rtp = vendorId;
+            else
+                a.Rtp = ur.Id;
+            a.Rtt = DateTime.Now;
+            return View(a);
+        }
+
+        // POST: /AttainFiles/Create
+        [HttpPost]
+        public async Task<IActionResult> Create(AttainFileModel attainFile, IEnumerable<IFormFile> file)
+        {
+            string s = "/Files/BMED";
+
+            switch (attainFile.DocType)
+            {
+                case "0":
+                    s += "/Budget";
+                    break;
+                case "1":
+                    s += "/Repair";
+                    break;
+                case "2":
+                    s += "/Keep";
+                    break;
+                case "3":
+                    s += "/BuyEvaluate";
+                    break;
+                case "4":
+                    s += "/Delivery";
+                    break;
+                case "5":
+                    s += "/Asset";
+                    break;
+                case "6":
+                    s += "/DeptStok";
+                    break;
+                case "7":
+                    s += "/MContract";
+                    break;
+                case "8":
+                    s += "/PContract";
+                    break;
+                case "9":
+                    s += "/News";
+                    break;
+            }
+            string WebRootPath = _hostingEnvironment.WebRootPath;
+            var bmedFile = _context.BMEDAttainFiles.Where(af => af.DocType == attainFile.DocType && af.DocId == attainFile.DocId)
+                                                   .Select(af => af.SeqNo).ToList();
+            int? i = null;
+            if (bmedFile.Count() > 0)
+            {
+                i = bmedFile.Max();
+            }
+            if (i == null)
+                attainFile.SeqNo = 1;
+            else
+                attainFile.SeqNo = Convert.ToInt32(i + 1);
+            string path = Path.Combine(WebRootPath + s, attainFile.DocId + "_"
+                + attainFile.SeqNo.ToString() + Path.GetExtension(Request.Form.Files[0].FileName));
+            string filelink = attainFile.DocId + "_"
+                + attainFile.SeqNo.ToString() + Path.GetExtension(Request.Form.Files[0].FileName);
+            try
+            {
+                // Upload files.
+                using (var stream = new FileStream(path, FileMode.Create))
+                {
+                    await Request.Form.Files[0].CopyToAsync(stream);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            switch (attainFile.DocType)
+            {
+                case "0":
+                    attainFile.FileLink = "Budget/" + filelink;
+                    break;
+                case "1":
+                    attainFile.FileLink = "Repair/" + filelink;
+                    break;
+                case "2":
+                    attainFile.FileLink = "Keep/" + filelink;
+                    break;
+                case "3":
+                    attainFile.FileLink = "BuyEvaluate/" + filelink;
+                    break;
+                case "4":
+                    attainFile.FileLink = "Delivery/" + filelink;
+                    break;
+                case "5":
+                    attainFile.FileLink = "Asset/" + filelink;
+                    break;
+                case "6":
+                    attainFile.FileLink = "DeptStok/" + filelink;
+                    break;
+                case "7":
+                    attainFile.FileLink = "MContract/" + filelink;
+                    break;
+                case "8":
+                    attainFile.FileLink = "PContract/" + filelink;
+                    break;
+                case "9":
+                    attainFile.FileLink = "News/" + filelink;
+                    break;
+            }
+            if (attainFile.IsPub)
+                attainFile.IsPublic = "Y";
+            attainFile.Rtt = DateTime.Now;
+            _context.BMEDAttainFiles.Add(attainFile);
+            try
+            {
+                _context.SaveChanges();
+
+                return Content("檔案上載完成");
+            }
+            catch (Exception e)
+            {
+                //throw new Exception(e.Message);
+                ModelState.AddModelError("", e.Message);
+                return Content(e.Message);
+            }
+
         }
 
         private bool AttainFileModelExists(string id)

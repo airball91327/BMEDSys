@@ -1,0 +1,132 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
+
+@{
+    ViewBag.Title = "採購評估/查看";
+}
+
+<h2>查看</h2>
+
+<fieldset>
+    <legend>採購評估</legend>
+    <div style="margin-bottom: 10px">
+        @await Html.PartialAsync("_AttainFile", Model)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.UserName)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.UserId)
+        @Html.DisplayFor(model => model.UserName)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Company)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Company)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Contact)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Contact)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.AccDpt)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.AccDpt)
+        @Html.DisplayFor(model => model.AccDptNam)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.PlantType)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantType)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.PlantCnam)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantCnam)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.PlantEnam)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.PlantEnam)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Standard)
+    </div>
+
+    <div class="display-field">
+        <pre>
+            @Html.DisplayFor(model => model.Standard)
+        </pre>
+    </div>
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Amt)
+    </div>
+
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Amt)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Unit)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Unit)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Price)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Price)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.TotalPrice)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.TotalPrice)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.Place)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Place)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.EngId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.EngId)
+        @Html.DisplayFor(model => model.EngName)
+    </div>
+
+    <div class="display-label">
+        @Html.DisplayNameFor(model => model.BudgetId)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.BudgetId)
+    </div>
+
+</fieldset>
+<div>
+    @await Component.InvokeAsync("BuyFlowList", new { id = Model.DocId, sid = Model.DocSid })
+</div>
+<p>
+    @Html.ActionLink("回到列表", "Index", "Home", new { Area = "" })
+</p>

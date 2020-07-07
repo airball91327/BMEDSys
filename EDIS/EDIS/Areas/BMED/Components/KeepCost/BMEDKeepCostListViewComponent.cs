@@ -15,10 +15,13 @@ namespace EDIS.Areas.BMED.Components.KeepCost
     public class BMEDKeepCostListViewComponent : ViewComponent
     {
         private readonly BMEDDbContext _context;
+        private readonly CustomUserManager userManager;
 
-        public BMEDKeepCostListViewComponent(BMEDDbContext context)
+        public BMEDKeepCostListViewComponent(BMEDDbContext context, 
+                                             CustomUserManager customUserManager)
         {
             _context = context;
+            userManager = customUserManager;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(string id, string viewType)
@@ -33,6 +36,17 @@ namespace EDIS.Areas.BMED.Components.KeepCost
                 else
                     r.StockType = "簽單";
             });
+
+            /* Check the device's contract. */
+            var keepDtl = _context.BMEDKeepDtls.Find(id);
+            if (keepDtl.NotInExceptDevice == "Y") //該案件為統包
+            {
+                ViewData["HideCost"] = "Y";
+            }
+            else
+            {
+                ViewData["HideCost"] = "N";
+            }
 
             if (viewType.Contains("Edit"))
             {

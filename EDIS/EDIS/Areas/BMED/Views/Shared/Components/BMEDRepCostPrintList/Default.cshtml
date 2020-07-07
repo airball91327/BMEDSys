@@ -5,28 +5,29 @@
     {
         <table cellpadding="0" cellspacing="0" style="width: 100%; border:1px solid black; ">
             <tr>
-                @*<th style="border-right:1px solid black;">
-                        @Html.DisplayNameFor(model => model.StockType)
-                    </th>*@
-                <th style="border-right:1px solid black;">
-                    料號/
-                    @Html.DisplayNameFor(model => model.PartName)
-                    (發票號碼/簽單編號)
+                <th style="border-right:1px solid black; Width:30px;">
+                    庫存
                 </th>
-                <th style="border-right:1px solid black;">
-                    @Html.DisplayNameFor(model => model.VendorName)
+                <th style="border-right:1px solid black; Width:30px;">
+                    簽單
                 </th>
-                <th style="border-right:1px solid black;">
-                    規格
+                <th style="border-right:1px solid black; Width:30px;">
+                    發票
                 </th>
-                <th style="border-right:1px solid black;">
-                    @Html.DisplayNameFor(model => model.Qty)
+                <th style="border-right:1px solid black; Width:50px;">
+                    零用金
                 </th>
-                <th style="border-right:1px solid black;">
+                <th style="border-right:1px solid black; Width:318px;">
+                    品名
+                </th>
+                <th style="border-right:1px solid black; Width:50px;">
+                    數量
+                </th>
+                <th style="border-right:1px solid black; Width:85px;">
                     @Html.DisplayNameFor(model => model.Price)
                 </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.TotalCost)
+                <th style="Width:30px;">
+                    總價
                 </th>
             </tr>
 
@@ -34,35 +35,21 @@
             {
                 i = i + item.TotalCost;
                 <tr>
-                    @*<td style="border-right: 1px solid black;border-top: 1px solid black;">
-                            @if (item.StockType == "0")
-                            {
-                                <div>庫存</div>
-                            }
-                            else
-                            {
-                                <div>發票</div>
-                            }
-                        </td>*@
+                    <td style="border-right: 1px solid black;border-top: 1px solid black;text-align:center;">
+                        &nbsp;
+                    </td>
+                    <td style="border-right: 1px solid black;border-top: 1px solid black;text-align:center;">
+                        &nbsp;
+                    </td>
+                    <td style="border-right: 1px solid black;border-top: 1px solid black;text-align:center;">
+                        &nbsp;
+                    </td>
+                    <td style="border-right: 1px solid black;border-top: 1px solid black;text-align:center;">
+                        &nbsp;
+                    </td>
                     <td style="border-right: 1px solid black;border-top: 1px solid black;">
                         <span style="color: blue;">@item.PartNo</span>
                         @Html.DisplayFor(modelItem => item.PartName)
-                        <span>(
-                            @if(item.TicketDtl != null)
-                            {
-                                @item.TicketDtl.TicketDtlNo
-                            }
-                            else
-                            {
-                                @item.SignNo
-                            }                        
-                        )</span>
-                    </td>
-                    <td style="border-right: 1px solid black;border-top: 1px solid black;">
-                        @Html.DisplayFor(modelIterm => item.VendorName)
-                    </td>
-                    <td style="border-right: 1px solid black;border-top: 1px solid black;">
-                        @Html.DisplayFor(modelIterm => item.Standard)
                     </td>
                     <td style="border-right: 1px solid black;border-top: 1px solid black;text-align:center;">
                         @Html.DisplayFor(modelItem => item.Qty)
@@ -96,13 +83,19 @@
                     <td style="border-right:1px solid black;border-top: 1px solid black;">
                         &nbsp;
                     </td>
+                    <td style="border-right:1px solid black;border-top: 1px solid black;">
+                        &nbsp;
+                    </td>
+                    <td style="border-right:1px solid black;border-top: 1px solid black;">
+                        &nbsp;
+                    </td>
                 </tr>
             }           
-            <tr>
+            @*<tr>
                 <td style="border-right: 1px solid black;border-top: 1px solid black;">
                     總計
                 </td>
-                <td colspan="5" style="border-top: 1px solid black;text-align:right;">
+                <td colspan="7" style="border-top: 1px solid black;text-align:right;">
                     @if (Convert.ToInt32(i) == 0)
                     {
                         @:&nbsp;
@@ -112,7 +105,7 @@
                         @Html.Raw(i.ToString("N0"))
                     }
                 </td>
-            </tr>
+            </tr>*@
         </table>
     }
 }

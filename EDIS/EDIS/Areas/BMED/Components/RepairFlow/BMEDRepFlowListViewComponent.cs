@@ -41,11 +41,13 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                 {
                     DocId = f.DocId,
                     StepId = f.StepId,
+                    UserId = f.UserId,
                     UserName = a.FullName + " (" + a.UserName + ")",
                     Opinions = f.Opinions,
                     Role = f.Role,
                     Status = f.Status,
                     Rtt = f.Rtt,
+                    Rtp = f.Rtp,
                     Cls = f.Cls
                 }).ToList()
                 .ForEach(f =>
@@ -54,15 +56,28 @@ namespace EDIS.Areas.BMED.Components.RepairFlow
                     {
                         DocId = f.DocId,
                         StepId = f.StepId,
+                        UserId = f.UserId,
                         UserName = f.UserName,
                         Opinions = f.Opinions,
                         Role = f.Role,
                         Status = f.Status,
                         Rtt = f.Rtt,
+                        Rtp = f.Rtp,
                         Cls = f.Cls
                     });
                 });
             flows = flows.OrderBy(f => f.StepId).ToList();
+
+            foreach(var item in flows)
+            {
+                if (item.Status != "?")
+                {
+                    if (item.UserId != item.Rtp)
+                    {
+                        item.UserName += "(" + _context.AppUsers.Find(item.Rtp).FullName + "代替)";
+                    }
+                }
+            }
 
             return View(flows);
         }

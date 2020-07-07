@@ -93,7 +93,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "採購評估單號")]
         public string Docid { get; set; } //採購評估單號
         [Display(Name = "設備工程師")]
-        public int AssetEngId { get; set; }
+        public int? AssetEngId { get; set; }
         [Display(Name = "工程師姓名")]
         public string AssetEngName { get; set; }
 
@@ -104,6 +104,13 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public DateTime? Rtt { get; set; }
         [NotMapped]
         public string upload { get; set; }
+
+        [NotMapped]
+        [Display(Name = "*保養週期(月)")]
+        public int? Cycle { get; set; }
+        [NotMapped]
+        [Display(Name = "*保養起始年月(民國年+月份=>10512)")]
+        public int? KeepYm { get; set; }
     }
 
     [Table("BMEDDeviceClassCodes")]

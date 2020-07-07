@@ -125,7 +125,7 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     else
                     {
-                        keepCost.AccountDate = DateTime.Now.Date;
+                        keepCost.AccountDate = keepCost.AccountDate == null ? DateTime.Now.Date : keepCost.AccountDate;
                         keepCost.TicketDtl = null;
                     }
                     keepCost.Rtp = ur.Id;

@@ -1,0 +1,65 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyVendorModel>
+
+@if (Model.Count() > 0)
+{
+    int flg = 0;
+    var docid = "";
+    <table style="width: 100%">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.VendorNam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UniteNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rtp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rtt)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            docid = item.DocId;
+            if (item.Status == "?")
+            {
+                flg++;
+            }
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.VendorNam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UniteNo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rtp)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rtt)
+                </td>
+                <td>
+                    @Html.ActionLink("刪除", "Delete", new { id = item.DocId, vno = item.VendorNo }, new { target = "_blank" })|
+                    @Html.ActionLink("改變狀態", "UpdStatus", new { id = item.DocId, vno = item.VendorNo }, new { target = "_blank" })
+                </td>
+            </tr>
+        }
+
+    </table>
+    if (flg == 0)
+    {
+        <p id="btnEVALUATE">
+            <a class="button" href="@Url.Content("~/BMED/BuyFlow/InEvaluate?docid=" + docid)"
+               id="InEvaluateLink">進入評估程序</a>
+        </p>
+    }
+}

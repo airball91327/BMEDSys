@@ -1,0 +1,187 @@
+﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
+
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "採購評估/新增";
+}
+
+<script src="https://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+<script src="~/js/BMED/FileChoose.js" asp-append-version="true"></script>
+<script src="~/js/BMED/BudgetChoose.js" asp-append-version="true"></script>
+
+<h2>新增</h2>
+<h4>採購評估</h4>
+<hr />
+
+<form asp-action="Create">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <fieldset>
+
+        @Html.HiddenFor(model => model.DocId)
+        @Html.HiddenFor(model => model.UserId)
+        @Html.HiddenFor(model => model.UserName)
+        @Html.HiddenFor(model => model.Company)
+        @Html.HiddenFor(model => model.Contact)
+
+        <div style="margin-bottom: 10px">
+            @await Html.PartialAsync("_AttainFile", Model)
+        </div>
+        <div>
+            @await Html.PartialAsync("_ChooseBudget")
+        </div>
+        <h4>
+            表單編號<br />
+            @Model.DocId
+        </h4>
+        <h4>
+            申請人姓名<br />
+            @Model.UserName
+        </h4>
+
+        <h4>
+            所屬單位<br />
+            @Model.Company
+        </h4>
+
+        <h4>
+            聯絡方式<br />
+            @Model.Contact
+        </h4>
+
+        <div class="editor-label">
+            <label asp-for="PlantType" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="PlantType" asp-items="@ViewData["PTYPE"] as SelectList" class="form-control"></select>
+            <span asp-validation-for="PlantType" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="AccDpt" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <input asp-for="AccDpt" class="form-control" readonly />
+            <span asp-validation-for="AccDpt" class="text-danger"></span>
+            <input asp-for="AccDptNam" class="form-control" readonly />
+            <span asp-validation-for="AccDptNam" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="PlantCnam" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="PlantCnam" class="form-control" />
+            <span asp-validation-for="PlantCnam" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="PlantEnam" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="PlantEnam" class="form-control" />
+            <span asp-validation-for="PlantEnam" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Amt" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Amt" class="form-control" />
+            <span asp-validation-for="Amt" class="text-danger"></span>
+        </div>
+
+
+        <div class="editor-label">
+            <label asp-for="Unit" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Unit" class="form-control" />
+            <span asp-validation-for="Unit" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Price" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="TotalPrice" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="TotalPrice" class="form-control" />
+            <span asp-validation-for="TotalPrice" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Place" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Place" class="form-control" />
+            <span asp-validation-for="Place" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="EngId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="EngId" asp-items="@ViewData["ENG"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="EngId" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="PurchaserId" class="control-title"></label>
+        </div>
+        <div class="editor-field form-inline">
+            <select asp-for="PurchaserId" asp-items="@ViewData["PUR"] as SelectList" class="form-control">
+                <option disabled selected>請選擇</option>
+            </select>
+            <span asp-validation-for="PurchaserId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <div class="editor-label">
+                <label asp-for="BudgetId" class="control-title"></label>
+            </div>
+            <div class="editor-field">
+                <input asp-for="BudgetId" class="form-control" />
+                <span asp-validation-for="BudgetId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div>
+            <input class="btn btn-primary" type="submit" value="確定送出" />
+        </div>
+    </fieldset>
+
+</form>
+
+
+<script>
+    $(function () {
+        $(this).keydown(function (e) {
+            //e.preventDefault();
+            if (e.keyCode == 13) { return false; }
+        });
+        $('#PlantType option:last').prop("disabled", "true");
+        $('#Price').change(function () {
+            var v1 = $(this).val();
+            var v2 = $('#Amt').val();
+            if (v1 != null && v2 != null) {
+                $('#TotalPrice').val(v1 * v2);
+            }
+        });
+        $('#Amt').change(function () {
+            var v1 = $(this).val();
+            var v2 = $('#Price').val();
+            if (v1 != null && v2 != null) {
+                $('#TotalPrice').val(v1 * v2);
+            }
+        });
+    });
+</script>

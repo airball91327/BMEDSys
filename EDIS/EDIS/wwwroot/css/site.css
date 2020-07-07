@@ -53,6 +53,6 @@
     }
 }
 
-td a {
+td a, a {
     color: deepskyblue;
 }

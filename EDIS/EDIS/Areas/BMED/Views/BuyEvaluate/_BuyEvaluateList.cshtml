@@ -1,0 +1,129 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateListVModel>
+@using EDIS.Models.Identity
+
+@inject CustomUserManager UserManager
+@inject CustomRoleManager RoleManager
+
+<script src="~/js/BMED/AssetFileUpload.js" asp-append-version="true"></script>
+
+@{
+    int i = 0;
+    var s = "";
+    if (ViewData["Sdate"] != null)
+    {
+        @Html.ActionLink("匯出規格", "ExcelStandard", new { sd = ViewData["Sdate"], ed = ViewData["Edate"] }
+               , new { @class = "button" })
+    }
+
+    <table style="width: 100%">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DocType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DocId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BudgetId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CustNam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlantCnam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EngName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlowUname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AgreeDate)
+            </th>
+            <th>
+                廠商上傳狀況
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            i++;
+            if (i % 2 == 0)
+            {
+                s = "#efeeef";
+            }
+            else
+            {
+                s = "#ffffff";
+            }
+            <tr style="background-color: @s" }>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DocId)
+                </td>
+                <td style="color: blue">
+                    @Html.DisplayFor(modelItem => item.BudgetId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CustId)<br />
+                    @Html.DisplayFor(modelItem => item.CustNam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlantCnam)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EngName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FlowUname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AgreeDate)
+                </td>
+                <td>
+                    @await Component.InvokeAsync("BuyVendorStatusList", new { id = item.DocId })
+                </td>
+                <td>
+                    @if (item.Flg == "?" && UserManager.GetCurrentUserId(User) == item.FlowUid)
+                    {
+                        @Html.ActionLink("編輯", "Edit", "BuyEvaluate", new { id = item.DocId, sid = item.DocSid }, null)
+                        if (UserManager.IsInRole(User, "BuyerMgr"))
+                        {
+                            @Html.Raw("|")
+                            @Html.ActionLink("刪除", "Delete", "BuyEvaluate", new { id = item.DocId }, null)
+                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink("查看", "Details", "BuyEvaluate", new { id = item.DocId }, null)
+                    }
+                    @if (UserManager.IsInRole(User, "Buyer"))
+                    {
+                        if (item.Flg == "2" || item.Flg == "E")
+                        {
+                            @Html.Raw("|")
+                            @Html.ActionLink("新增儀器", "New", "Asset", new { id = item.DocId }, new { id = "btnAddAsset", target = "_blank" })
+                            @Html.Raw("|")
+                            @Html.ActionLink("驗收", "Create", "Delivery", new { id = item.DocId }, null)
+                            <span class="badge">@item.DelivCount</span>
+                        }
+                    }
+
+                </td>
+            </tr>
+            if (item.Flg == "2")
+            {
+                <tr style="background-color: @s" }>
+                    <td colspan="5" style="padding-left: 30px; color: lightgray">
+                        @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = item.DocId, upload = "採購人員" })
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+}

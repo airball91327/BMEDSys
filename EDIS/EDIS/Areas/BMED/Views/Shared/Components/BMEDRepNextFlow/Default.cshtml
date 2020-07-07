@@ -1,6 +1,17 @@
 ﻿@model EDIS.Areas.BMED.Models.RepairModels.AssignModel
 
-<script src="~/js/BMED/RepNextFlow.js"></script>
+@using EDIS.Models.Identity
+@inject CustomUserManager UserManager
+
+<script src="~/js/BMED/RepNextFlow.js" asp-append-version="true"></script>
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('.qryCombobox').combobox();
+    });
+</script>
 
 <form asp-controller="RepairFlow" asp-action="NextFlow" asp-area="BMED" data-ajax="true" data-ajax-method="POST" id="nextFlowForm"
       data-ajax-begin="$.Toast.showToast({
@@ -22,6 +33,28 @@
                 @Html.DisplayFor(model => model.Hint)
             </div>
         </div>
+
+        @if (UserManager.IsInRole(User, "MedEngineer") == true || UserManager.IsInRole(User, "MedAdmin") == true ||
+            UserManager.IsInRole(User, "Admin") == true)
+        {
+            <div class="form-group">
+                <label class="control-label col-md-2">預設驗收人</label>
+                <div class="col-md-10 text-left">
+                    <div class="form-inline">
+                        <select asp-items="@ViewData["DefaultChecker"] as SelectList" class="form-control" id="UpdChecker"></select>
+                        <button type="button" class="btn btn-default" id="UpdCheckerBtn">修改</button>
+                        <span>
+                            <input type="text" placeholder="輸入code或關鍵字查詢" class="form-control" id="CheckerQry" />
+                            <select asp-items="@ViewData["BMEDQRYDPT"] as SelectList" class="form-control qryCombobox" id="CheckerQryDptId">
+                                <option value="">請選擇驗收人所屬部門</option>
+                            </select>
+                            <button type="button" class="btn btn-default" id="CheckerQryBtn">查詢</button>
+                            <img id="imgLOADING_CHK" src="~/images/opc-ajax-loader.gif" style="display: none" />
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
 
         <div class="form-group">
             <label class="control-label col-md-2">請修類別 / 處理狀態</label>
@@ -79,8 +112,8 @@
 </form>
 
 @*<div id="pnlREPFLOWLIST">
-    @if (Model != null)
-    {
-        @await Component.InvokeAsync("BMEDRepFlowList", new { id = Model.DocId })
-    }
-</div>*@
+        @if (Model != null)
+        {
+            @await Component.InvokeAsync("BMEDRepFlowList", new { id = Model.DocId })
+        }
+    </div>*@

@@ -12,7 +12,7 @@
     }
     ViewData["Title"] = "Create";
 }
-<script src="~/js/RepCreate.js"></script>
+<script src="~/js/RepCreate.js" asp-append-version="true"></script>
 
 <h2>新增</h2>
 
@@ -147,6 +147,12 @@
                         增設
                     </label>
                 </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="RepType" id="RepType4" value="借物">
+                        借物
+                    </label>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -170,17 +176,6 @@
                             其他單位
                         </label>
                     </div>*@
-            </div>
-        </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="AccDpt" class="control-title"></label>
-                    <input asp-for="AccDpt" class="form-control" readonly />
-                    <input asp-for="AccDptName" class="form-control" readonly />
-                    <span style="color:red" id="AccDptNameErrorMsg"></span>
-                    <span asp-validation-for="AccDpt" class="text-danger"></span>
-                </div>
             </div>
         </div>
         <div class="row">
@@ -227,6 +222,17 @@
                         </select>
                         <span asp-validation-for="Area" class="text-danger"></span>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label asp-for="AccDpt" class="control-title"></label>
+                    <input asp-for="AccDpt" class="form-control" readonly />
+                    <input asp-for="AccDptName" class="form-control" readonly />
+                    <span style="color:red" id="AccDptNameErrorMsg"></span>
+                    <span asp-validation-for="AccDpt" class="text-danger"></span>
                 </div>
             </div>
         </div>

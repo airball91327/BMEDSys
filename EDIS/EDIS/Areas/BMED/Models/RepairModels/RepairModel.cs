@@ -47,6 +47,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "財產編號")]
         public string AssetNo { get; set; }
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "儀器名稱")]
         public string AssetName { get; set; }
         [Required]
@@ -56,7 +57,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "送修儀器配件")]
         public string PlantDoc { get; set; }
         [Required(ErrorMessage = "必填寫欄位")]
-        [Display(Name = "請修地點")] //放置地點
+        [Display(Name = "擺設地點")] //放置地點
         public string PlaceLoc { get; set; }
         [Display(Name = "申請日期")]
         [DataType(DataType.Date)]
@@ -82,5 +83,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "設備類別")]
         public string PlantClass { get; set; }
+        [NotMapped]
+        [Display(Name = "立帳日")]
+        public string AssetAccDate { get; set; }
     }
 }

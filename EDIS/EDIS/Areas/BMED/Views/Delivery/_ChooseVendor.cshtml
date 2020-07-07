@@ -1,0 +1,12 @@
+﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
+@Html.RadioButton("rbVENDOR", "0", true)關鍵字
+@Html.RadioButton("rbVENDOR", "1")統一編號
+@Html.TextBox("txtVENDOR")
+<a class="button" href="@Url.Content("~/BMED/Vendor/Choose")" id="VendorChooseLink">查詢</a>
+
+<div id="Vendors" style="display: inline">
+    
+</div>
+<div id="AjaxLoading" style="display: inline">
+    <img src="~/images/opc-ajax-loader.gif" style="width: 30px; height: 30px;" />
+</div>

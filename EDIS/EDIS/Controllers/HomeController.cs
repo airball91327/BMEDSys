@@ -41,29 +41,34 @@ namespace EDIS.Controllers
         {
             /* Get user details. */
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-
-            var repairCount = _context.RepairFlows.Where(f => f.Status == "?")
-                                                  .Where(f => f.UserId == ur.Id).Count();
+            //請修案件數
             var BMEDrepairCount = _BMEDcontext.BMEDRepairFlows.Where(f => f.Status == "?")
                                                               .Where(f => f.UserId == ur.Id).Count();
+            //保養案件數
             var BMEDkeepCount = _BMEDcontext.BMEDKeepFlows.Where(f => f.Status == "?")
                                                           .Where(f => f.UserId == ur.Id).Count();
+            //驗收案件數
+            var BMEDdeliveryCount = _BMEDcontext.DelivFlows.Where(f => f.Status == "?")
+                                                           .Where(f => f.UserId == ur.Id).Count();
+            //採購評估案件數
+            var BMEDbuyCount = _BMEDcontext.BuyFlows.Where(f => f.Status == "?")
+                                                    .Where(f => f.UserId == ur.Id).Count();
 
             UnsignCounts v = new UnsignCounts();
-            v.RepairCount = repairCount;
-            v.KeepCount = 0;
             v.BMEDrepCount = BMEDrepairCount;
             v.BMEDkeepCount = BMEDkeepCount;
+            v.BMEDDeliveryCount = BMEDdeliveryCount;
+            v.BMEDBuyEvalateCount = BMEDbuyCount;
 
-            if (fBrowserIsMobile())
-            {
-                if (userManager.IsInRole(User, "RepEngineer") == true &&
-                    userManager.IsInRole(User, "RepMgr") == false)
-                {
-                    // go to mobile pages
-                    return RedirectToAction("Index", "Repair", new { Area = "Mobile" });
-                }
-            }
+            //if (fBrowserIsMobile())
+            //{
+            //    if (userManager.IsInRole(User, "RepEngineer") == true &&
+            //        userManager.IsInRole(User, "RepMgr") == false)
+            //    {
+            //        // go to mobile pages
+            //        return RedirectToAction("Index", "Repair", new { Area = "Mobile" });
+            //    }
+            //}
 
             return View(v);
         }

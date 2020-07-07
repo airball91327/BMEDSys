@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "新增資產設備";
 }
-<script src="~/js/BMED/AssetCreate.js"></script>
+<script src="~/js/BMED/AssetCreate.js" asp-append-version="true"></script>
 
 <h2>新增</h2>
 
@@ -152,7 +152,7 @@
 
         <div class="form-group">
             <label asp-for="DisposeKind" class="control-label col-md-2"></label>
-            <div class="col-md-10">
+            <div class="col-md-10 form-inline">
                 <select asp-for="DisposeKind" asp-items="@ViewData["DisposeKind"] as SelectList" class="form-control">
                     <option disabled selected>請選擇</option>
                 </select>
@@ -271,8 +271,8 @@
 
         <div class="form-group">
             <label asp-for="AssetEngId" class="control-label col-md-2"></label>
-            <div class="col-md-10">
-                <select asp-for="AssetEngId" asp-items="@ViewData["AssetEngId"] as SelectList" class="form-control-s">
+            <div class="col-md-10 form-inline">
+                <select asp-for="AssetEngId" asp-items="@ViewData["AssetEngId"] as SelectList" class="form-control">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="AssetEngId" class="text-danger"></span>

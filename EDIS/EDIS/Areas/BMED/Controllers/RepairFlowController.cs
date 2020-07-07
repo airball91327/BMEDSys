@@ -51,59 +51,60 @@ namespace EDIS.Areas.BMED.Controllers
         public ActionResult NextFlow(AssignModel assign)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
-            
+
             /* 工程師的流程控管 */
-            if(assign.Cls == "醫工工程師")
+            if (assign.Cls == "設備工程師")
             {
                 /* 如點選有費用、卻無輸入費用明細 */
                 var isCharged = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault().IsCharged;
-                if( isCharged == "Y" )
+                if (isCharged == "Y")
                 {
                     var CheckRepairCost = _context.BMEDRepairCosts.Where(c => c.DocId == assign.DocId).FirstOrDefault();
-                    if(CheckRepairCost == null)
+                    if (CheckRepairCost == null)
                     {
                         throw new Exception("尚未輸入費用明細!!");
                     }
                 }
-                var repairDtl = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault();
-                /* 3 = 已完成，4 = 報廢 */
-                if (repairDtl.DealState == 3 || repairDtl.DealState == 4)
-                {
-                    if(repairDtl.EndDate == null)
-                    {
-                        throw new Exception("報廢及已完成，需輸入完工日!!");
-                    }
-                }
-                /* 工程師做結案 */
-                if (assign.FlowCls == "結案")
-                {
-                    if (_context.BMEDRepairEmps.Where(emp => emp.DocId == assign.DocId).Count() <= 0)
-                    {
-                        throw new Exception("沒有維修工程師紀錄!!");
-                    }
-                    else if (_context.BMEDRepairDtls.Find(assign.DocId).EndDate == null)
-                    {
-                        throw new Exception("沒有完工日!!");
-                    }
-                    else if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 0)
-                    {
-                        throw new Exception("處理狀態不可空值!!");
-                    }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).FailFactor == 0)
-                    {
-                        throw new Exception("故障原因不可空白!!");
-                    }
-                    if (string.IsNullOrEmpty(_context.BMEDRepairDtls.Find(assign.DocId).InOut))
-                    {
-                        throw new Exception("維修方式不可空白!!");
-                    }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 || 
-                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
-                    {
-                        throw new Exception("處理狀態不可為處理中或未處理!!");
-                    }
-                }
             }
+            //    var repairDtl = _context.BMEDRepairDtls.Where(d => d.DocId == assign.DocId).FirstOrDefault();
+            //    /* 3 = 已完成，4 = 報廢 */
+            //    if (repairDtl.DealState == 3 || repairDtl.DealState == 4)
+            //    {
+            //        if(repairDtl.EndDate == null)
+            //        {
+            //            throw new Exception("報廢及已完成，需輸入完工日!!");
+            //        }
+            //    }
+            //    /* 工程師做結案 */
+            //    if (assign.FlowCls == "結案")
+            //    {
+            //        if (_context.BMEDRepairEmps.Where(emp => emp.DocId == assign.DocId).Count() <= 0)
+            //        {
+            //            throw new Exception("沒有維修工程師紀錄!!");
+            //        }
+            //        else if (_context.BMEDRepairDtls.Find(assign.DocId).EndDate == null)
+            //        {
+            //            throw new Exception("沒有完工日!!");
+            //        }
+            //        else if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 0)
+            //        {
+            //            throw new Exception("處理狀態不可空值!!");
+            //        }
+            //        if (_context.BMEDRepairDtls.Find(assign.DocId).FailFactor == 0)
+            //        {
+            //            throw new Exception("故障原因不可空白!!");
+            //        }
+            //        if (string.IsNullOrEmpty(_context.BMEDRepairDtls.Find(assign.DocId).InOut))
+            //        {
+            //            throw new Exception("維修方式不可空白!!");
+            //        }
+            //        if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 || 
+            //            _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
+            //        {
+            //            throw new Exception("處理狀態不可為處理中或未處理!!");
+            //        }
+            //    }
+            //}
 
             if (assign.FlowCls == "結案" || assign.FlowCls == "廢除")
                 assign.FlowUid = ur.Id;
@@ -132,10 +133,16 @@ namespace EDIS.Areas.BMED.Controllers
                     {
                         throw new Exception("維修方式不可空白!!");
                     }
-                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 1 ||
-                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 2)
+                    if (_context.BMEDRepairDtls.Find(assign.DocId).DealState == 3 ||
+                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 4 ||
+                        _context.BMEDRepairDtls.Find(assign.DocId).DealState == 8)
                     {
-                        throw new Exception("處理狀態不可為處理中或未處理!!");
+                        //Do nothing.
+                        //狀態為【已完成】、【報廢】、【退件】才可送至驗收人
+                    }
+                    else
+                    {
+                        throw new Exception("送至驗收人處理狀態只可為【已完成】、【報廢】、【退件】!!");
                     }
                 }
                 if (assign.FlowCls == "結案")
@@ -170,7 +177,7 @@ namespace EDIS.Areas.BMED.Controllers
                             });
                     mail.sto = sto.TrimEnd(new char[] { ',' });
 
-                    mail.message.Subject = "工務智能請修系統[醫工請修案-結案通知]：設備名稱： " + repair.AssetName;
+                    mail.message.Subject = "醫工工務智能保修系統[醫工請修案-結案通知]：設備名稱： " + repair.AssetName;
                     body += "<p>表單編號：" + repair.DocId + "</p>";
                     body += "<p>申請日期：" + repair.ApplyDate.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + repair.UserName + "</p>";
@@ -187,7 +194,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
                 else if (assign.FlowCls == "廢除")
                 {
@@ -229,7 +236,7 @@ namespace EDIS.Areas.BMED.Controllers
                     u = _context.AppUsers.Find(flow.UserId);
                     mail.to = new System.Net.Mail.MailAddress(u.Email); //u.Email
                                                                         //mail.cc = new System.Net.Mail.MailAddress("99242@cch.org.tw");
-                    mail.message.Subject = "工務智能請修系統[醫工請修案]：設備名稱： " + repair.AssetName;
+                    mail.message.Subject = "醫工工務智能保修系統[醫工請修案]：設備名稱： " + repair.AssetName;
                     body += "<p>表單編號：" + repair.DocId + "</p>";
                     body += "<p>申請日期：" + repair.ApplyDate.ToString("yyyy/MM/dd") + "</p>";
                     body += "<p>申請人：" + repair.UserName + "</p>";
@@ -245,7 +252,7 @@ namespace EDIS.Areas.BMED.Controllers
                     //body += "<h3 style='color:red'>如有任何疑問請聯絡工務部，分機3033或7033。<h3>";
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
-                    //mail.SendMail();
+                    mail.SendMail();
                 }
 
                 return new JsonResult(assign)
@@ -292,6 +299,21 @@ namespace EDIS.Areas.BMED.Controllers
                     break;
                 case "醫工主管":
                     s = roleManager.GetUsersInRole("MedMgr").ToList();
+                    list = new List<SelectListItem>();
+                    foreach (string l in s)
+                    {
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (!string.IsNullOrEmpty(u.DptId))
+                        {
+                            li = new SelectListItem();
+                            li.Text = u.FullName + "(" + u.UserName + ")";
+                            li.Value = u.Id.ToString();
+                            list.Add(li);
+                        }
+                    }
+                    break;
+                case "賀康主管": //設備主管
+                    s = roleManager.GetUsersInRole("MedAssetMgr").ToList();
                     list = new List<SelectListItem>();
                     foreach (string l in s)
                     {

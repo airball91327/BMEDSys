@@ -1,0 +1,96 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.AssetKeepListVModel>
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+}
+
+<h4>儀器設備保養清單</h4>
+<p>
+    <a class="btn btn-default" href="@Url.Action("ExcelAssetKeepList")">匯出Excel</a>
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetNo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AssetName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Brand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Standard)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Type)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.InOut)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccDptName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LeaveSite)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WartySt)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.WartyEd)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Sdate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Edate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Note)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssetNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AssetName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Brand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Standard)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Type)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccDptName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LeaveSite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WartySt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WartyEd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sdate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Edate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+        </tr>
+    }
+</table>

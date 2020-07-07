@@ -1,0 +1,97 @@
+﻿@model IEnumerable<EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel>
+
+<script src="~/Scripts/QryDpt.js" asp-append-version="true"></script>
+
+<h4>驗收案件查詢</h4>
+
+<form asp-controller="Delivery" asp-action="Index2" asp-area="BMED"
+    data-ajax="true" data-ajax-method="POST" id="nextFlowForm"
+    data-ajax-update="#pnlDELIVERYLIST"
+    data-ajax-begin="$.Toast.showToast({
+    'title':'作業進行中，請稍待...',
+    'icon':'loading',
+    'duration':0
+    })"
+    data-ajax-complete="$.Toast.hideToast()"
+    data-ajax-success="flowmsg" data-ajax-failure="onFailed"
+    class="form-horizontal">
+
+    <div class="form-group">
+        <div class="form-inline">
+            @Html.Label("qtyDOCID", "表單編號", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyDOCID", "", new { @class = "form-control" })
+            </div>
+            @Html.Label("qtyPURCHASENO", "採購案號", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyPURCHASENO", "", new { @class = "form-control" })
+            </div>
+            @Html.Label("qtyASSETNO", "財產編號", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyASSETNO", "", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-inline">
+            @Html.Label("qtyASSETNAME", "儀器名稱(關鍵字)", new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyASSETNAME", "", new { @class = "form-control" })
+            </div>
+            @Html.Label("qtyVENDOR", "廠商(關鍵字)", new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyVENDOR", "", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-inline">
+            @Html.Label("qtyBUDGETID", "預算編號", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyBUDGETID", "", new { @class = "form-control" })
+            </div>
+            @Html.Label("qtyCONTRACTNO", "合約號碼", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.TextBox("qtyCONTRACTNO", "", new { @class = "form-control" })
+            </div>
+            @Html.Label("qtyFLOWTYP", "流程狀態", new { @class = "control-label col-md-2" })
+            <div class="col-md-2">
+                @Html.DropDownList("qtyFLOWTYP", ViewData["FLOWTYP"] as SelectList, "請選擇", new { @class = "form-control" })
+            </div>
+
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("AccdptKeyName", "成本中心", new { @class = "control-label col-md-2" })
+        <div class="col-md-10 text-left">
+            <div class="form-inline">
+                @Html.TextBox("AccdptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
+                <input id="btnQtyAccdpt" type="button" value="查詢" class="btn btn-default">
+                @Html.DropDownList("qtyACCDPT", ViewData["ACCDPT"] as SelectList, "請選擇", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("ApplydptKeyName", "申請部門", new { @class = "control-label col-md-2" })
+        <div class="col-md-10 text-left">
+            <div class="form-inline">
+                @Html.TextBox("ApplydptKeyName", "", new { @class = "form-control", placeholder = "代號或關鍵字" })
+                <input id="btnQtyApplydpt" type="button" value="查詢" class="btn btn-default">
+                @Html.DropDownList("qtyDPTID", ViewData["APPLYDPT"] as SelectList, "請選擇", new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input id="btnQTY" type="submit" value="查詢" class="btn btn-default" />
+            <img id="imgLOADING" src="~/Images/ajax-loader.gif" style="display: none" />
+        </div>
+    </div>
+
+</form>
+
+
+<div id="pnlDELIVERYLIST" style="margin: 20px 0">
+
+</div>

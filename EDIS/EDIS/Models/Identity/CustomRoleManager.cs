@@ -7,6 +7,7 @@ using EDIS.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
 
 namespace EDIS.Models.Identity
 {
@@ -24,7 +25,12 @@ namespace EDIS.Models.Identity
 
         public string[] GetUsersInRole(string roleName)
         {
-            int roleId = _context.AppRoles.Where(r => r.RoleName == roleName).FirstOrDefault().RoleId;
+            int roleId = 4; 
+            var role = _context.AppRoles.Where(r => r.RoleName == roleName).FirstOrDefault();
+            if (role != null)
+            {
+                roleId = role.RoleId;
+            }
             var getUsers = _context.UsersInRoles.Where(r => r.RoleId == roleId).ToList();
             string[] roleUsers = new string[getUsers.Count];
             int i = 0;
@@ -34,6 +40,21 @@ namespace EDIS.Models.Identity
                 i++;
             }         
             return roleUsers;
+        }
+
+        public string[] GetRolesForUser(int userId)
+        {
+            int uid = userId;
+            var getRoles = _context.UsersInRoles.Include(r => r.AppRoles)
+                                                .Where(r => r.UserId == uid).ToList();
+            string[] userRoles = new string[getRoles.Count];
+            int i = 0;
+            foreach (var role in getRoles)
+            {
+                userRoles[i] = role.AppRoles.RoleName;
+                i++;
+            }
+            return userRoles;
         }
     }
 }

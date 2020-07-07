@@ -1,0 +1,51 @@
+﻿@model EDIS.Areas.BMED.Models.RepairModels.AttainFileModel
+
+@{
+    Layout = "";
+}
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<form asp-action="Create" asp-controller="AttainFile" asp-area="BMED" 
+    method="post" enctype="multipart/form-data" id="filepost">
+
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <fieldset>
+        <legend>上傳檔案</legend>
+
+        <input asp-for="Rtp" type="hidden" />
+        <div class="editor-label">
+            <label asp-for="DocType" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="DocType" class="form-control" readonly />
+            <span asp-validation-for="DocType" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="DocId" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="DocId" class="form-control" id="FileDocId" readonly />
+            <span asp-validation-for="DocId" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="Title" class="control-title"></label>
+        </div>
+        <div class="editor-field">
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="editor-label">
+            <label asp-for="FileLink" class="control-title"></label>
+        </div>
+        <input asp-for="FileLink" type="file" class="form-control" />
+        <span asp-validation-for="FileLink" class="text-danger"></span>
+
+    </fieldset>
+
+</form>
+
+<iframe id="result" name="result" style="display: none;"></iframe>

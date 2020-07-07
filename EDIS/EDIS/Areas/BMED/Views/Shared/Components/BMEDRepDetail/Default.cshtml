@@ -73,17 +73,6 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.EndDate)
-        </dt>
-
-        <dd>
-            @if (@Model.EndDate != null)
-            {
-                @Model.EndDate.Value.ToString("yyyy/MM/dd");
-            }
-        </dd>
-
-        <dt>
             @Html.DisplayNameFor(model => model.NotInExceptDevice)
         </dt>
 
@@ -98,7 +87,33 @@
             }
         </dd>
 
-        @*<dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.IsInstrument)
+        </dt>
+
+        <dd>
+            @if (@Model.IsInstrument == "Y")
+            {
+                @Html.Raw("是")
+            }
+            else if (@Model.IsInstrument == "N")
+            {
+                @Html.Raw("否")
+            }
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EndDate)
+        </dt>
+
+        <dd>
+            @if (@Model.EndDate != null)
+            {
+                @Model.EndDate.Value.ToString("yyyy/MM/dd");
+            }
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.CloseDate)
         </dt>
 
@@ -110,6 +125,14 @@
         </dd>
 
         <dt>
+            @Html.DisplayNameFor(model => model.CheckerName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckerName)
+        </dd>
+
+        <dt>
             @Html.DisplayNameFor(model => model.ShutDate)
         </dt>
 
@@ -118,7 +141,7 @@
             {
                 @Model.ShutDate.Value.ToString("yyyy/MM/dd");
             }
-        </dd>*@
+        </dd>
 
     </dl>
 </div>

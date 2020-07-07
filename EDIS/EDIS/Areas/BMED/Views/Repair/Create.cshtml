@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewData["Title"] = "Create";
 }
-<script src="~/js/BMED/RepCreate.js"></script>
+<script src="~/js/BMED/RepCreate.js" asp-append-version="true"></script>
 
 <h2>新增</h2>
 
@@ -99,6 +99,22 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label class="control-title"></label>
+                    <input type="text" placeholder="輸入成本中心代號查詢" class="form-control" id="AssetAccDptQry" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label class="control-title"></label>
+                    <input type="text" placeholder="輸入保管部門代號查詢" class="form-control" id="AssetDelivDptQry" />
+                </div>
+            </div>
+        </div>
         <div class="row" id="rowAssetName">
             <div class=form-inline>
                 <div class="form-group">
@@ -108,15 +124,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class=form-inline>
-                <div class="form-group">
-                    <label asp-for="PlantClass" class="control-title"></label>
-                    <input asp-for="PlantClass" class="form-control"/>
-                    <span asp-validation-for="PlantClass" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
+        <input type="hidden" asp-for="PlantClass" value="醫療儀器" />
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
@@ -154,7 +162,7 @@
         </div>
         <div class="row">
             <div class="form-inline">
-                <label asp-for="PlaceLoc" class="control-title"></label>
+                <label class="control-title">費用歸屬</label>
                 <div class="radio">
                     <label>
                         <input type="radio" name="LocType" id="LocType1" value="本單位" checked>
@@ -227,7 +235,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        @*<div class="row">
             <div class=form-inline>
                 <div class="form-group">
                     <label asp-for="PrimaryEngId" class="control-title"></label>
@@ -237,7 +245,7 @@
                     <span asp-validation-for="PrimaryEngId" class="text-danger"></span>
                 </div>
             </div>
-        </div>
+        </div>*@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">

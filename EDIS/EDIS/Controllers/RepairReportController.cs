@@ -52,6 +52,7 @@ namespace EDIS.Controllers
             return View();
         }
 
+        // GET: /RepairReport/ExportToExcel
         public IActionResult ExportToExcel(DateTime qtyMonth, string qtyDptId)
         {
             DateTime reportMonth = qtyMonth;
@@ -61,8 +62,9 @@ namespace EDIS.Controllers
             //剔除廢除的單
             repairFlows = repairFlows.Where(rf => rf.Status != "3").ToList();
 
-            //申請日為當月的所有案件
-            var qtyRepairs = _context.Repairs.Where(r => r.ApplyDate.Month == reportMonth.Month)
+            //申請日為該年當月的所有案件
+            var qtyRepairs = _context.Repairs.Where(r => r.ApplyDate.Month == reportMonth.Month &&
+                                                         r.ApplyDate.Year == reportMonth.Year)
                                              .Join(_context.RepairDtls, r => r.DocId, d => d.DocId,
                                              (r, d) => new
                                              {
@@ -572,6 +574,7 @@ namespace EDIS.Controllers
                 ws2.Columns(15, 17).Width = 20;
                 ws2.Columns(18, 20).Width = 20;
                 ws2.Row(1).Style.Alignment.WrapText = true;
+                ws2.Columns(12, 13).Hide();
 
                 //Title
                 ws2.Cell(1, 1).Value = "姓名";
@@ -585,19 +588,21 @@ namespace EDIS.Controllers
                 ws2.Cell(1, 9).Value = "維修件數\n(未處理)";
                 ws2.Cell(1, 10).Value = "報廢件數";
                 ws2.Cell(1, 11).Value = "總件數";
-                ws2.Cell(1, 12).Value = "維修(內修)\n3日內完成率";
-                ws2.Cell(1, 13).Value = "維修(內修)\n4 - 7日完成率";
-                ws2.Cell(1, 14).Value = "維修(內修)\n8日以上完成率";
-                ws2.Cell(1, 15).Value = "維修(外修、內外修)\n15日內完成率";
-                ws2.Cell(1, 16).Value = "維修(外修、內外修)\n16 - 30日完成率";
-                ws2.Cell(1, 17).Value = "維修(外修、內外修)\n31日以上完成率";
-                ws2.Cell(1, 18).Value = "增設\n15日內完成率";
-                ws2.Cell(1, 19).Value = "增設\n16 - 30日完成率";
-                ws2.Cell(1, 20).Value = "增設\n31日以上完成率";
-                ws2.Cell(1, 21).Value = "有費用件數";
-                ws2.Cell(1, 22).Value = "無費用件數";
-                ws2.Cell(1, 23).Value = "總費用";
-                ws2.Cell(1, 24).Value = "平均每件\n維修費用";
+                ws2.Cell(1, 12).Value = "平均每人件數";
+                ws2.Cell(1, 13).Value = "維修完工率";
+                ws2.Cell(1, 14).Value = "維修(內修)\n3日內完成率";
+                ws2.Cell(1, 15).Value = "維修(內修)\n4 - 7日完成率";
+                ws2.Cell(1, 16).Value = "維修(內修)\n8日以上完成率";
+                ws2.Cell(1, 17).Value = "維修(外修、內外修)\n15日內完成率";
+                ws2.Cell(1, 18).Value = "維修(外修、內外修)\n16 - 30日完成率";
+                ws2.Cell(1, 19).Value = "維修(外修、內外修)\n31日以上完成率";
+                ws2.Cell(1, 20).Value = "增設\n15日內完成率";
+                ws2.Cell(1, 21).Value = "增設\n16 - 30日完成率";
+                ws2.Cell(1, 22).Value = "增設\n31日以上完成率";
+                ws2.Cell(1, 23).Value = "有費用件數";
+                ws2.Cell(1, 24).Value = "無費用件數";
+                ws2.Cell(1, 25).Value = "總費用";
+                ws2.Cell(1, 26).Value = "平均每件\n維修費用";
 
                 //Data 整理及統計
 
@@ -783,7 +788,7 @@ namespace EDIS.Controllers
                 }
 
                 //如果是要塞入Query後的資料該資料一定要變成是data.AsEnumerable()
-                ws2.Cell(2, 1).InsertData(rvData);
+                ws2.Cell(2, 1).InsertData(rvData.AsEnumerable());
 
                 //WorkSheet3
                 var ws3 = workbook.Worksheets.Add("個人各月份統計", 3);
@@ -1282,6 +1287,159 @@ namespace EDIS.Controllers
                     memoryStream.Seek(0, SeekOrigin.Begin);
                     //注意Excel的ContentType,是要用這個"application/vnd.ms-excel"
                     string fileName = "月報表_" + qtyMonth.ToString("yyyy-MM") + ".xlsx";
+                    return this.File(memoryStream.ToArray(), "application/vnd.ms-excel", fileName);
+                }
+            }
+        }
+
+        // GET: /RepairReport/EndDateReport
+        public IActionResult EndDateReport(DateTime QtyMonth)
+        {
+            DateTime reportMonth = QtyMonth;
+            int qryYear = reportMonth.Year;
+            int qryMonth = reportMonth.Month;
+
+            //完工日為當月的所有案件
+            var repairDtls = _context.RepairDtls.Where(rd => rd.EndDate.Value.Year == qryYear && 
+                                                             rd.EndDate.Value.Month == qryMonth).ToList();
+            var qtyResults = _context.Repairs.Join(repairDtls, r => r.DocId, d => d.DocId,
+                                             (r, d) => new
+                                             {
+                                                 repair = r,
+                                                 repdtl = d
+                                             }).Join(_context.RepairEmps, r => r.repair.DocId, emp => emp.DocId,
+                                             (r, emp) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = emp
+                                             }).Join(_context.AppUsers, r => r.repemp.UserId, u => u.Id,
+                                             (r, u) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = r.repemp,
+                                                 appuser = u
+                                             }).Join(_context.Departments, r => r.repair.DptId, d => d.DptId,
+                                             (r, d) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = r.repemp,
+                                                 appuser = r.appuser,
+                                                 dpt = d
+                                             }).Join(_context.Departments, r => r.repair.AccDpt, d => d.DptId,
+                                             (r, acc) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = r.repemp,
+                                                 appuser = r.appuser,
+                                                 dpt = r.dpt,
+                                                 accdpt = acc
+                                             }).Join(_context.Buildings, r => Convert.ToInt32(r.repair.Building), b => b.BuildingId,
+                                             (r, b) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = r.repemp,
+                                                 appuser = r.appuser,
+                                                 dpt = r.dpt,
+                                                 accdpt = r.accdpt,
+                                                 building = b
+                                             }).Join(_context.Floors, r => new { BuildingId =  Convert.ToInt32(r.repair.Building), FloorId = r.repair.Floor },
+                                                                      f => new { f.BuildingId, f.FloorId },
+                                             (r, f) => new
+                                             {
+                                                 repair = r.repair,
+                                                 repdtl = r.repdtl,
+                                                 repemp = r.repemp,
+                                                 appuser = r.appuser,
+                                                 dpt = r.dpt,
+                                                 accdpt = r.accdpt,
+                                                 building = r.building,
+                                                 floor = f
+                                             }).Join(_context.Places, r => new { BuildingId = Convert.ToInt32(r.repair.Building), FloorId = r.repair.Floor, PlaceId = r.repair.Area },
+                                                                      p => new { p.BuildingId, p.FloorId, p.PlaceId },
+                                             (r, p) => new
+                                             {
+                                                 //repair = r.repair,
+                                                 //repdtl = r.repdtl,
+                                                 //repemp = r.repemp,
+                                                 //appuser = r.appuser,
+                                                 //dpt = r.dpt,
+                                                 //accdpt = r.accdpt,
+                                                 //building = r.building,
+                                                 //floor = r.floor,
+                                                 //place = p,
+                                                 DocId = r.repair.DocId,
+                                                 ApplyDate = r.repair.ApplyDate,
+                                                 RepType = r.repair.RepType,
+                                                 UserName = r.repair.UserName,
+                                                 DptId = r.dpt.Name_C,
+                                                 AssetNo = r.repair.AssetNo,
+                                                 AssetName = r.repair.AssetName,
+                                                 TroubleDes = r.repair.TroubleDes,
+                                                 AccDpt = r.repair.AccDpt,
+                                                 AccDptName = r.accdpt.Name_C,
+                                                 Building = r.building.BuildingName,
+                                                 Floor = r.floor.FloorName,
+                                                 Area = p.PlaceName,
+                                                 EndDate = r.repdtl.EndDate,
+                                                 Hour = r.repdtl.Hour,
+                                                 EngId = r.appuser.UserName,
+                                                 EngName = r.appuser.FullName,
+                                                 EngDpt = r.appuser.DptId,
+                                             }).ToList();
+
+            //ClosedXML的用法 先new一個Excel Workbook
+            using (XLWorkbook workbook = new XLWorkbook())
+            {
+
+                //一個workbook內至少會有一個worksheet,並將資料Insert至這個位於A1這個位置上
+                //WorkSheet1
+                var ws = workbook.Worksheets.Add("請修完工日資料", 1);
+                //Style
+                ws.ColumnWidth = 15;
+                ws.Column(5).Width = 25;
+                ws.Column(6).Width = 50;
+                ws.Column(8).Width = 200;
+                ws.Columns(10, 13).Width = 25;
+                ws.Column(12).Width = 10;
+
+                //Title1  【2019年各月統計】
+                ws.Cell(1, 1).Value = "表單編號";
+                ws.Cell(1, 2).Value = "申請日期";
+                ws.Cell(1, 3).Value = "請修類別";
+                ws.Cell(1, 4).Value = "申請人";
+                ws.Cell(1, 5).Value = "申請部門";
+                ws.Cell(1, 6).Value = "財產編號";
+                ws.Cell(1, 7).Value = "設備名稱";
+                ws.Cell(1, 8).Value = "故障原因";
+                ws.Cell(1, 9).Value = "成本中心";
+                ws.Cell(1, 10).Value = "成本中心名稱";
+                ws.Cell(1, 11).Value = "期別";
+                ws.Cell(1, 12).Value = "樓層";
+                ws.Cell(1, 13).Value = "區域地點";
+                ws.Cell(1, 14).Value = "完工日";
+                ws.Cell(1, 15).Value = "工時";
+                ws.Cell(1, 16).Value = "工程師代號";
+                ws.Cell(1, 17).Value = "工程師名稱";
+                ws.Cell(1, 18).Value = "工程師部門";
+
+
+                //Data1
+                //如果是要塞入Query後的資料該資料一定要變成是data.AsEnumerable()
+                ws.Cell(2, 1).InsertData(qtyResults.AsEnumerable());
+
+                //因為是用Query的方式,這個地方要用串流的方式來存檔
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    workbook.SaveAs(memoryStream);
+                    //請注意 一定要加入這行,不然Excel會是空檔
+                    memoryStream.Seek(0, SeekOrigin.Begin);
+                    //注意Excel的ContentType,是要用這個"application/vnd.ms-excel"
+                    string fileName = "月報表_" + QtyMonth.ToString("yyyy-MM") + "月請修完工日資料" + ".xlsx";
                     return this.File(memoryStream.ToArray(), "application/vnd.ms-excel", fileName);
                 }
             }

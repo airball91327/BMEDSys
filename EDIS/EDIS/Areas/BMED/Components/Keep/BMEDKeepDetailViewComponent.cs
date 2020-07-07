@@ -30,6 +30,7 @@ namespace EDIS.Areas.BMED.Components.Keep
         {
             KeepModel kp = _context.BMEDKeeps.Find(id);
             kp.AccDptName = kp.AccDpt == null ? "" : _context.Departments.Find(kp.AccDpt).Name_C;
+            kp.CheckerName = kp.CheckerId == 0 ? "" : _context.AppUsers.Find(kp.CheckerId).FullName;
 
             return View(kp);
         }

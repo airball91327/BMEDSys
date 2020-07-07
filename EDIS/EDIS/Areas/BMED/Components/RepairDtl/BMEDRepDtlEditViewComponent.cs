@@ -56,14 +56,14 @@ namespace EDIS.Areas.BMED.Components.RepairDtl
                 return View(dtl);
             }
 
-            if (repairDtl.InOut == null)  // Set default value.
-            {
-                repairDtl.InOut = "內修";
-            }
-            if (repairDtl.IsCharged == null)  // Set default value.
-            {
-                repairDtl.IsCharged = "N";
-            }
+            //if (repairDtl.InOut == null)  // Set default value.
+            //{
+            //    repairDtl.InOut = "內修";
+            //}
+            //if (repairDtl.IsCharged == null)  // Set default value.
+            //{
+            //    repairDtl.IsCharged = "N";
+            //}
             /* Get assetNo, and set default value. */
             repairDtl.AssetNo = _context.BMEDRepairs.Find(repairDtl.DocId).AssetNo;
             if (repairDtl.AssetNo != null)
@@ -79,9 +79,13 @@ namespace EDIS.Areas.BMED.Components.RepairDtl
                 }
             }
 
+            /* Get CheckerName from Repair table. */
+            var checkerId = _context.BMEDRepairs.Find(id).CheckerId;
+            repairDtl.CheckerName = checkerId == 0 ? "" : _context.AppUsers.Find(checkerId).FullName;
+
             RepairFlowModel rf = _context.BMEDRepairFlows.Where(f => f.DocId == id)
                                                          .Where(f => f.Status == "?").FirstOrDefault();
-            var isEngineer = _context.UsersInRoles.Where(u => u.AppRoles.RoleName == "RepEngineer" &&
+            var isEngineer = _context.UsersInRoles.Where(u => u.AppRoles.RoleName == "MedEngineer" &&
                                                               u.UserId == ur.Id).FirstOrDefault();
             /* 流程 => 工程師，Login User => 負責之工程師 */
             if (rf.Cls.Contains("工程師") && rf.UserId == ur.Id)

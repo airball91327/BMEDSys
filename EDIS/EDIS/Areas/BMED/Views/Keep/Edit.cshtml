@@ -54,25 +54,33 @@
         </div>
     </div>
 </div>
+
+<div id="pnlKEEPDTL2">
+    @if (UserManager.IsInRole(User, "MedEngineer") == true || UserManager.IsInRole(User, "MedAdmin") == true ||
+         UserManager.IsInRole(User, "Admin") == true)
+    {
+        @await Component.InvokeAsync("BMEDKeepEdit", new { id = Model.DocId })
+    }
+    else
+    {
+        @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
+    }
+</div>
+
 <ul class="nav nav-pills" style="font-size:120%">
-    <li role="presentation" id="page1" class="active"><a href="#keep" data-toggle="tab" style="padding-left:20px">申請資料</a></li>
-    <li role="presentation" id="page2"><a href="#keepdtl" data-toggle="tab" style="padding-left:20px">保養紀錄</a></li>
-    <li role="presentation" id="page3"><a href="#keeprecord" data-toggle="tab" style="padding-left:20px">保養項目登錄</a></li>
-    <li role="presentation" id="page4"><a href="#keepemp" data-toggle="tab" style="padding-left:20px">工程師工時</a></li>
-    <li role="presentation" id="page5"><a href="#keepcost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
-    <li role="presentation" id="page6"><a href="#flowlist" data-toggle="tab" style="padding-left:20px">流程紀錄</a></li>
-    <li role="presentation" id="page7"><a href="#keepflow" data-toggle="tab" style="padding-left:20px">簽核作業</a></li>
+    <li role="presentation" id="page1" class="active"><a href="#keepdtl" data-toggle="tab" style="padding-left:20px">保養紀錄與工時</a></li>
+    <li role="presentation" id="page2"><a href="#keeprecord" data-toggle="tab" style="padding-left:20px">保養項目登錄</a></li>
+    <li role="presentation" id="page3"><a href="#keepcost" data-toggle="tab" style="padding-left:20px">費用明細</a></li>
+    <li role="presentation" id="page4"><a href="#keepflow" data-toggle="tab" style="padding-left:20px">簽核作業</a></li>
 </ul>
 <hr />
 <div class="tab-content">
-    <div id="keep" class="tab-pane fade in active">
-        <div>
-            @await Component.InvokeAsync("BMEDKeepDetail", new { id = Model.DocId })
-        </div>
-    </div>
-    <div id="keepdtl" class="tab-pane fade">
+    <div id="keepdtl" class="tab-pane fade in active">
         <div>
             @await Component.InvokeAsync("BMEDKeepDtlEdit", new { id = Model.DocId })
+        </div>
+        <div>
+            @await Component.InvokeAsync("BMEDKeepEmpEdit", new { DocId = Model.DocId })
         </div>
     </div>
     <div id="keeprecord" class="tab-pane fade">
@@ -80,24 +88,17 @@
             @await Component.InvokeAsync("BMEDKeepRecordEdit", new { id = Model.DocId })
         </div>
     </div>
-    <div id="keepemp" class="tab-pane fade">
-        <div>
-            @await Component.InvokeAsync("BMEDKeepEmpEdit", new { DocId = Model.DocId })
-        </div>
-    </div>
     <div id="keepcost" class="tab-pane fade">
         <div>
             @await Component.InvokeAsync("BMEDKeepCostEdit", new { id = Model.DocId })
         </div>
     </div>
-    <div id="flowlist" class="tab-pane fade">
-        <div>
-            @await Component.InvokeAsync("BMEDKeepFlowList", new { id = Model.DocId })
-        </div>
-    </div>
     <div id="keepflow" class="tab-pane fade">
         <div>
             @await Component.InvokeAsync("BMEDKeepNextFlow", new { id = Model.DocId })
+        </div>
+        <div>
+            @await Component.InvokeAsync("BMEDKeepFlowList", new { id = Model.DocId })
         </div>
     </div>
 </div>

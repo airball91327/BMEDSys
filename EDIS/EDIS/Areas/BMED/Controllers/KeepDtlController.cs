@@ -38,7 +38,7 @@ namespace EDIS.Areas.BMED.Controllers
                 {
                     if (keepDtlModel.IsCharged == "N")
                     {
-                        _context.BMEDKeepCosts.RemoveRange(_context.BMEDKeepCosts.Where(c => c.DocId == keepDtlModel.DocId));
+                        //_context.BMEDKeepCosts.RemoveRange(_context.BMEDKeepCosts.Where(c => c.DocId == keepDtlModel.DocId));
                         keepDtlModel.Cost = 0;
                     }
                     else

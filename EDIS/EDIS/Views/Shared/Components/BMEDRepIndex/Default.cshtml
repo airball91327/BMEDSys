@@ -25,6 +25,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $('.BMEDcombobox').combobox();
+        $("#BMEDrepSearchForm").submit();
         /* Only first visit the page, will submit the form. */
         var count = 0;
         $('.nav-tabs a[href="#menu1"]').on('shown.bs.tab', function (event) {
@@ -47,6 +48,9 @@
             var IsCharged = $("#BMEDqtyIsCharged").val();
             var DateType = $("#BMEDqtyDateType").val();
             var SearchAllDoc = false;
+            var EngCode = $("#BMEDqtyEngCode").val();
+            var TicketNo = $("#BMEDqtyTicketNo").val();
+            var Vendor = $("#BMEDqtyVendor").val();
             if ($("#BMEDqtySearchAllDoc").is(':checked') == true) {
                 SearchAllDoc = true;
             }
@@ -65,14 +69,17 @@
                     DealStatus: DealStatus,
                     IsCharged: IsCharged,
                     DateType: DateType,
-                    SearchAllDoc: SearchAllDoc
+                    SearchAllDoc: SearchAllDoc,
+                    EngCode: EngCode,
+                    TicketNo: TicketNo,
+                    Vendor: Vendor,
                 },
                 success: function (response, textStatus, jqXHR) {
 
                     window.location.href = '@Url.Action("ExportToExcel", "Repair", new { Area = "BMED" })' + '?qtyDocId=' + DocId + '&qtyAssetNo=' + AssetNo
                         + '&qtyAccDpt=' + AccDpt + '&qtyAssetName=' + AssetName + '&qtyFlowType=' + FlowType + '&qtyDptId=' + DptId
                         + '&Date1=' + Date1 + '&Date2=' + Date2 + '&DealStatus=' + DealStatus + '&IsCharged=' + IsCharged
-                        + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc;
+                        + '&DateType=' + DateType + '&SearchAllDoc=' + SearchAllDoc + '&EngCode=' + EngCode + '&TicketNo=' + TicketNo + '&Vendor=' + Vendor;
                 },
                 error: function (xhr, status, error) {
                     alert(error);
@@ -108,15 +115,15 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyDOCID" class="control-title">表單編號</label>
+                    <label for="BMEDqtyDOCID" class="control-title">表單編號</label>
                     <input asp-for="BMEDqtyDOCID" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyASSETNO" class="control-title">財產編號</label>
+                    <label for="BMEDqtyASSETNO" class="control-title">財產編號</label>
                     <input asp-for="BMEDqtyASSETNO" class="form-control-s" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyACCDPT" class="control-title">成本中心</label>
+                    <label for="BMEDqtyACCDPT" class="control-title">成本中心</label>
                     <select asp-for="BMEDqtyACCDPT" asp-items="@ViewData["BMEDAccDpt"] as SelectList" class="form-control BMEDcombobox">
                         <option value="">請選擇</option>
                     </select>
@@ -126,16 +133,16 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyASSETNAME" class="control-title">設備名稱<br />(關鍵字)</label>
+                    <label for="BMEDqtyASSETNAME" class="control-title">設備名稱<br />(關鍵字)</label>
                     <input asp-for="BMEDqtyASSETNAME" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label for="qtyFLOWTYPE" class="control-title">流程狀態</label>
+                    <label for="BMEDqtyFLOWTYPE" class="control-title">流程狀態</label>
                     <select asp-for="BMEDqtyFLOWTYPE" asp-items="@ViewData["BMEDFlowType"] as SelectList" class="form-control-s">
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="qtyDPTID" class="control-title">申請部門</label>
+                    <label for="BMEDqtyDPTID" class="control-title">申請部門</label>
                     <select asp-for="BMEDqtyDPTID" asp-items="@ViewData["BMEDApplyDpt"] as SelectList" class="form-control BMEDcombobox">
                         <option value="">請選擇</option>
                     </select>
@@ -145,15 +152,33 @@
         <div class="row">
             <div class=form-inline>
                 <div class="form-group">
-                    <label for="qtyDealStatus" class="control-title">處理狀態</label>
+                    <label for="BMEDqtyDealStatus" class="control-title">處理狀態</label>
                     <select asp-for="BMEDqtyDealStatus" asp-items="@ViewData["BMEDDealStatus"] as SelectList" class="form-control">
                         <option value="">請選擇</option>
                     </select>
                 </div>
-                <label for="qtyIsCharged" class="control-title">[有][無]費用</label>
+                <label for="BMEDqtyIsCharged" class="control-title">[有][無]費用</label>
                 <select asp-for="BMEDqtyIsCharged" asp-items="@ViewData["BMEDIsCharged"] as SelectList" class="form-control-s">
                     <option value="">請選擇</option>
                 </select>
+                <div class="form-group">
+                    <label for="BMEDqtyEngCode" class="control-title">負責工程師</label>
+                    <select asp-for="BMEDqtyEngCode" asp-items="@ViewData["BMEDEngs"] as SelectList" class="form-control BMEDcombobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="BMEDqtyTicketNo" class="control-title">發票號碼</label>
+                    <input asp-for="BMEDqtyTicketNo" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="BMEDqtyVendor" class="control-title">廠商(關鍵字)</label>
+                    <input asp-for="BMEDqtyVendor" class="form-control-s" />
+                </div>
                 @if (UserManager.IsInRole(User, "MedEngineer") == true) /* Only MedEngineer can search all engineer docs. */
                 {
                     <div class="form-group">
@@ -195,3 +220,14 @@
 </form>
 
 <div id="BMEDpnlREPLIST"></div>
+
+
+@if (UserManager.IsInRole(User, "MedAssetMgr") || UserManager.IsInRole(User, "Admin"))
+{
+    <hr />
+    <h4>未分派案件</h4>
+    <br />
+    <div id="unsignListDiv">
+        @await Component.InvokeAsync("BMEDRepResign")
+    </div>
+}

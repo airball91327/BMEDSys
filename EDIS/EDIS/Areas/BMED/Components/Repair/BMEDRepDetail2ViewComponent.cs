@@ -35,6 +35,18 @@ namespace EDIS.Areas.BMED.Components.Repair
             repair.AccDptName = _context.Departments.Find(repair.AccDpt).Name_C;
             repair.CheckerName = _context.AppUsers.Find(repair.CheckerId).FullName;
 
+            if (repair.AssetNo != null)
+            {
+                var asset = _context.BMEDAssets.Find(repair.AssetNo);
+                if (asset != null)
+                {
+                    if (asset.AccDate.HasValue)
+                    {
+                        repair.AssetAccDate = asset.AccDate.Value.ToString("yyyy/MM/dd");
+                    }
+                }
+            }
+
             return View(repair);
         }
 
