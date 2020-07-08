@@ -1,41 +1,42 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
 
 @{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "採購評估/查看";
 }
 
 <h2>查看</h2>
+<h4>採購評估</h4>
+<hr />
 
 <fieldset>
-    <legend>採購評估</legend>
     <div style="margin-bottom: 10px">
         @await Html.PartialAsync("_AttainFile", Model)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.UserName)
+        <label asp-for="UserName" class="control-title"></label>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.UserId)
         @Html.DisplayFor(model => model.UserName)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Company)
+        <label asp-for="Company" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Company)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Contact)
+        <label asp-for="Contact" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Contact)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.AccDpt)
+        <label asp-for="AccDpt" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.AccDpt)
@@ -43,81 +44,78 @@
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantType)
+        <label asp-for="PlantType" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantType)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantCnam)
+        <label asp-for="PlantCnam" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantCnam)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.PlantEnam)
+        <label asp-for="PlantEnam" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.PlantEnam)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Standard)
+        <label asp-for="Standard" class="control-title"></label>
     </div>
 
-    <div class="display-field">
-        <pre>
-            @Html.DisplayFor(model => model.Standard)
-        </pre>
+    <div class="display-field form-inline">
+        <textarea asp-for="Standard" class="form-control" rows="3" disabled></textarea>
     </div>
+
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Amt)
+        <label asp-for="Amt" class="control-title"></label>
     </div>
-
     <div class="display-field">
         @Html.DisplayFor(model => model.Amt)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Unit)
+        <label asp-for="Unit" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Unit)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Price)
+        <label asp-for="Price" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Price)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.TotalPrice)
+        <label asp-for="TotalPrice" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.TotalPrice)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.Place)
+        <label asp-for="Place" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.Place)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.EngId)
+        <label asp-for="EngId" class="control-title"></label>
     </div>
     <div class="display-field">
-        @Html.DisplayFor(model => model.EngId)
         @Html.DisplayFor(model => model.EngName)
     </div>
 
     <div class="display-label">
-        @Html.DisplayNameFor(model => model.BudgetId)
+        <label asp-for="BudgetId" class="control-title"></label>
     </div>
     <div class="display-field">
         @Html.DisplayFor(model => model.BudgetId)

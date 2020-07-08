@@ -4,9 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
-using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Areas.BMED.Models.BuyEvaluateModels;
-using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Models.Identity;
 using EDIS.Repositories;
 using EDIS.Services;
@@ -56,8 +54,7 @@ namespace EDIS.Areas.BMED.Controllers
 
         public ActionResult GetList(string id = null, string sid = null)
         {
-            List<BuyFlowModel> rf = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id",
-                new SqlParameter("id", id)).ToList();
+            List<BuyFlowModel> rf = _context.BuyFlows.Where(f => f.DocId == id).ToList();
             AppUserModel p;
             foreach (BuyFlowModel f in rf)
             {
@@ -68,8 +65,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (sid != null)
             {
-                List<BuyFlowModel> rf2 = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id",
-                new SqlParameter("id", sid)).ToList();
+                List<BuyFlowModel> rf2 = _context.BuyFlows.Where(f => f.DocId == sid).ToList();
                 foreach (BuyFlowModel f in rf2)
                 {
                     p = _context.AppUsers.Find(f.UserId);
@@ -84,15 +80,13 @@ namespace EDIS.Areas.BMED.Controllers
 
         public ActionResult GetSList(string id = null)
         {
-            List<BuySFlowModel> sf = _context.Database.SqlQuery<BuySFlowModel>("SELECT * FROM BuySFlow WHERE DOCID = @id",
-                new SqlParameter("id", id)).ToList();
+            List<BuySFlowModel> sf = _context.BuySFlows.Where(f => f.DocId == id).ToList();
             List<BuyFlowModel> rf = new List<BuyFlowModel>();
             List<BuyFlowModel> rf2;
             AppUserModel p;
             foreach (BuySFlowModel f in sf)
             {
-                rf2 = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id",
-                new SqlParameter("id", f.DocSid)).ToList();
+                rf2 = _context.BuyFlows.Where(bf => bf.DocId == f.DocSid).ToList();
                 foreach (BuyFlowModel f2 in rf2)
                 {
                     p = _context.AppUsers.Find(f2.UserId);
@@ -262,20 +256,16 @@ namespace EDIS.Areas.BMED.Controllers
                 _context.BuyFlows.Add(bf2);
                 _context.SaveChanges();
             }
-            return RedirectToAction("Index", "Members");
+            return RedirectToAction("Index", "Home", new { Area = "" });
         }
 
         public ActionResult NextFlow(string id = null, string sid = null)
         {
             BuyFlowModel rf;
             if (sid != null)
-                rf = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id "
-                + "AND STATUS = '?' ",
-                new SqlParameter("id", sid)).FirstOrDefault();
+                rf = _context.BuyFlows.Where(f => f.DocId == sid && f.Status == "?").FirstOrDefault();
             else
-                rf = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id "
-                + "AND STATUS = '?' ",
-                new SqlParameter("id", id)).FirstOrDefault();
+                rf = _context.BuyFlows.Where(f => f.DocId == id && f.Status == "?").FirstOrDefault();
             //rf.Docid = id;
             List<SelectListItem> listItem = new List<SelectListItem>();
             if (sid == null)
@@ -341,17 +331,16 @@ namespace EDIS.Areas.BMED.Controllers
         [HttpPost]
         public ActionResult NextFlow(BuyFlowModel BuyFlow)
         {
+            // Get Login User's details.
+            var loginUser = _userRepo.Find(ur => ur.UserName == User.Identity.Name).FirstOrDefault();
             if (ModelState.IsValid)
             {
                 if (BuyFlow.SelOpin == "其他" && string.IsNullOrEmpty(BuyFlow.Opinions))
                 {
                     throw new Exception("請填寫意見欄!!");
                 }
-                BuyFlowModel rf = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id "
-                + "AND STATUS = '?' ",
-                new SqlParameter("id", BuyFlow.DocId)).FirstOrDefault();
-                List<BuyFlowModel> rflist = _context.Database.SqlQuery<BuyFlowModel>("SELECT * FROM BuyFlow WHERE DOCID = @id ",
-                new SqlParameter("id", BuyFlow.DocId)).ToList();
+                BuyFlowModel rf = _context.BuyFlows.Where(f => f.DocId == BuyFlow.DocId && f.Status == "?").FirstOrDefault();
+                List<BuyFlowModel> rflist = _context.BuyFlows.Where(f => f.DocId == BuyFlow.DocId).ToList();
                 BuyEvaluateModel r;
                 BuySFlowModel s = _context.BuySFlows.Where(b => b.DocSid == BuyFlow.DocId).FirstOrDefault();
                 if (s != null)
@@ -367,12 +356,12 @@ namespace EDIS.Areas.BMED.Controllers
                     rf.Opinions = BuyFlow.SelOpin + Environment.NewLine + BuyFlow.Opinions;
                     rf.Status = "2";
                     rf.Rtt = DateTime.Now;
-                    rf.Rtp = WebSecurity.CurrentUserId;
+                    rf.Rtp = loginUser.Id;
                     if (s != null)
                     {
                         s.Status = "2";
                         s.Rtt = DateTime.Now;
-                        s.Rtp = WebSecurity.CurrentUserId;
+                        s.Rtp = loginUser.Id;
                         _context.Entry(s).State = EntityState.Modified;
                     }
                     _context.Entry(rf).State = EntityState.Modified;
@@ -393,7 +382,7 @@ namespace EDIS.Areas.BMED.Controllers
                                 _context.SaveChanges();
                                 //
                                 mail = new Tmail();
-                                u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                                u = _context.AppUsers.Find(loginUser.Id);
                                 mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
                                 mail.to = new System.Net.Mail.MailAddress(_context.AppUsers.Find(f.UserId).Email);
                                 //mail.cc = new System.Net.Mail.MailAddress("99242@cch.org.tw");
@@ -411,7 +400,7 @@ namespace EDIS.Areas.BMED.Controllers
                     else
                     {
                         mail = new Tmail();
-                        u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                        u = _context.AppUsers.Find(loginUser.Id);
                         mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
                         foreach (BuyFlowModel rr in rflist)
                         {
@@ -430,19 +419,22 @@ namespace EDIS.Areas.BMED.Controllers
                         mail.message.IsBodyHtml = true;
                         //mail.SendMail();
                     }
-                    return RedirectToAction("Index", "Members");
+                    return new JsonResult(BuyFlow)
+                    {
+                        Value = new { success = true, error = "" },
+                    };
                 }
                 else if (BuyFlow.Cls == "廢除")
                 {
                     rf.Opinions = BuyFlow.SelOpin + Environment.NewLine + BuyFlow.Opinions;
                     rf.Status = "3";
                     rf.Rtt = DateTime.Now;
-                    rf.Rtp = WebSecurity.CurrentUserId;
+                    rf.Rtp = loginUser.Id;
                     _context.Entry(rf).State = EntityState.Modified;
                     _context.SaveChanges();
                     //
                     mail = new Tmail();
-                    u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                    u = _context.AppUsers.Find(loginUser.Id);
                     mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
                     foreach (BuyFlowModel rr in rflist)
                     {
@@ -459,7 +451,10 @@ namespace EDIS.Areas.BMED.Controllers
                     mail.message.Body = body;
                     mail.message.IsBodyHtml = true;
                     //mail.SendMail();
-                    return RedirectToAction("Index", "Members");
+                    return new JsonResult(BuyFlow)
+                    {
+                        Value = new { success = true, error = "" },
+                    };
                 }
                 BuyFlow.StepId = rf.StepId + 1;
                 BuyFlow.Rtt = DateTime.Now;
@@ -474,10 +469,10 @@ namespace EDIS.Areas.BMED.Controllers
                 }
                 BuyFlow.Status = "?";
                 u = _context.AppUsers.Find(BuyFlow.UserId);
-                BuyFlow.Role = Roles.GetRolesForUser(u.UserName).FirstOrDefault();
+                BuyFlow.Role = roleManager.GetRolesForUser(u.Id).FirstOrDefault();
                 rf.Opinions = BuyFlow.SelOpin + Environment.NewLine + BuyFlow.Opinions;
                 rf.Status = "1";
-                rf.Rtp = WebSecurity.CurrentUserId;
+                rf.Rtp = loginUser.Id;
                 BuyFlow.Opinions = null;
                 _context.Entry(rf).State = EntityState.Modified;
                 _context.BuyFlows.Add(BuyFlow);
@@ -485,7 +480,7 @@ namespace EDIS.Areas.BMED.Controllers
                 //
                 mail = new Tmail();
                 body = "";
-                u = _context.AppUsers.Find(WebSecurity.CurrentUserId);
+                u = _context.AppUsers.Find(loginUser.Id);
                 mail.from = new System.Net.Mail.MailAddress(u.Email); //u.Email
                 u = _context.AppUsers.Find(BuyFlow.UserId);
                 mail.to = new System.Net.Mail.MailAddress(u.Email); //u.Email
@@ -500,7 +495,10 @@ namespace EDIS.Areas.BMED.Controllers
                 mail.message.IsBodyHtml = true;
                 //mail.SendMail();
 
-                return RedirectToAction("Index", "Members");
+                return new JsonResult(BuyFlow)
+                {
+                    Value = new { success = true, error = "" },
+                };
             }
 
             return View(BuyFlow);
@@ -508,13 +506,15 @@ namespace EDIS.Areas.BMED.Controllers
 
         public JsonResult GetNextEmp(string cls = null, string docid = null, string vendor = null)
         {
+            // Get Login User's details.
+            var loginUser = _userRepo.Find(ur => ur.UserName == User.Identity.Name).FirstOrDefault();
             List<SelectListItem> list = null;
             List<string> s;
             SelectListItem li;
             AppUserModel u;
             BuyEvaluateModel r = _context.BuyEvaluates.Find(docid);
-            string c = _context.AppUsers.Find(WebSecurity.CurrentUserId).CustId;
-            string g = _context.Departments.Find(c).GroupId;
+            string c = _context.AppUsers.Find(loginUser.Id).DptId;
+            //string g = _context.Departments.Find(c).GroupId;
             //string g = _context.CustOrgans.Find(_context.UserProfiles.Find(r.UserId).CustId).GroupId;
             switch (cls)
             {
@@ -529,105 +529,95 @@ namespace EDIS.Areas.BMED.Controllers
                     break;
                 case "評估工程師":
                     list = new List<SelectListItem>();
-                    s = Roles.GetUsersInRole("MedEngineer").ToList();
+                    s = roleManager.GetUsersInRole("MedEngineer").ToList();
                     foreach (string l in s)
                     {
-                        u = _context.AppUsers.Find(WebSecurity.GetUserId(l));
-                        if (_context.Departments.Find(u.DptId).GroupId == g)
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (u != null)
                         {
                             li = new SelectListItem();
                             li.Text = u.FullName;
-                            li.Value = WebSecurity.GetUserId(l).ToString();
+                            li.Value = u.Id.ToString();
                             list.Add(li);
                         }
                     }
                     break;
                 case "設備主管":
-                    list = new List<ListItem>();
-                    s = Roles.GetUsersInRole("MedMgr").ToList();
+                    list = new List<SelectListItem>();
+                    s = roleManager.GetUsersInRole("MedMgr").ToList();
                     foreach (string l in s)
                     {
-                        u = _context.UserProfiles.Find(WebSecurity.GetUserId(l));
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
                         if (u != null)
                         {
                             if (u.Status == "Y")
                             {
-                                li = new ListItem();
+                                li = new SelectListItem();
                                 li.Text = u.FullName;
-                                li.Value = WebSecurity.GetUserId(l).ToString();
+                                li.Value = u.Id.ToString();
                                 list.Add(li);
                             }
                         }
                     }
                     break;
                 case "採購主管":
-                    s = Roles.GetUsersInRole("BuyerMgr").ToList();
-                    list = new List<ListItem>();
+                    s = roleManager.GetUsersInRole("BuyerMgr").ToList();
+                    list = new List<SelectListItem>();
                     foreach (string l in s)
                     {
-                        u = _context.UserProfiles.Find(WebSecurity.GetUserId(l));
-                        if (u.CustId != null)
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (u != null)
                         {
-                            if (_context.CustOrgans.Find(u.CustId).GroupId == g)
-                            {
-                                li = new ListItem();
-                                li.Text = u.FullName;
-                                li.Value = WebSecurity.GetUserId(l).ToString();
-                                list.Add(li);
-                            }
+                            li = new SelectListItem();
+                            li.Text = u.FullName;
+                            li.Value = u.Id.ToString();
+                            list.Add(li);
                         }
                     }
                     break;
                 case "單位主管":
-                    s = Roles.GetUsersInRole("Manager").ToList();
-                    c = _context.UserProfiles.Find(r.UserId).CustId;
-                    list = new List<ListItem>();
+                    s = roleManager.GetUsersInRole("Manager").ToList();
+                    c = _context.AppUsers.Find(r.UserId).DptId;
+                    list = new List<SelectListItem>();
                     foreach (string l in s)
                     {
-                        u = _context.UserProfiles.Find(WebSecurity.GetUserId(l));
-                        CustOrgan o = _context.CustOrgans.Find(u.CustId);
-                        if (g != null)
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if (u != null)
                         {
-                            if (o.GroupId == g)
+                            DepartmentModel o = _context.Departments.Find(u.DptId);
+                            if (u.DptId == c)
                             {
-                                li = new ListItem();
+                                li = new SelectListItem();
                                 li.Text = u.FullName;
-                                li.Value = WebSecurity.GetUserId(l).ToString();
-                                list.Add(li);
-                            }
-                        }
-                        else
-                        {
-                            if (u.CustId == c)
-                            {
-                                li = new ListItem();
-                                li.Text = u.FullName;
-                                li.Value = WebSecurity.GetUserId(l).ToString();
+                                li.Value = u.Id.ToString();
                                 list.Add(li);
                             }
                         }
                     }
                     break;
                 case "設備經辦":
-                    s = Roles.GetUsersInRole("MedToDo").ToList();
-                    list = new List<ListItem>();
+                    s = roleManager.GetUsersInRole("MedToDo").ToList();
+                    list = new List<SelectListItem>();
                     foreach (string l in s)
                     {
-                        u = _context.UserProfiles.Find(WebSecurity.GetUserId(l));
-                        if (u.Status == "Y")
+                        u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                        if ( u != null)
                         {
-                            li = new ListItem();
-                            li.Text = u.FullName;
-                            li.Value = WebSecurity.GetUserId(l).ToString();
-                            list.Add(li);
+                            if (u.Status == "Y")
+                            {
+                                li = new SelectListItem();
+                                li.Text = u.FullName;
+                                li.Value = u.Id.ToString();
+                                list.Add(li);
+                            }
                         }
                     }
                     break;
                 case "申請者":
                     if (r != null)
                     {
-                        list = new List<ListItem>();
-                        li = new ListItem();
+                        list = new List<SelectListItem>();
+                        li = new SelectListItem();
                         li.Text = r.UserName;
                         li.Value = r.UserId.ToString();
                         list.Add(li);
@@ -636,15 +626,15 @@ namespace EDIS.Areas.BMED.Controllers
                 case "採購人員":
                     if (r != null)
                     {
-                        list = new List<ListItem>();
-                        li = new ListItem();
+                        list = new List<SelectListItem>();
+                        li = new SelectListItem();
                         li.Text = r.PurchaserName;
                         li.Value = r.PurchaserId.ToString();
                         list.Add(li);
                     }
                     break;
                 default:
-                    list = new List<ListItem>();
+                    list = new List<SelectListItem>();
                     break;
             }
             return Json(list);

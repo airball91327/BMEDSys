@@ -5,6 +5,16 @@
     ViewBag.Title = "採購評估/編輯";
 }
 
+<style>
+    /* Style the scale of checkbox. */
+    input[type=checkbox] {
+        -ms-transform: scale(2); /* IE */
+        -moz-transform: scale(2); /* FireFox */
+        -webkit-transform: scale(2); /* Safari and Chrome */
+        -o-transform: scale(2); /* Opera */
+    }
+</style>
+
 <h2>採購評估/編輯</h2>
 
 <fieldset>
@@ -119,10 +129,8 @@
         <div class="display-label">
             <label asp-for="Standard" class="control-title"></label>
         </div>
-        <div class="display-field">
-            <pre>
-                @Html.DisplayFor(model => model.Standard)
-            </pre>
+        <div class="display-field form-inline">
+            <textarea asp-for="Standard" class="form-control" rows="3" disabled></textarea>
         </div>
     </div>
     <div id="pnlMEDMGR">
@@ -136,7 +144,7 @@
             <label asp-for="IsAgree" class="control-title"></label>
         </div>
         <div class="display-field">
-            <input asp-for="IsAgree" type="checkbox" class="form-control" />
+            <input asp-for="IsAgree" type="checkbox" style="margin-left: 1.2em;"/>
         </div>
     </div>
     <div id="pnlMEDENG">

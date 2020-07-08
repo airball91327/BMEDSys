@@ -71,7 +71,7 @@
                     }
                     else
                     {
-                        @Html.ActionLink("查看", "Details", "BuyEvaluate", new { id = item.DocId }, null)
+                        @Html.ActionLink("查看", "Details", "BuyEvaluate", new { id = item.DocId }, new { target = "_blank" })
                     }
                     @if (UserManager.IsInRole(User, "Buyer"))
                     {
@@ -116,8 +116,8 @@
             </tr>
             if (item.Flg == "2")
             {
-                <tr style="background-color: @s" }>
-                    <td colspan="5" style="padding-left: 30px; color: lightgray">
+                <tr @*style="background-color: @s"*@ >
+                    <td colspan="5" style="padding-left: 30px; color: lightblue">
                         @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = item.DocId, upload = "採購人員" })
                     </td>
                 </tr>

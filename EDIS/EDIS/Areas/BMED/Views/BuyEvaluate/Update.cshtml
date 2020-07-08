@@ -1,7 +1,7 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BuyEvaluateModel
 
 @{
-    Layout = null;
+    Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
 }
 
 <!DOCTYPE html>
@@ -13,7 +13,16 @@
 </head>
 <body>
 
-    <form>
+    <form asp-action="Update" asp-controller="BuyEvaluate" asp-area="BMED" data-ajax="true"
+      data-ajax-method="POST"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'作業進行中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-success="alert('儲存成功');window.opener.location.reload();close();">
+
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         <fieldset>

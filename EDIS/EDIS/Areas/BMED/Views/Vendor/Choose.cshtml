@@ -1,0 +1,6 @@
+﻿@Html.DropDownList("VendorNamSelect", ViewData["Vendors"] as SelectList, "請選擇廠商", new { @id = "SelectVendor", @class = "form-control" })
+<script>
+    $(document).ready(function () {
+        $('#AjaxLoading').hide();
+    });
+</script>

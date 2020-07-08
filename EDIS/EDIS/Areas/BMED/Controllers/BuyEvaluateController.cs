@@ -78,6 +78,11 @@ namespace EDIS.Areas.BMED.Controllers
                 return NotFound();
             }
             buyevaluate.EngName = _context.AppUsers.Find(buyevaluate.EngId).FullName;
+            var dpt = _context.Departments.Find(buyevaluate.AccDpt);
+            if (dpt != null)
+            {
+                buyevaluate.AccDptNam = dpt.Name_C;
+            }
             return View(buyevaluate);
         }
 
@@ -290,7 +295,10 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 _context.Entry(buyevaluate).State = EntityState.Modified;
                 _context.SaveChanges();
-                return Content("<script>alert('儲存成功');window.opener.location.reload();close();</script>");
+                return new JsonResult(buyevaluate)
+                {
+                    Value = new { success = true, error = "" },
+                };
             }
             return View(buyevaluate);
         }

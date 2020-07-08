@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using EDIS.Areas.BMED.Data;
 using EDIS.Areas.BMED.Models.RepairModels;
 using Microsoft.AspNetCore.Authorization;
+using EDIS.Models.Identity;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -185,6 +186,55 @@ namespace EDIS.Areas.BMED.Controllers
         private bool VendorModelExists(int id)
         {
             return _context.BMEDVendors.Any(e => e.VendorId == id);
+        }
+
+        public IActionResult Choose(string KeyWord = "", string UniteNo = "", string src = "ws")
+        {
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            List<VendorModel> vr = _context.BMEDVendors.ToList();
+            if (KeyWord != "")
+                vr = vr.Where(r => r.VendorName.Contains(KeyWord)).ToList();
+            if (UniteNo != "")
+                vr = vr.Where(r => r.UniteNo == UniteNo).ToList();
+            foreach (VendorModel v in vr)
+            {
+                listItem.Add(new SelectListItem { Text = v.VendorName, Value = v.UniteNo });
+            }
+            ViewData["Vendors"] = new SelectList(listItem.Distinct(), "Value", "Text", "");
+            return PartialView();
+        }
+
+        public IActionResult GetMembers(string uniteno = null)
+        {
+            List<SelectListItem> list = new List<SelectListItem>();
+            SelectListItem li;
+            VendorModel v = _context.BMEDVendors.Where(vr => vr.UniteNo == uniteno && vr.Status == "Y").FirstOrDefault();
+            if (v != null)
+            {
+                List<AppUserModel> ur = _context.AppUsers.Where(u => u.VendorId == v.VendorId).ToList();
+                foreach (AppUserModel p in ur)
+                {
+                    li = new SelectListItem();
+                    li.Text = p.FullName;
+                    li.Value = p.Id.ToString();
+                    list.Add(li);
+                }
+            }
+            return Json(list);
+        }
+
+        public string IsInVendor(string uniteno = null)
+        {
+            List<VendorModel> vv = _context.BMEDVendors.Where(v => v.UniteNo == uniteno).ToList();
+            if (vv.Count > 0)
+                return "";
+            return "*此廠商尚未建檔";
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            _context.Dispose();
+            base.Dispose(disposing);
         }
     }
 }
