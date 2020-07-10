@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using EDIS.Areas.BMED.Data;
+using EDIS.Areas.BMED.Models.BuyEvaluateModels;
 using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Areas.BMED.Models.KeepModels;
 using EDIS.Areas.BMED.Models.RepairModels;
@@ -389,31 +390,31 @@ namespace EDIS.Areas.BMED.Controllers
             VendorModel v = _context.BMEDVendors.Find(u.VendorId);
             if (id != null)
             {
-                //BuyEvaluate b = _context.BuyEvaluates.Find(id);
-                //if (b != null)
-                //{
-                //    r.EngId = b.EngId;
-                //    r.BudgetId = b.BudgetId;
-                //    int a = 0;
-                //    if (int.TryParse(b.AccDpt, out a))
-                //    {
-                //        c = _context.Departments.Find(b.AccDpt);
-                //        if (c != null)
-                //        {
-                //            r.AccDpt = c.DptId;
-                //            r.AccDptNam = c.Name_C;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        c = _context.Departments.Where(d => d.Name_C == b.AccDpt).FirstOrDefault();
-                //        if (c != null)
-                //        {
-                //            r.AccDpt = c.DptId;
-                //            r.AccDptNam = c.Name_C;
-                //        }
-                //    }
-                //}
+                BuyEvaluateModel b = _context.BuyEvaluates.Find(id);
+                if (b != null)
+                {
+                    r.EngId = b.EngId;
+                    r.BudgetId = b.BudgetId;
+                    int a = 0;
+                    if (int.TryParse(b.AccDpt, out a))
+                    {
+                        c = _context.Departments.Find(b.AccDpt);
+                        if (c != null)
+                        {
+                            r.AccDpt = c.DptId;
+                            r.AccDptNam = c.Name_C;
+                        }
+                    }
+                    else
+                    {
+                        c = _context.Departments.Where(d => d.Name_C == b.AccDpt).FirstOrDefault();
+                        if (c != null)
+                        {
+                            r.AccDpt = c.DptId;
+                            r.AccDptNam = c.Name_C;
+                        }
+                    }
+                }
             }
             r.DocId = GetID();
             r.UserId = u.Id;
@@ -457,17 +458,13 @@ namespace EDIS.Areas.BMED.Controllers
                 listItem2.Add(new SelectListItem { Text = p.FullName, Value = p.Id.ToString() });
             }
             ViewData["PUR"] = new SelectList(listItem2, "Value", "Text");
-            //
-            //List<BuyVendor> bv = _context.BuyVendors.Where(t => t.Docid == id).ToList();
-            //foreach (BuyVendor b in bv)
-            //{
-            //    listItem3.Add(new SelectListItem { Text = b.VendorNam, Value = b.UniteNo });
-            //}
-            List<VendorModel> bv = _context.BMEDVendors.ToList();
-            foreach (VendorModel b in bv)
+
+            List<BuyVendorModel> bv = _context.BuyVendors.Where(t => t.DocId == id).ToList();
+            foreach (BuyVendorModel b in bv)
             {
-                listItem3.Add(new SelectListItem { Text = b.VendorName, Value = b.UniteNo });
+                listItem3.Add(new SelectListItem { Text = b.VendorNam, Value = b.UniteNo });
             }
+
             ViewData["Vendors"] = new SelectList(listItem3, "Value", "Text");
             //
             //List<objuser> uv = _context.AppUsers.Join(_context.Departments, up => up.DptId, co => co.DptId,
@@ -594,9 +591,9 @@ namespace EDIS.Areas.BMED.Controllers
             AppUserModel u = _context.AppUsers.Find(Convert.ToInt32(delivery.DelivPson));
             if (u != null)
                 delivery.DelivPsonNam = u.FullName;
-            //BuyEvaluate b = db.BuyEvaluates.Find(delivery.PurchaseNo);
-            //if (b != null)
-            //    delivery.BudgetId = b.BudgetId;
+            BuyEvaluateModel b = _context.BuyEvaluates.Find(delivery.PurchaseNo);
+            if (b != null)
+                delivery.BudgetId = b.BudgetId;
             return View(delivery);
         }
 
@@ -703,7 +700,7 @@ namespace EDIS.Areas.BMED.Controllers
                 DeliveryModel r = _context.Deliveries.Find(f.DocId);
                 AppUserModel p = _context.AppUsers.Find(r.UserId);
                 DepartmentModel c = _context.Departments.Find(p.DptId);
-                //BuyEvaluate b = db.BuyEvaluates.Find(r.PurchaseNo);
+                BuyEvaluateModel b = _context.BuyEvaluates.Find(r.PurchaseNo);
                 i = new DeliveryListVModel();
                 i.DocType = "驗收";
                 i.DocId = r.DocId;

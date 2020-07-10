@@ -48,8 +48,18 @@
                     @Html.DisplayFor(modelItem => item.Rtt)
                 </td>
                 <td>
-                    @Html.ActionLink("刪除", "Delete", new { id = item.DocId, vno = item.VendorNo }, new { target = "_blank" })|
-                    @Html.ActionLink("改變狀態", "UpdStatus", new { id = item.DocId, vno = item.VendorNo }, new { target = "_blank" })
+                    @Html.ActionLink("刪除", "Delete", "BuyVendor", new { Area = "BMED", id = item.DocId, vno = item.VendorNo },
+                                                                    new {
+                                                                        data_ajax = "true",
+                                                                        data_ajax_method = "GET",
+                                                                        data_ajax_success = "alert('刪除成功!');window.location.reload();"
+                                                                    })|
+                    @Html.ActionLink("改變狀態", "UpdStatus", "BuyVendor", new { Area = "BMED", id = item.DocId, vno = item.VendorNo },
+                                                                           new {
+                                                                               data_ajax = "true",
+                                                                               data_ajax_method = "GET",
+                                                                               data_ajax_success = "alert('改變狀態成功!');window.location.reload();"
+                                                                           })
                 </td>
             </tr>
         }

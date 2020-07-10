@@ -691,6 +691,14 @@ namespace EDIS.Areas.BMED.Controllers
 
                 asset.Rtp = ur.Id;
                 asset.Rtt = DateTime.Now;
+                if (asset.DelivUid != null)
+                {
+                    var u = _context.AppUsers.Find(asset.DelivUid);
+                    if (u != null)
+                    {
+                        asset.DelivEmp = u.FullName;
+                    }
+                }
                 _context.Entry(asset).State = EntityState.Modified;
                 //
                 AssetKeepModel ak = _context.BMEDAssetKeeps.Find(asset.AssetNo);

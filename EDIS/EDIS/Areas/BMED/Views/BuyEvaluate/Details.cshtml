@@ -11,7 +11,7 @@
 
 <fieldset>
     <div style="margin-bottom: 10px">
-        @await Html.PartialAsync("_AttainFile", Model)
+        @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "3", viewType = "View" })
     </div>
 
     <div class="display-label">

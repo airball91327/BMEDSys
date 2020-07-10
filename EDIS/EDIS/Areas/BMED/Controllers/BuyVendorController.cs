@@ -47,13 +47,13 @@ namespace EDIS.Areas.BMED.Controllers
 
         //
         // GET: /BuyVendor/
-        public ActionResult Index(string id = null)
+        public IActionResult Index(string id = null)
         {
             List<BuyVendorModel> t = _context.BuyVendors.Where(c => c.DocId == id).ToList();
             return PartialView(t);
         }
 
-        public ActionResult StatusList(string id = null)
+        public IActionResult StatusList(string id = null)
         {
             List<BuyVendorModel> tv = _context.BuyVendors.Where(c => c.DocId == id).ToList();
             foreach (BuyVendorModel b in tv)
@@ -66,16 +66,16 @@ namespace EDIS.Areas.BMED.Controllers
             return PartialView(tv);
         }
 
-        public ActionResult BuyPriceList(string uniteno = null)
+        public IActionResult BuyPriceList(string uniteno = null)
         {
-            BuyPriceListVModel bpv = new BuyPriceListVModel();
+            BuyPriceListVModel bpv = new BuyPriceListVModel(_context);
             return View("_BuyPriceList", bpv.GetList().Where(b => b.UniteNo == uniteno).ToList());
         }
 
         //
         // GET: /BuyVendor/Details/5
 
-        public ActionResult Details(string id = null)
+        public IActionResult Details(string id = null)
         {
             BuyVendorModel buyvendor = _context.BuyVendors.Find(id);
             if (buyvendor == null)
@@ -88,7 +88,7 @@ namespace EDIS.Areas.BMED.Controllers
         //
         // GET: /BuyVendor/Create
 
-        public ActionResult Create()
+        public IActionResult Create()
         {
             return View();
         }
@@ -97,7 +97,7 @@ namespace EDIS.Areas.BMED.Controllers
         // POST: /BuyVendor/Create
 
         [HttpPost]
-        public ActionResult Create(BuyVendorModel buyvendor)
+        public IActionResult Create(BuyVendorModel buyvendor)
         {
             if (ModelState.IsValid)
             {
@@ -112,7 +112,7 @@ namespace EDIS.Areas.BMED.Controllers
         //
         // GET: /BuyVendor/Edit/5
 
-        public ActionResult Edit(string id = null)
+        public IActionResult Edit(string id = null)
         {
             BuyVendorModel buyvendor = new BuyVendorModel();
             buyvendor.DocId = id;
@@ -123,7 +123,7 @@ namespace EDIS.Areas.BMED.Controllers
         // POST: /BuyVendor/Edit/5
 
         [HttpPost]
-        public ActionResult Edit(BuyVendorModel buyvendor)
+        public IActionResult Edit(BuyVendorModel buyvendor)
         {
             if (ModelState.IsValid)
             {
@@ -140,7 +140,7 @@ namespace EDIS.Areas.BMED.Controllers
             return View(buyvendor);
         }
 
-        public ActionResult UpdStatus(string id = null, string vno = null)
+        public IActionResult UpdStatus(string id = null, string vno = null)
         {
             // Get Login User's details.
             var loginUser = _userRepo.Find(ur => ur.UserName == User.Identity.Name).FirstOrDefault();
@@ -157,12 +157,15 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 ModelState.AddModelError("", e.Message);
             }
-            return Content("<script>alert('改變狀態成功!');window.opener.location.reload();close();</script>");
+            return new JsonResult(buyvendor)
+            {
+                Value = new { success = true, error = "" },
+            };
         }
         //
         // GET: /BuyVendor/Delete/5
 
-        public ActionResult Delete(string id = null, string vno = null)
+        public IActionResult Delete(string id = null, string vno = null)
         {
             BuyVendorModel buyvendor = _context.BuyVendors.Find(id, vno);
             if (buyvendor == null)
@@ -178,14 +181,17 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 ModelState.AddModelError("", e.Message);
             }
-            return Content("<script>alert('刪除成功!');window.opener.location.reload();close();</script>");
+            return new JsonResult(buyvendor)
+            {
+                Value = new { success = true, error = "" },
+            };
         }
 
         //
         // POST: /BuyVendor/Delete/5
 
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(string id)
+        public IActionResult DeleteConfirmed(string id)
         {
             BuyVendorModel buyvendor = _context.BuyVendors.Find(id);
             _context.BuyVendors.Remove(buyvendor);
@@ -194,7 +200,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
 
-        public ActionResult Upload(string id = null, string vno = null)
+        public IActionResult Upload(string id = null, string vno = null)
         {
             BuyVendorModel buyvendor = _context.BuyVendors.Find(id, vno);
             buyvendor.Status = "2";
@@ -212,9 +218,9 @@ namespace EDIS.Areas.BMED.Controllers
             return RedirectToAction("BuyPriceList", "BuyVendor", new { uniteno = buyvendor.UniteNo});
         }
 
-        public ActionResult Home()
+        public IActionResult Home()
         {
-            return PartialView(new BuyPriceListVModel().GetHomeList());
+            return PartialView(new BuyPriceListVModel(_context).GetHomeList());
         }
 
         protected override void Dispose(bool disposing)

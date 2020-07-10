@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_LayoutNoTitle.cshtml";
 }
 
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
 <div id="body">
     <section class="content-wrapper main-content clear-fix">
         <form asp-action="NewEdit" asp-controller="Asset" asp-area="BMED" data-ajax="true"
@@ -75,7 +78,7 @@
                 <label asp-for="DelivDpt" class="control-title"></label>
             </div>
             <div class="editor-field form-inline">
-                <select asp-for="DelivDpt" asp-items="@ViewData["DelivDpts"] as SelectList" class="form-control">
+                <select asp-for="DelivDpt" asp-items="@ViewData["DelivDpts"] as SelectList" class="form-control combobox">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="DelivDpt" class="text-danger"></span>
@@ -103,7 +106,7 @@
                 <label asp-for="AccDpt" class="control-title"></label>
             </div>
             <div class="editor-field form-inline">
-                <select asp-for="AccDpt" asp-items="@ViewData["AccDpts"] as SelectList" class="form-control">
+                <select asp-for="AccDpt" asp-items="@ViewData["AccDpts"] as SelectList" class="form-control combobox">
                     <option disabled selected>請選擇</option>
                 </select>
                 <span asp-validation-for="AccDpt" class="text-danger"></span>
@@ -181,6 +184,7 @@
 
 <script language="javascript" type="text/javascript">
     $(function () {
+        $('.combobox').combobox();
         var url = '@Url.Action("GetUsersInDpt", "AppUser", new { Area = "" })';
         $("#DelivDpt").change(function () {
             var s = $(this).val();
@@ -208,7 +212,7 @@
 
     $(window).on('beforeunload', function () {
         var s = $("#Docid").val();
-        var v = "<img src='../../images/opc-ajax-loader.gif' id='imgLOADING' />";
+        var v = "<img src='../../../images/opc-ajax-loader.gif' id='imgLOADING' />";
         window.opener.$("#gvASSETLIST").html(v)
             .load(encodeURI('../../Asset/BuyEvaluateListItem?id=' + s + '&upload=' + '得標廠商'));
         return '確定要離開此頁面嗎?';

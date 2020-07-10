@@ -89,7 +89,8 @@ namespace EDIS.Areas.BMED.Controllers
                 string[] v = { "?", "2" };
                 var ds = _context.BuyFlows.Where(f => v.Contains(f.Status))
                     .Join(_context.BuyEvaluates, f => f.DocId, b => b.DocId,
-                    (f, b) => b).Select(b => b.BudgetId).Distinct();
+                    (f, b) => b).Where(b => !string.IsNullOrEmpty(b.BudgetId))
+                                .Select(b => b.BudgetId).Distinct();
                 vm = _context.Budgets.Where(b => !ds.Contains(b.DocId)).ToList();
             }
             else
@@ -212,7 +213,7 @@ namespace EDIS.Areas.BMED.Controllers
             String[] st = { "?", "2" };
             var s = _context.BuyFlows.Where(b => st.Contains(b.Status))
                 .Join(_context.BuyEvaluates, b => b.DocId, e => e.DocId,
-                (b, e) => e)
+                (b, e) => e).Where(e => !string.IsNullOrEmpty(e.BudgetId))
                 .Select(e => e.BudgetId).Distinct();
             List<BudgetModel> bs = _context.Budgets.Where(b => !s.Contains(b.DocId)).ToList();
             BuyEvaluateModel r;
