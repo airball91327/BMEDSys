@@ -202,7 +202,7 @@ namespace EDIS.Areas.BMED.Controllers
             BudgetModel budget = _context.Budgets.Find(id);
             _context.Budgets.Remove(budget);
             _context.SaveChanges();
-            return Redirect(Url.Content("~/Budget/Index"));
+            return RedirectToAction("Index", "Budget", new { Area = "BMED" });
         }
 
         public IActionResult TransToBuyEvaluate()

@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="ClosedXML" Version="0.94.2" />
-    <PackageReference Include="EPPlus" Version="5.1.2" />
+    <PackageReference Include="EPPlus" Version="4.5.3.3" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="2.1.8" PrivateAssets="All" />

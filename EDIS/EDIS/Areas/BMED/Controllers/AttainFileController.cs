@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using System.Data.SqlClient;
+using EDIS.Areas.BMED.Models.BuyEvaluateModels;
+using OfficeOpenXml;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -462,7 +464,14 @@ namespace EDIS.Areas.BMED.Controllers
             try
             {
                 _context.SaveChanges();
-
+                if (attainFile.DocType == "0")
+                {
+                    string s1 = ReadBudgetExcel(attainFile);
+                    if (!string.IsNullOrEmpty(s1))
+                    {
+                        throw new Exception(s1);
+                    }
+                }
                 return Content("檔案上載完成");
             }
             catch (Exception e)
@@ -478,5 +487,118 @@ namespace EDIS.Areas.BMED.Controllers
         {
             return _context.BMEDAttainFiles.Any(e => e.DocType == id);
         }
+
+        public string ReadBudgetExcel(AttainFileModel attainfile)
+        {
+            string WebRootPath = _hostingEnvironment.WebRootPath;
+            string s2 = "/Files/BMED/";
+            string filepath = Path.Combine(WebRootPath + s2, attainfile.FileLink);
+
+            string s = "";
+            BudgetModel bg;
+            try
+            {
+                //FileStream fs = System.IO.File.Open(filepath, FileMode.Open, FileAccess.Read);
+                FileInfo fileinfo = new FileInfo(filepath);
+
+                //ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+                ExcelPackage package = new ExcelPackage(fileinfo);
+                ExcelWorksheet sheet = package.Workbook.Worksheets["全部案件"];
+                int lastRow = sheet.Dimension.End.Row;
+                int lastCol = sheet.Dimension.End.Column;
+                int numLOC = 0;
+                int numDOCID = 0;
+                int numPLANTNAME = 0;
+                int numPRICE = 0;
+                int numAMT = 0;
+                int numTOTALPRICE = 0;
+                int numENGNAME = 0;
+                int numACCDPT = 0;
+                int numOPINION = 0;
+                int numGRPOPIN = 0;
+
+                for (int j = 1; j <= lastCol; j++)
+                {
+                    if (sheet.Cells[1, j].Value == null)
+                        continue;
+                    switch (sheet.Cells[1, j].Value.ToString())
+                    {
+                        case "院區":
+                            numLOC = j;
+                            break;
+                        case "表單編號":
+                            numDOCID = j;
+                            break;
+                        case "儀器中文名稱":
+                            numPLANTNAME = j;
+                            break;
+                        case "成本中心":
+                            numACCDPT = j;
+                            break;
+                        case "單價":
+                            numPRICE = j;
+                            break;
+                        case "通過":
+                            numAMT = j;
+                            break;
+                        case "通過金額":
+                            numTOTALPRICE = j;
+                            break;
+                        case "工程師":
+                            numENGNAME = j;
+                            break;
+                        case "醫工部意見":
+                            numOPINION = j;
+                            break;
+                        case "小組意見":
+                            numGRPOPIN = j;
+                            break;
+                    }
+                }
+                while (string.IsNullOrEmpty(sheet.Cells[lastRow, 6].Text.Trim()))
+                {
+                    lastRow--;
+                }
+
+                //
+                string dbstring = "";
+                for (int i = 2; i <= lastRow; i++)
+                {
+                    if (_context.Budgets.Find(sheet.Cells[i, numDOCID].Value.ToString()) == null)
+                    {
+                        bg = new BudgetModel();
+                        bg.Loc = sheet.Cells[i, numLOC].Value.ToString();
+                        bg.DocId = sheet.Cells[i, numDOCID].Value.ToString();
+                        bg.Year = Convert.ToString(DateTime.Now.Year - 1);
+                        bg.PlantName = sheet.Cells[i, numPLANTNAME].Value.ToString();
+                        bg.Price = Convert.ToDecimal(sheet.Cells[i, numPRICE].Value);
+                        bg.Amt = Convert.ToInt32(sheet.Cells[i, numAMT].Value);
+                        bg.TotalPrice = Convert.ToDecimal(sheet.Cells[i, numTOTALPRICE].Value);
+                        bg.EngName = sheet.Cells[i, numENGNAME].Value.ToString();
+                        bg.AccDpt = sheet.Cells[i, numACCDPT].Value.ToString();
+                        bg.Opinion = sheet.Cells[i, numOPINION].Value == null ? "" : sheet.Cells[i, numOPINION].Value.ToString();
+                        bg.GrpOpin = sheet.Cells[i, numGRPOPIN].Value == null ? "" : sheet.Cells[i, numGRPOPIN].Value.ToString();
+                        _context.Budgets.Add(bg);
+                    }
+                    else
+                    {
+                        dbstring += sheet.Cells[i, numDOCID].Value.ToString() + ";";
+                    }
+                }
+                _context.SaveChanges();
+                if (dbstring != "")
+                {
+                    dbstring = "重複申請：" + dbstring;
+                    return dbstring;
+                }
+            }
+            catch (Exception ex)
+            {
+                s = ex.Message;
+            }
+
+            return s;
+        }
+
     }
 }

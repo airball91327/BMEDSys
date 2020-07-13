@@ -1,6 +1,7 @@
 ﻿@model EDIS.Areas.BMED.Models.BuyEvaluateModels.BudgetModel
 
 @{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
     ViewBag.Title = "刪除";
 }
 
@@ -8,7 +9,8 @@
 
 <h3>確定要刪除此項目?</h3>
 <fieldset>
-    <legend>預算</legend>
+    <h4>預算</h4>
+    <hr />
 
     <div class="display-label">
          @Html.DisplayNameFor(model => model.PlantName)
@@ -67,9 +69,10 @@
     </div>
 </fieldset>
 
-<form>
+<form asp-action="Delete" method="post">
+    @Html.HiddenFor(model => model.DocId)
     <div>
-        <input type="submit" value="確定刪除" /> |
-        <a href='@Url.Content("~/BMED/Budget/Index")'>回到列表</a>
+        <input class="btn btn-default" type="submit" value="確定刪除" /> |
+        <a href='@Url.Action("Index", "Budget", new { Area = "BMED" })'>回到列表</a>
     </div>
 </form>
