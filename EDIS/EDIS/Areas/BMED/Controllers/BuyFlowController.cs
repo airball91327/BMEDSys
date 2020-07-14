@@ -523,7 +523,7 @@ namespace EDIS.Areas.BMED.Controllers
                     list = new List<SelectListItem>();
                     AppUserModel u2 = _context.AppUsers.Find(r.EngId);
                     li = new SelectListItem();
-                    li.Text = u2.FullName;
+                    li.Text = "(" + u2.UserName + ")" + u2.FullName;
                     li.Value = u2.Id.ToString();
                     list.Add(li);
                     break;
@@ -536,7 +536,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (u != null)
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = "(" + u.UserName + ")" + u.FullName;
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -553,7 +553,7 @@ namespace EDIS.Areas.BMED.Controllers
                             if (u.Status == "Y")
                             {
                                 li = new SelectListItem();
-                                li.Text = u.FullName;
+                                li.Text = "(" + u.UserName + ")" + u.FullName;
                                 li.Value = u.Id.ToString();
                                 list.Add(li);
                             }
@@ -569,7 +569,7 @@ namespace EDIS.Areas.BMED.Controllers
                         if (u != null)
                         {
                             li = new SelectListItem();
-                            li.Text = u.FullName;
+                            li.Text = "(" + u.UserName + ")" + u.FullName;
                             li.Value = u.Id.ToString();
                             list.Add(li);
                         }
@@ -588,7 +588,7 @@ namespace EDIS.Areas.BMED.Controllers
                             if (u.DptId == c)
                             {
                                 li = new SelectListItem();
-                                li.Text = u.FullName;
+                                li.Text = "(" + u.UserName + ")" + u.FullName;
                                 li.Value = u.Id.ToString();
                                 list.Add(li);
                             }
@@ -606,7 +606,7 @@ namespace EDIS.Areas.BMED.Controllers
                             if (u.Status == "Y")
                             {
                                 li = new SelectListItem();
-                                li.Text = u.FullName;
+                                li.Text = "(" + u.UserName + ")" + u.FullName;
                                 li.Value = u.Id.ToString();
                                 list.Add(li);
                             }
@@ -616,21 +616,29 @@ namespace EDIS.Areas.BMED.Controllers
                 case "申請者":
                     if (r != null)
                     {
-                        list = new List<SelectListItem>();
-                        li = new SelectListItem();
-                        li.Text = r.UserName;
-                        li.Value = r.UserId.ToString();
-                        list.Add(li);
+                        var usr = _context.AppUsers.Find(r.UserId);
+                        if (usr != null)
+                        {
+                            list = new List<SelectListItem>();
+                            li = new SelectListItem();
+                            li.Text = "(" + usr.UserName + ")" + r.UserName;
+                            li.Value = r.UserId.ToString();
+                            list.Add(li);
+                        }
                     }
                     break;
                 case "採購人員":
                     if (r != null)
                     {
-                        list = new List<SelectListItem>();
-                        li = new SelectListItem();
-                        li.Text = r.PurchaserName;
-                        li.Value = r.PurchaserId.ToString();
-                        list.Add(li);
+                        var pr = _context.AppUsers.Find(r.PurchaserId);
+                        if (pr != null)
+                        {
+                            list = new List<SelectListItem>();
+                            li = new SelectListItem();
+                            li.Text = "(" + pr.UserName + ")" + r.PurchaserName;
+                            li.Value = r.PurchaserId.ToString();
+                            list.Add(li);
+                        }
                     }
                     break;
                 default:
