@@ -24,7 +24,7 @@
                 });
                 $(this).dialog('close');
             },
-            'Cancel': function () {
+            '取消': function () {
                 $(this).dialog('close');
             }
         }
