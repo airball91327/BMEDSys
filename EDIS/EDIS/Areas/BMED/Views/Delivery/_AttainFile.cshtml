@@ -1,6 +1,6 @@
 ﻿@model EDIS.Areas.BMED.Models.DeliveryModels.DeliveryModel
 
-<a class="button" href="@Url.Content("~/BMED/AttainFile/Create?id="+ Model.DocId + "&typ=4")"
+<a class="button btn btn-default" href="@Url.Content("~/BMED/AttainFile/Create?id="+ Model.DocId + "&typ=4")"
    id="FileChooseLink">夾帶檔案</a>
 <div id="pnlFILES">
     @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "4", viewType = "Edit" })
