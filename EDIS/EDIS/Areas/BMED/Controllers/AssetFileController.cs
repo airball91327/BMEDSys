@@ -129,6 +129,10 @@ namespace EDIS.Areas.BMED.Controllers
                 at = _context.BMEDAssets.Where(a => a.Docid == t.Docid).ToList();
                 AssetFileModel af = _context.AssetFiles.Where(f => f.AssetNo == id && f.SeqNo == sno)
                     .FirstOrDefault();
+                if (af == null)
+                {
+                    return Content("錯誤!!尚未上傳檔案!!");
+                }
                 ViewData["ano"] = id;
                 ViewData["sno"] = sno;
                 ViewData["cname"] = t.Cname;
