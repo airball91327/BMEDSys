@@ -43,11 +43,24 @@ namespace EDIS.Components.BMEDBuyEvaluate
 
         public async Task<IViewComponentResult> InvokeAsync(string id = null, string sid = null)
         {
-           List<SelectListItem> listItem = new List<SelectListItem>();
+            List<SelectListItem> listItem = new List<SelectListItem>();
             listItem.Add(new SelectListItem { Text = "待處理", Value = "待處理" });
             listItem.Add(new SelectListItem { Text = "已處理", Value = "已處理" });
             listItem.Add(new SelectListItem { Text = "已結案", Value = "已結案" });
             ViewData["Item"] = new SelectList(listItem, "Value", "Text", "待處理");
+            //
+            List<SelectListItem> listItem2 = new List<SelectListItem>();
+            SelectListItem li;
+            _context.Departments.ToList()
+                    .ForEach(d =>
+                    {
+                        li = new SelectListItem();
+                        li.Text = d.Name_C;
+                        li.Value = d.DptId;
+                        listItem2.Add(li);
+
+                    });
+            ViewData["ApplyDpt"] = new SelectList(listItem2, "Value", "Text");
 
             return View();
         }

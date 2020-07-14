@@ -401,7 +401,7 @@ namespace EDIS.Areas.BMED.Controllers
             return PartialView("_BuyEvaluateListIndex", GetList("待處理"));
         }
 
-        public void ExcelStandard(string sd, string ed)
+        public IActionResult ExcelStandard(string sd, string ed)
         {
             DataTable dt = new DataTable();
             dt.Columns.Add("院區");
@@ -425,13 +425,13 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 sd = sd.Replace("-", "/");
                 vm = vm
-                   .Where(f => f.AgreeDate.Value.CompareTo(DateTime.ParseExact(sd, "yyyy/MM/dd", null)) >= 0).ToList();
+                   .Where(f => f.AgreeDate.Value.Date.CompareTo(DateTime.ParseExact(sd, "yyyy/MM/dd", null)) >= 0).ToList();
             }
             if (!string.IsNullOrEmpty(ed))
             {
                 ed = ed.Replace("-", "/");
                 vm = vm
-                   .Where(f => f.AgreeDate.Value.CompareTo(DateTime.ParseExact(ed, "yyyy/MM/dd", null)) <= 0).ToList();
+                   .Where(f => f.AgreeDate.Value.Date.CompareTo(DateTime.ParseExact(ed, "yyyy/MM/dd", null)) <= 0).ToList();
             }
             BudgetModel bg;
             AppUserModel u;
@@ -486,15 +486,21 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("Sheet1");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.Headers.Add("content-disposition", "attachment;  filename=EvaluateStandard.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "EvaluateStandard.xlsx"
+            );
         }
 
         [HttpPost]
@@ -524,9 +530,9 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 qry.cname = form["qtyCNAME"];
             }
-            if (form["qtyCUSTID"] != "")
+            if (form["qtyDPTID"] != "")
             {
-                qry.applydpt = form["qtyCUSTID"];
+                qry.applydpt = form["qtyDPTID"];
             }
             if (form["qtyFLOWTYP"] != "")
             {
@@ -782,7 +788,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (!string.IsNullOrEmpty(qry.applydpt))
             {
-                data = data.Where(f => f.DptId == qry.applydpt);
+                data = data.Where(f => f.AccDpt == qry.applydpt);
             }
             if (!string.IsNullOrEmpty(qry.budgetid))
             {
@@ -796,7 +802,7 @@ namespace EDIS.Areas.BMED.Controllers
             if (!string.IsNullOrEmpty(qry.agreedate2))
             {
                 data = data.Where(f => f.AgreeDate != null)
-                .Where(f => f.AgreeDate.Value.CompareTo(DateTime.ParseExact(qry.agreedate2, "yyyy/MM/dd", null)) <= 0);
+                .Where(f => f.AgreeDate.Value.Date.CompareTo(DateTime.ParseExact(qry.agreedate2, "yyyy/MM/dd", null)) <= 0);
             }
             data = data.Take((qry.pagecnt + 1) * 100);
             string status = "";
