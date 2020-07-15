@@ -789,6 +789,19 @@ namespace EDIS.Areas.BMED.Controllers
                 else
                     vm.Clear();
             }
+            if (form["qtyVENDOR"] != "")
+            {
+                string s = form["qtyVENDOR"];
+                List<VendorModel> vs = _context.BMEDVendors.Where(a => a.VendorName.Contains(s))
+                    .ToList();
+                if (vs != null)
+                {
+                    vm = vm.Join(vs, v => Convert.ToInt32(v.VendorNo), a => a.VendorId,
+                        (v, a) => v).ToList();
+                }
+                else
+                    vm.Clear();
+            }
             foreach (var item in vm)
             {
                 var u = _context.AppUsers.Find(item.UserId);
@@ -797,6 +810,7 @@ namespace EDIS.Areas.BMED.Controllers
                 item.FlowUname = u == null ? "" : u.FullName;
                 item.CompanyNam = _context.Departments.Find(item.Company) == null ? "" : _context.Departments.Find(item.Company).Name_C;
             }
+            vm = vm.OrderByDescending(v => v.ApplyDate).ToList();
             return PartialView("DelivQryList", vm);
         }
 
@@ -906,6 +920,8 @@ namespace EDIS.Areas.BMED.Controllers
                     i.Days = null;
                 i.Flg = f.Status;
                 i.FlowUid = f.UserId;
+                i.VendorNo = r.VendorId;
+                i.ApplyDate = r.ApplyDate;
                 dv.Add(i);
             }
             //

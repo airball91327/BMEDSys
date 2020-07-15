@@ -18,6 +18,8 @@ namespace EDIS.Areas.BMED.Models.DeliveryModels
         public int UserId { get; set; }
         [Display(Name = "申請人姓名")]
         public string UserName { get; set; }
+        [Display(Name = "申請日期")]
+        public DateTime? ApplyDate { get; set; }
         [Display(Name = "申請人分機")]
         public string Contact { get; set; }
         [Display(Name = "申請部門代號")]

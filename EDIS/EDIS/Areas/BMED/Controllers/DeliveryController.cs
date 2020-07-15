@@ -111,6 +111,8 @@ namespace EDIS.Areas.BMED.Controllers
                 item.FlowUname = u == null ? "" : u.FullName;
                 item.CompanyNam = _context.Departments.Find(item.Company) == null ? "" : _context.Departments.Find(item.Company).Name_C;
             }
+
+            vm = vm.OrderByDescending(v => v.ApplyDate).ToList();
             return PartialView("_DeliveryList", vm);
         }
 
@@ -198,7 +200,7 @@ namespace EDIS.Areas.BMED.Controllers
                     .ToList();
                 if (vs != null)
                 {
-                    vm = vm.Join(vs, v => v.VendorNo, a => a.UniteNo,
+                    vm = vm.Join(vs, v => Convert.ToInt32(v.VendorNo), a => a.VendorId,
                         (v, a) => v).ToList();
                 }
                 else
@@ -723,6 +725,7 @@ namespace EDIS.Areas.BMED.Controllers
                     i.Days = null;
                 i.Flg = f.Status;
                 i.FlowUid = f.UserId;
+                i.ApplyDate = r.ApplyDate;
                 dv.Add(i);
             }
             //
