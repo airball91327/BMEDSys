@@ -21,7 +21,7 @@
     <legend class="setWhiteColor">驗收單</legend>
 
     <div style="margin-bottom: 10px">
-        @await Html.PartialAsync("_AttainFile", Model)
+        @await Component.InvokeAsync("BMEDAttainFileList", new { id = Model.DocId, typ = "4", viewType = "View" })
     </div>
 
     <div class="editor-label">
@@ -143,7 +143,7 @@
     </div>
 
     <div>
-        @await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId })
+        @await Component.InvokeAsync("DelivWartyData", new { id = Model.DocId, viewType = "View" })
     </div>
     <div>
         @await Component.InvokeAsync("DelivFlowList", new { id = Model.DocId })

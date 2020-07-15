@@ -30,7 +30,7 @@ namespace EDIS.Areas.BMED.Components.Delivery
             userManager = customUserManager;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string id)
+        public async Task<IViewComponentResult> InvokeAsync(string id, string viewType = null)
         {
             DelivDataVModel dv = new DelivDataVModel();
             if (id != null)
@@ -95,6 +95,11 @@ namespace EDIS.Areas.BMED.Components.Delivery
                 stype2.Add(new SelectListItem { Text = "一般", Value = "N" });
                 stype2.Add(new SelectListItem { Text = "須報備", Value = "S" });
                 ViewData["Stype2"] = new SelectList(stype2, "Value", "Text", dv.Stype2);
+            }
+
+            if (viewType == "View")
+            {
+                return View("View", dv);
             }
             return View(dv);
         }
