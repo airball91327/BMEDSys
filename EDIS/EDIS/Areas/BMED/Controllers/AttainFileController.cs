@@ -532,7 +532,7 @@ namespace EDIS.Areas.BMED.Controllers
                         case "儀器中文名稱":
                             numPLANTNAME = j;
                             break;
-                        case "成本中心":
+                        case "成本中心代號":
                             numACCDPT = j;
                             break;
                         case "單價":

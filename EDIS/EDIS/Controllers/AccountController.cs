@@ -20,6 +20,7 @@ using EDIS.Areas.BMED.Data;
 using EDIS.Data;
 using System.Web;
 using System.Text;
+using EDIS.Extensions;
 
 namespace EDIS.Controllers
 {
@@ -162,6 +163,55 @@ namespace EDIS.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
+                if (model.LoginType == "2") //系統帳密
+                {
+                    var loginUser = _context.AppUsers.Where(a => a.UserName == model.UserName).FirstOrDefault();
+                    if (loginUser != null)    
+                    {
+                        if (string.IsNullOrEmpty(loginUser.Password))
+                        {
+                            var vendor = _context.Vendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
+                            if (vendor != null)
+                            {
+                                string defaultPW = vendor.UniteNo;
+                                if (model.Password != defaultPW)
+                                {
+                                    ModelState.AddModelError(string.Empty, "密碼錯誤.");
+                                    return View(model);
+                                }
+                            }
+                            else
+                            {
+                                ModelState.AddModelError(string.Empty, "查無廠商.");
+                                return View(model);
+                            }
+                        }
+                        else
+                        {
+                            string DESKey = "84203025";
+                            var encryptPW = CryptoExtensions.DESEncrypt(model.Password, DESKey);   // Encrypt and check password.
+                            if (encryptPW != loginUser.Password)
+                            {
+                                ModelState.AddModelError(string.Empty, "密碼錯誤.");
+                                return View(model);
+                            }
+                        }
+                        var user = new ApplicationUser { Id = loginUser.Id.ToString(), UserName = model.UserName };
+
+                        await _signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = true });
+
+                        _logger.LogInformation("使用者已經登入.");
+                        if (!string.IsNullOrEmpty(returnUrl))
+                            return RedirectToLocal(returnUrl);
+
+                        return RedirectToAction("Index", "Home");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "帳號或密碼錯誤.");
+                        return View(model);
+                    }
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 //

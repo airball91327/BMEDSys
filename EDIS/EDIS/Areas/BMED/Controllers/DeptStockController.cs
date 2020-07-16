@@ -10,6 +10,7 @@ using EDIS.Areas.BMED.Models.RepairModels;
 using Microsoft.AspNetCore.Http;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -178,5 +179,35 @@ namespace EDIS.Areas.BMED.Controllers
         {
             return _context.BMEDDeptStocks.Any(e => e.StockId == id);
         }
+
+        //private List<DeptStockModel> GetERPDptStok(string userName)
+        //{
+        //    DataTable dt = new DataTable();
+        //    dt.Columns.Add(new DataColumn("STOK_NAM"));
+        //    dt.Columns.Add(new DataColumn("UNIT"));
+        //    dt.Columns.Add(new DataColumn("PRICE"));
+        //    dt.Columns.Add(new DataColumn("VENDOR"));
+        //    dt.Columns.Add(new DataColumn("AMT"));
+        //    dt.Columns.Add(new DataColumn("PRD_NO"));
+        //    DataRow dw;
+        //    Prdts pd;
+        //    var objs = ERPWebServices.GetPrdtqtys("", "344033");
+        //    foreach (var obj in objs)
+        //    {
+        //        pd = ERPWebServices.GetPrdts(obj.PRD_NO);
+        //        dw = dt.NewRow();
+        //        dw["STOK_NAM"] = obj.PRD_NAME;
+        //        dw["UNIT"] = pd.UT;
+        //        dw["PRICE"] = "";
+        //        dw["VENDOR"] = pd.SUP1;
+        //        dw["AMT"] = obj.QTY;
+        //        dw["PRD_NO"] = obj.PRD_NO;
+        //        dt.Rows.Add(dw);
+        //    }
+        //    gvDPTSTOK.DataSource = dt;
+        //    gvDPTSTOK.DataBind();
+        //    dt.Dispose();
+        //}
+
     }
 }

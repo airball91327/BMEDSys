@@ -93,7 +93,7 @@
                         @Html.ActionLink("編輯", "Edit", "BuyEvaluate", new { id = item.DocId, sid = item.DocSid }, null)
                         if (UserManager.IsInRole(User, "BuyerMgr"))
                         {
-                            @Html.Raw("|")
+                            @Html.Raw("| ")
                             @Html.ActionLink("刪除", "Delete", "BuyEvaluate", new { id = item.DocId }, null)
                         }
                     }
@@ -105,11 +105,8 @@
                     {
                         if (item.Flg == "2" || item.Flg == "E")
                         {
-                            @Html.Raw("|")
-                            @Html.ActionLink("新增儀器", "New", "Asset", new { id = item.DocId }, new { id = "btnAddAsset", target = "_blank" })
-                            @Html.Raw("|")
+                            @Html.Raw("| ")
                             @Html.ActionLink("驗收", "Create", "Delivery", new { id = item.DocId }, null)
-                            <span class="badge">@item.DelivCount</span>
                         }
                     }
 
