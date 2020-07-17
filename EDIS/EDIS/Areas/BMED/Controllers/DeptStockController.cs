@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Http;
 using X.PagedList;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using WebService;
+using EDIS.Areas.WebService.Models;
+using EDIS.Models.Identity;
+using EDIS.Repositories;
+using Newtonsoft.Json;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -19,19 +24,26 @@ namespace EDIS.Areas.BMED.Controllers
     public class DeptStockController : Controller
     {
         private readonly BMEDDbContext _context;
+        private readonly IRepository<AppUserModel, int> _userRepo;
         private int pageSize = 100;
 
-        public DeptStockController(BMEDDbContext context)
+        public DeptStockController(BMEDDbContext context,
+                                   IRepository<AppUserModel, int> userRepo)
         {
             _context = context;
+            _userRepo = userRepo;
         }
 
-        public ActionResult Index(IFormCollection fm, int page = 1)
+        public async Task<IActionResult> Index(IFormCollection fm, int page = 1)
         {
+            /* Get login user. */
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+
             string stockno = fm["qtySTOCKNO"];
             string dname = fm["qtyDEPTNAME"];
             string brand = fm["qtyBRAND"];
-            List<DeptStockModel> dv = _context.BMEDDeptStocks.ToList();
+            //List<DeptStockModel> dv = _context.BMEDDeptStocks.ToList();
+            List<DeptStockModel> dv = await GetERPDptStokAsync(ur.UserName);
             if (!string.IsNullOrEmpty(stockno))
             {
                 dv = dv.Where(d => d.StockNo.Contains(stockno)).ToList();
@@ -180,33 +192,78 @@ namespace EDIS.Areas.BMED.Controllers
             return _context.BMEDDeptStocks.Any(e => e.StockId == id);
         }
 
-        //private List<DeptStockModel> GetERPDptStok(string userName)
+        private async Task<List<DeptStockModel>> GetERPDptStokAsync(string userName)
+        {
+            DeptStockModel deptStock;
+            List<DeptStockModel> deptStockList = new List<DeptStockModel>();
+            Prdts pd;
+            int serNo = 1;
+#if DEBUG
+            userName = "344033";
+#endif
+
+            ERPservicesSoapClient ERPWebServices = new ERPservicesSoapClient(ERPservicesSoapClient.EndpointConfiguration.ERPservicesSoap);
+            var objs = await ERPWebServices.GetStockAsync("", userName);
+            string s = objs.Body.GetStockResult;
+            List<WsStock> stocks = JsonConvert.DeserializeObject<List<WsStock>>(s);
+            foreach (var obj in stocks)
+            {
+                var objs2 = await ERPWebServices.GetProductAsync(obj.PRD_NO, "");
+                s = objs2.Body.GetProductResult;
+                pd = JsonConvert.DeserializeObject<List<Prdts>>(s).FirstOrDefault();
+                deptStock = new DeptStockModel();
+                deptStock.StockId = serNo;
+                deptStock.StockName = obj.PRD_NAME;
+                deptStock.StockNo = obj.PRD_NO;
+                deptStock.Unite = pd.UT;
+                deptStock.Qty = obj.QTY == null ? 0 : Convert.ToInt32(obj.QTY);
+
+                deptStockList.Add(deptStock);
+                serNo++;
+            }
+            return deptStockList;
+        }
+
+        //private string SaveToERP()
         //{
-        //    DataTable dt = new DataTable();
-        //    dt.Columns.Add(new DataColumn("STOK_NAM"));
-        //    dt.Columns.Add(new DataColumn("UNIT"));
-        //    dt.Columns.Add(new DataColumn("PRICE"));
-        //    dt.Columns.Add(new DataColumn("VENDOR"));
-        //    dt.Columns.Add(new DataColumn("AMT"));
-        //    dt.Columns.Add(new DataColumn("PRD_NO"));
-        //    DataRow dw;
-        //    Prdts pd;
-        //    var objs = ERPWebServices.GetPrdtqtys("", "344033");
-        //    foreach (var obj in objs)
+        //    string msg = "";
+        //    string str = "";
+        //    //
+        //    ERPRepHead hd = new ERPRepHead();
+        //    hd.BIL_NO = docid.Text;
+        //    hd.PS_DD = DateTime.ParseExact(sentdat.Text, "yyyy/MM/dd", null);
+        //    hd.SAL_NO = User.Identity.Name;
+        //    //
+        //    Tdbconn conn = new Tdbconn(); //TEST
+        //    OracleCommand cmd = new OracleCommand();
+        //    cmd.Connection = conn.Conn;
+        //    str += "SELECT * FROM HOT.REPASTSUBDTL WHERE RECNO={0} AND ABOV_DPT={1} ORDER BY SEQNO";
+        //    cmd.CommandText = String.Format(str, docid.Text, "8420");
+        //    OracleDataReader dr = cmd.ExecuteReader();
+        //    int i = 1;
+        //    List<ERPRepBody> body = new List<ERPRepBody>();
+        //    while (dr.Read())
         //    {
-        //        pd = ERPWebServices.GetPrdts(obj.PRD_NO);
-        //        dw = dt.NewRow();
-        //        dw["STOK_NAM"] = obj.PRD_NAME;
-        //        dw["UNIT"] = pd.UT;
-        //        dw["PRICE"] = "";
-        //        dw["VENDOR"] = pd.SUP1;
-        //        dw["AMT"] = obj.QTY;
-        //        dw["PRD_NO"] = obj.PRD_NO;
-        //        dt.Rows.Add(dw);
+        //        body.Add(new ERPRepBody
+        //        {
+        //            ITM = i,
+        //            PRD_NO = dr["PART_NO"].ToString(),
+        //            PRD_NAME = dr["PARTNAM"].ToString(),
+        //            QTY = Convert.ToDecimal(dr["QTY"].ToString()),
+        //            UP = Convert.ToDecimal(dr["PRICE"].ToString()),
+        //            AMT = Convert.ToDecimal(dr["TOTPRICE"].ToString())
+        //        });
         //    }
-        //    gvDPTSTOK.DataSource = dt;
-        //    gvDPTSTOK.DataBind();
-        //    dt.Dispose();
+        //    //
+        //    dr.Dispose();
+        //    cmd.Dispose();
+        //    conn.Dispose();
+        //    //
+        //    string mf = JsonConvert.SerializeObject(hd);
+        //    string bf = JsonConvert.SerializeObject(body);
+        //    msg = ERPWebServices.PostRepStuff(mf, bf);
+
+        //    return msg;
         //}
 
     }

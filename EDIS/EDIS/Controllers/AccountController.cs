@@ -165,11 +165,13 @@ namespace EDIS.Controllers
             {
                 if (model.LoginType == "2") //系統帳密
                 {
+                    // Get the login user's details.
                     var loginUser = _context.AppUsers.Where(a => a.UserName == model.UserName).FirstOrDefault();
                     if (loginUser != null)    
                     {
                         if (string.IsNullOrEmpty(loginUser.Password))
                         {
+                            // vendor's password will default to unitoNo, if not changed.
                             var vendor = _context.Vendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
                             if (vendor != null)
                             {
@@ -188,6 +190,7 @@ namespace EDIS.Controllers
                         }
                         else
                         {
+                            // user's password encrypt by DES.
                             string DESKey = "84203025";
                             var encryptPW = CryptoExtensions.DESEncrypt(model.Password, DESKey);   // Encrypt and check password.
                             if (encryptPW != loginUser.Password)

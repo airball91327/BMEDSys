@@ -22,7 +22,11 @@
                 },
                 async: false,
                 success: function (data) {
-                    alert("此案件已結案!");
+                    if (data.success == false) {
+                        alert(data.error);
+                    } else {
+                        alert("此案件已結案!");
+                    }
                     BMEDRepReSubmit();
                 },
                 onFailed: function (data) {
