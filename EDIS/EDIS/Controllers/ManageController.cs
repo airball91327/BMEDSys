@@ -21,7 +21,7 @@ namespace EDIS.Controllers
     [Route("[controller]/[action]")]
     public class ManageController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly CustomUserManager _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
@@ -31,7 +31,7 @@ namespace EDIS.Controllers
         private const string RecoveryCodesKey = nameof(RecoveryCodesKey);
 
         public ManageController(
-          UserManager<ApplicationUser> userManager,
+          CustomUserManager userManager,
           SignInManager<ApplicationUser> signInManager,
           IEmailSender emailSender,
           ILogger<ManageController> logger,
@@ -165,16 +165,21 @@ namespace EDIS.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var changePasswordResult = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-            if (!changePasswordResult.Succeeded)
+            //var changePasswordResult = await _userManager.ChangePassword(user, model.OldPassword, model.NewPassword);
+            //if (!changePasswordResult.Succeeded)
+            //{
+            //    AddErrors(changePasswordResult);
+            //    return View(model);
+            //}
+            var s = _userManager.ChangePassword(user, model.OldPassword, model.NewPassword);
+            if (s != "成功")
             {
-                AddErrors(changePasswordResult);
+                StatusMessage = s;
                 return View(model);
             }
-
             await _signInManager.SignInAsync(user, isPersistent: false);
-            _logger.LogInformation("User changed their password successfully.");
-            StatusMessage = "Your password has been changed.";
+            _logger.LogInformation("使用者密碼已變更.");
+            StatusMessage = "密碼已變更.";
 
             return RedirectToAction(nameof(ChangePassword));
         }
@@ -214,15 +219,21 @@ namespace EDIS.Controllers
                 throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
-            if (!addPasswordResult.Succeeded)
+            //var addPasswordResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+            //if (!addPasswordResult.Succeeded)
+            //{
+            //    AddErrors(addPasswordResult);
+            //    return View(model);
+            //}
+            var s = _userManager.AddPassword(user, model.NewPassword);
+            if (s != "成功")
             {
-                AddErrors(addPasswordResult);
+                StatusMessage = s;
                 return View(model);
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);
-            StatusMessage = "Your password has been set.";
+            StatusMessage = "密碼已設定.";
 
             return RedirectToAction(nameof(SetPassword));
         }

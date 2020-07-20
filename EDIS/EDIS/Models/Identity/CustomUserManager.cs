@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-
+using EDIS.Extensions;
 
 namespace EDIS.Models.Identity
 {
@@ -71,5 +71,78 @@ namespace EDIS.Models.Identity
             var dptId = _context.AppUsers.Where(u => u.UserName == userName).FirstOrDefault().DptId;
             return dptId;
         }
+
+        public override async Task<bool> HasPasswordAsync(ApplicationUser user)
+        {
+            if (string.IsNullOrEmpty(user.Id))
+            {
+                return false;
+            }
+            int id = Convert.ToInt32(user.Id);
+            var ur = await _context.AppUsers.FindAsync(id);
+            if (ur != null)
+            {
+                if (!string.IsNullOrEmpty(ur.Password))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public string ChangePassword(ApplicationUser user, string currentPassword, string newPassword)
+        {
+            string s = "";
+            if (string.IsNullOrEmpty(user.Id))
+            {
+                s = "無此帳號!";
+                return s;
+            }
+            int id = Convert.ToInt32(user.Id);
+            var ur = _context.AppUsers.Find(id);
+            if (ur != null)
+            {
+                // user's password encrypt by DES.
+                string DESKey = "84203025";
+                var checkPW = CryptoExtensions.DESEncrypt(currentPassword, DESKey);
+                if (ur.Password == checkPW)
+                {
+                    var encryptPW = CryptoExtensions.DESEncrypt(newPassword, DESKey);   // Encrypt and check password.
+                    ur.Password = encryptPW;
+                    _context.Entry(ur).State = EntityState.Modified;
+                    _context.SaveChanges();
+                    s = "成功";
+                    return s;
+                }
+            }
+            s = "密碼錯誤!";
+            return s;
+        }
+
+        public string AddPassword(ApplicationUser user, string newPassword)
+        {
+            string s = "";
+            if (string.IsNullOrEmpty(user.Id))
+            {
+                s = "無此帳號!";
+                return s;
+            }
+            int id = Convert.ToInt32(user.Id);
+            var ur = _context.AppUsers.Find(id);
+            if (ur != null)
+            {
+                // user's password encrypt by DES.
+                string DESKey = "84203025";
+                var encryptPW = CryptoExtensions.DESEncrypt(newPassword, DESKey);   // Encrypt and check password.
+                ur.Password = encryptPW;
+                _context.Entry(ur).State = EntityState.Modified;
+                _context.SaveChanges();
+                s = "成功";
+                return s;
+            }
+            s = "設定錯誤!";
+            return s;
+        }
+
     }
 }

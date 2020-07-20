@@ -5,7 +5,7 @@
 @using EDIS.Extensions;
 
 
-<nav class="navbar navbar-inverse navbar-fixed-top mobileNavBar">
+@*<nav class="navbar navbar-inverse navbar-fixed-top mobileNavBar">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -27,7 +27,7 @@
             @Html.Partial("_LoginPartial")
         </div>
     </div>
-</nav>
+</nav>*@
 
 <nav class="navbar-default navbar-static-side" role="navigation" style="padding-top:0px; width:11%">
     <img src="~/images/logo.png" style="width:97%" />
@@ -172,6 +172,16 @@
                         </ul>
                     </li>
 
+                    @*<li class="@Html.IsSelected(controller: "Manage", area: "")">
+                        <a href="#"><span class="nav-label">個人帳號管理</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-third-level collapse @Html.IsSelected(area: "", cssClass: "in")">
+
+                            <li class="@Html.IsSelected(action: "Manage", area: "")">
+                                <a href="@Url.Action("ChangePassword", "Manage", new { Area = "" })">修改密碼</a>
+                            </li>
+                        </ul>
+                    </li>*@
+
                     @{
                         if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
                         {
@@ -210,6 +220,7 @@
                     }
                 </ul>
             </li>
+        
         </ul>
     </div>
 </nav>
