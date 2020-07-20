@@ -85,7 +85,17 @@ $(function () {
                 }
                 $("#AccDptName").val(data);  
             }
-        });    
+        });
+        $.ajax({
+            url: '../Repair/GetAccEngs',
+            type: "POST",
+            dataType: "json",
+            data: { dptId: AccDptId },
+            success: function (data) {
+                $('#EngId').val(data.engId);
+                $('#EngName').val(data.fullName);
+            }
+        });
     });
 
     /* If user select "本單位" */
@@ -153,7 +163,7 @@ $(function () {
             type: "GET",
             data: { QueryStr: queryStr, QueryAccDpt: queryAccDpt, QueryDelivDpt: queryDelivDpt },
             success: function (data) {
-                console.log(data);
+                //console.log(data);
                 var select = $('#AssetNo');
                 $('option', select).remove();
                 if (data.length == 0) {

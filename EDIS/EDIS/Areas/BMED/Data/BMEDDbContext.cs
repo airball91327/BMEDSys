@@ -67,6 +67,7 @@ namespace EDIS.Areas.BMED.Data
         public DbSet<BuySFlowModel> BuySFlows { get; set; }
         public DbSet<BuyVendorModel> BuyVendors { get; set; }
         public DbQuery<UnSignListVModel> UnSignListVModelQuery { get; set; }
+        public DbSet<EngsInDptsModel> EngsInDpts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -115,6 +116,7 @@ namespace EDIS.Areas.BMED.Data
             builder.Entity<BuyFlowModel>().HasKey(c => new { c.DocId, c.StepId });
             builder.Entity<BuySFlowModel>().HasKey(c => new { c.DocId, c.StepId, c.DocSid });
             builder.Entity<BuyVendorModel>().HasKey(c => new { c.DocId, c.VendorNo });
+            builder.Entity<EngsInDptsModel>().HasKey(c => new { c.AccDptId, c.EngId });
 
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.

@@ -1645,6 +1645,28 @@ namespace EDIS.Areas.BMED.Controllers
             return RedirectToAction("Index", "Home", new { Area = "" });
         }
 
+        [HttpPost]
+        public JsonResult GetAccEngs(string dptId)
+        {
+            var engsInDpts = _context.EngsInDpts.Include(e => e.AppUsers).ToList();
+            engsInDpts = engsInDpts.Where(e => e.AccDptId == dptId).ToList();
+            //List<SelectListItem> list = new List<SelectListItem>();
+            if (engsInDpts.Count() > 0)
+            {
+                //engsInDpts.ForEach(eng => {
+                //    list.Add(new SelectListItem
+                //    {
+                //        Text = eng.AppUsers.FullName + "(" + eng.AppUsers.UserName + ")",
+                //        Value = eng.EngId.ToString()
+                //    });
+                //});
+                var tempEng = engsInDpts.First();
+                var eng = new { EngId = tempEng.EngId, UserName = tempEng.UserName, FullName = tempEng.AppUsers.FullName };
+                return Json(eng);
+            }
+            return Json("");
+        }
+
         protected override void Dispose(bool disposing)
         {
             _context.Dispose();

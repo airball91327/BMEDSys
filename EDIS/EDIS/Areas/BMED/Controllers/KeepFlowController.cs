@@ -14,6 +14,9 @@ using EDIS.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using EDIS.Fliters;
+using Newtonsoft.Json;
+using EDIS.Areas.WebService.Models;
+using WebService;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -100,6 +103,8 @@ namespace EDIS.Areas.BMED.Controllers
                     _context.Entry(kd).State = EntityState.Modified;
 
                     _context.SaveChanges();
+                    // Save stock to ERP system.
+                    //var ERPreponse = await SaveToERPAsync(assign.DocId);
 
                     //Send Mail
                     //To all users in this keep's flow.
@@ -444,6 +449,46 @@ namespace EDIS.Areas.BMED.Controllers
             return Json(list);
         }
 
+        private async Task<string> SaveToERPAsync(string docId)
+        {
+            ERPservicesSoapClient ERPWebServices = new ERPservicesSoapClient(ERPservicesSoapClient.EndpointConfiguration.ERPservicesSoap);
+            string msg = "";
+            //
+            ERPRepHead hd = new ERPRepHead();
+            hd.BIL_NO = docId;
+            hd.PS_DD = DateTime.Now;
+            hd.SAL_NO = User.Identity.Name;
+            //Get keep doc's stock.
+            var keepCosts = _context.BMEDKeepCosts.Where(rc => rc.DocId == docId).ToList();
+            if (keepCosts.Count() > 0)
+            {
+                var stocks = keepCosts.Where(rc => rc.StockType == "0").OrderBy(rc => rc.SeqNo).ToList();
+                if (stocks.Count() > 0)
+                {
+
+                    int i = 1;
+                    List<ERPRepBody> body = new List<ERPRepBody>();
+                    foreach (var stock in stocks)
+                    {
+                        body.Add(new ERPRepBody
+                        {
+                            ITM = i,
+                            PRD_NO = stock.PartNo.ToString(),
+                            PRD_NAME = stock.PartName.ToString(),
+                            QTY = Convert.ToDecimal(stock.Qty),
+                            UP = Convert.ToDecimal(stock.Price),
+                            AMT = Convert.ToDecimal(stock.TotalCost)
+                        });
+                    }
+                    //
+                    string mf = JsonConvert.SerializeObject(hd);
+                    string bf = JsonConvert.SerializeObject(body);
+                    var response = await ERPWebServices.PostRepStuffAsync(mf, bf);
+                    msg = response.Body.PostRepStuffResult;
+                }
+            }
+            return msg;
+        }
 
     }
 }

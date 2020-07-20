@@ -13,6 +13,9 @@ using EDIS.Areas.BMED.Repositories;
 using EDIS.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Newtonsoft.Json;
+using EDIS.Areas.WebService.Models;
+using WebService;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -48,7 +51,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public ActionResult NextFlow(AssignModel assign)
+        public async Task<IActionResult> NextFlowAsync(AssignModel assign)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
             var repairDtl = _context.BMEDRepairDtls.Find(assign.DocId);
@@ -138,6 +141,8 @@ namespace EDIS.Areas.BMED.Controllers
                     _context.Entry(rd).State = EntityState.Modified;
 
                     _context.SaveChanges();
+                    // Save stock to ERP system.
+                    //var ERPreponse = await SaveToERPAsync(assign.DocId);
 
                     //Send Mail
                     //To all users in this repair's flow.
@@ -251,7 +256,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public ActionResult GetNextEmp(string cls, string docid/*, string vendor*/)
+        public IActionResult GetNextEmp(string cls, string docid/*, string vendor*/)
         {
             List<SelectListItem> list = new List<SelectListItem>();
             List<string> s;
@@ -479,5 +484,47 @@ namespace EDIS.Areas.BMED.Controllers
             }
             return Json(list);
         }
+
+        private async Task<string> SaveToERPAsync(string docId)
+        {
+            ERPservicesSoapClient ERPWebServices = new ERPservicesSoapClient(ERPservicesSoapClient.EndpointConfiguration.ERPservicesSoap);
+            string msg = "";
+            //
+            ERPRepHead hd = new ERPRepHead();
+            hd.BIL_NO = docId;
+            hd.PS_DD = DateTime.Now;
+            hd.SAL_NO = User.Identity.Name;
+            //Get repair doc's stock.
+            var repairCosts = _context.BMEDRepairCosts.Where(rc => rc.DocId == docId).ToList();
+            if (repairCosts.Count() > 0)
+            {
+                var stocks = repairCosts.Where(rc => rc.StockType == "0").OrderBy(rc => rc.SeqNo).ToList();
+                if (stocks.Count() > 0)
+                {
+
+                    int i = 1;
+                    List<ERPRepBody> body = new List<ERPRepBody>();
+                    foreach (var stock in stocks)
+                    {
+                        body.Add(new ERPRepBody
+                        {
+                            ITM = i,
+                            PRD_NO = stock.PartNo.ToString(),
+                            PRD_NAME = stock.PartName.ToString(),
+                            QTY = Convert.ToDecimal(stock.Qty),
+                            UP = Convert.ToDecimal(stock.Price),
+                            AMT = Convert.ToDecimal(stock.TotalCost)
+                        });
+                    }
+                    //
+                    string mf = JsonConvert.SerializeObject(hd);
+                    string bf = JsonConvert.SerializeObject(body);
+                    var response = await ERPWebServices.PostRepStuffAsync(mf, bf);
+                    msg = response.Body.PostRepStuffResult;
+                }
+            }
+            return msg;
+        }
+
     }
 }

@@ -224,47 +224,5 @@ namespace EDIS.Areas.BMED.Controllers
             return deptStockList;
         }
 
-        //private string SaveToERP()
-        //{
-        //    string msg = "";
-        //    string str = "";
-        //    //
-        //    ERPRepHead hd = new ERPRepHead();
-        //    hd.BIL_NO = docid.Text;
-        //    hd.PS_DD = DateTime.ParseExact(sentdat.Text, "yyyy/MM/dd", null);
-        //    hd.SAL_NO = User.Identity.Name;
-        //    //
-        //    Tdbconn conn = new Tdbconn(); //TEST
-        //    OracleCommand cmd = new OracleCommand();
-        //    cmd.Connection = conn.Conn;
-        //    str += "SELECT * FROM HOT.REPASTSUBDTL WHERE RECNO={0} AND ABOV_DPT={1} ORDER BY SEQNO";
-        //    cmd.CommandText = String.Format(str, docid.Text, "8420");
-        //    OracleDataReader dr = cmd.ExecuteReader();
-        //    int i = 1;
-        //    List<ERPRepBody> body = new List<ERPRepBody>();
-        //    while (dr.Read())
-        //    {
-        //        body.Add(new ERPRepBody
-        //        {
-        //            ITM = i,
-        //            PRD_NO = dr["PART_NO"].ToString(),
-        //            PRD_NAME = dr["PARTNAM"].ToString(),
-        //            QTY = Convert.ToDecimal(dr["QTY"].ToString()),
-        //            UP = Convert.ToDecimal(dr["PRICE"].ToString()),
-        //            AMT = Convert.ToDecimal(dr["TOTPRICE"].ToString())
-        //        });
-        //    }
-        //    //
-        //    dr.Dispose();
-        //    cmd.Dispose();
-        //    conn.Dispose();
-        //    //
-        //    string mf = JsonConvert.SerializeObject(hd);
-        //    string bf = JsonConvert.SerializeObject(body);
-        //    msg = ERPWebServices.PostRepStuff(mf, bf);
-
-        //    return msg;
-        //}
-
     }
 }
