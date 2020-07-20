@@ -5,6 +5,9 @@
     ViewBag.Title = "驗收單/新增";
 }
 
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
 <h2>驗收單/新增</h2>
 
 @using (Html.BeginForm())
@@ -120,9 +123,7 @@
             <label asp-for="EngId" class="control-title"></label>
         </div>
         <div class="editor-field form-inline">
-            <select asp-for="EngId" asp-items="@ViewData["ENG"] as SelectList" class="form-control">
-                <option disabled selected>請選擇</option>
-            </select>
+            @Html.DropDownListFor(model => model.EngId, ViewData["ENG"] as SelectList, "請選擇", new { @class = "form-control combobox" })
             <span asp-validation-for="EngId" class="text-danger"></span>
         </div>
 
@@ -189,11 +190,11 @@
         </div>
 
         @*<div class="editor-label">
-            <label class="control-title">儀器列表</label>
-        </div>
-        <div style="padding-left: 20px; color: whitesmoke">
-            @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = false })
-        </div>*@
+                <label class="control-title">儀器列表</label>
+            </div>
+            <div style="padding-left: 20px; color: whitesmoke">
+                @await Component.InvokeAsync("BuyEvaluateAssetListItem", new { id = Model.DocId, upload = false })
+            </div>*@
 
         <div style="padding-top: 20px;">
             <input class="btn btn-primary" id="btnSEND" type="submit" value="確定送出" />
@@ -229,6 +230,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         $(function () {
+            $('.combobox').combobox();
             var url = '@Url.Action("", "AppUser", new { Area = "" })';
             /* Prevent submit for pressing Enter. */
             $('input').keypress(function (e) {
@@ -322,6 +324,26 @@
                 else {
                     $("#VendorNam").val(vendorName);
                     $("#VendorId").val(vendorId);
+                    //Get Vendor's PM.
+                    $.ajax({
+                        contentType: "application/json; charset=utf-8",
+                        url: url + '/GetUsersByVendorId',
+                        type: "GET",
+                        data: { vendorId: vendorId },
+                        dataType: "json",
+                        success: function (data) {
+                            var jsdata = JSON.parse(data);
+                            var appenddata;
+                            //appenddata += "<option value = ''>請選擇</option>";
+                            $.each(jsdata, function (key, value) {
+                                appenddata += "<option value = '" + value.uid + "'>" + value.uname + " </option>";
+                            });
+                            $('#DelivPson').html(appenddata);
+                        },
+                        error: function (msg) {
+                            alert(msg);
+                        }
+                    });
                 }
             });
 

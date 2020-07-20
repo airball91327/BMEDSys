@@ -172,7 +172,7 @@ namespace EDIS.Controllers
                         if (string.IsNullOrEmpty(loginUser.Password))
                         {
                             // vendor's password will default to unitoNo, if not changed.
-                            var vendor = _context.Vendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
+                            var vendor = _BMEDcontext.BMEDVendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
                             if (vendor != null)
                             {
                                 string defaultPW = vendor.UniteNo;

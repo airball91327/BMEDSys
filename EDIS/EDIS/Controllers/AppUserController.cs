@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using EDIS.Areas.BMED.Data;
 
 namespace EDIS.Controllers
 {
@@ -19,18 +20,21 @@ namespace EDIS.Controllers
     public class AppUserController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _BMEDcontext;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly IRepository<DepartmentModel, string> _dptRepo;
         private readonly CustomUserManager userManager;
         private readonly CustomRoleManager roleManager;
 
         public AppUserController(ApplicationDbContext context,
+                                 BMEDDbContext BMEDcontext,
                                  IRepository<AppUserModel, int> userRepo,
                                  IRepository<DepartmentModel, string> dptRepo,
                                  CustomUserManager customUserManager,
                                  CustomRoleManager customRoleManager)
         {
             _context = context;
+            _BMEDcontext = BMEDcontext;
             _userRepo = userRepo;
             _dptRepo = dptRepo;
             userManager = customUserManager;
@@ -71,10 +75,8 @@ namespace EDIS.Controllers
             List<AppUserModel> ul;
             List<UserList> us = new List<UserList>();
             string s = "";
-            string uid = keyname.PadLeft(10, '0');
-            ul = _context.AppUsers.Where(p => p.UserName == uid)
+            ul = _context.AppUsers.Where(p => p.FullName.Contains(keyname) || p.UserName == keyname)
                                   .Where(p => p.Status == "Y")
-                                  .Union(_context.AppUsers.Where(p => p.FullName.Contains(keyname)))
                                   .ToList();
             foreach (AppUserModel f in ul)
             {
@@ -112,6 +114,25 @@ namespace EDIS.Controllers
             }
             s = JsonConvert.SerializeObject(us);
 
+            return Json(s);
+        }
+
+        public JsonResult GetUsersByVendorId(string vendorId)
+        {
+            List<AppUserModel> ul;
+            List<UserList> us = new List<UserList>();
+            string s = "";
+            ul = _context.AppUsers.Where(p => p.VendorId == Convert.ToInt32(vendorId))
+                                  .Where(p => p.Status == "Y")
+                                  .ToList();
+            foreach (AppUserModel f in ul)
+            {
+                UserList u = new UserList();
+                u.uid = f.Id;
+                u.uname = "(" + f.UserName + ")" + f.FullName;
+                us.Add(u);
+            }
+            s = JsonConvert.SerializeObject(us);
             return Json(s);
         }
 

@@ -155,15 +155,18 @@ namespace EDIS.Areas.BMED.Controllers
             List<SelectListItem> items = new List<SelectListItem>();
             if (qryVendor.QryType == "關鍵字")
             {
-                _context.BMEDVendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord.Trim()))
-                        .ToList()
-                        .ForEach(v => {
-                            items.Add(new SelectListItem()
-                            {
-                                Text = v.VendorName,
-                                Value = v.VendorId.ToString()
-                            });
-                        });
+                if (!string.IsNullOrEmpty(qryVendor.KeyWord))
+                {
+                    _context.BMEDVendors.Where(v => v.VendorName.Contains(qryVendor.KeyWord.Trim()))
+                                        .ToList()
+                                        .ForEach(v => {
+                                            items.Add(new SelectListItem()
+                                            {
+                                                Text = v.VendorName,
+                                                Value = v.VendorId.ToString()
+                                            });
+                                        });
+                }
             }
             else if (qryVendor.QryType == "統一編號")
             {
