@@ -174,7 +174,7 @@ namespace EDIS.Controllers
             var s = _userManager.ChangePassword(user, model.OldPassword, model.NewPassword);
             if (s != "成功")
             {
-                StatusMessage = s;
+                model.StatusMessage = s;
                 return View(model);
             }
             await _signInManager.SignInAsync(user, isPersistent: false);
@@ -228,7 +228,7 @@ namespace EDIS.Controllers
             var s = _userManager.AddPassword(user, model.NewPassword);
             if (s != "成功")
             {
-                StatusMessage = s;
+                model.StatusMessage = s;
                 return View(model);
             }
 
