@@ -172,7 +172,7 @@
                         </ul>
                     </li>
 
-                    @*<li class="@Html.IsSelected(controller: "Manage", area: "")">
+                    <li class="@Html.IsSelected(controller: "Manage", area: "")">
                         <a href="#"><span class="nav-label">個人帳號管理</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-third-level collapse @Html.IsSelected(area: "", cssClass: "in")">
 
@@ -180,7 +180,7 @@
                                 <a href="@Url.Action("ChangePassword", "Manage", new { Area = "" })">修改密碼</a>
                             </li>
                         </ul>
-                    </li>*@
+                    </li>
 
                     @{
                         if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))

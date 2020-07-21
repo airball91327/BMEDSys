@@ -95,7 +95,7 @@ namespace EDIS.Models.Identity
             string s = "";
             if (string.IsNullOrEmpty(user.Id))
             {
-                s = "無此帳號!";
+                s = "錯誤!無此帳號!";
                 return s;
             }
             int id = Convert.ToInt32(user.Id);
@@ -115,7 +115,7 @@ namespace EDIS.Models.Identity
                     return s;
                 }
             }
-            s = "密碼錯誤!";
+            s = "錯誤!原密碼輸入不正確!";
             return s;
         }
 
@@ -124,7 +124,7 @@ namespace EDIS.Models.Identity
             string s = "";
             if (string.IsNullOrEmpty(user.Id))
             {
-                s = "無此帳號!";
+                s = "錯誤!無此帳號!";
                 return s;
             }
             int id = Convert.ToInt32(user.Id);
@@ -140,7 +140,7 @@ namespace EDIS.Models.Identity
                 s = "成功";
                 return s;
             }
-            s = "設定錯誤!";
+            s = "錯誤!設定密碼失敗!";
             return s;
         }
 
