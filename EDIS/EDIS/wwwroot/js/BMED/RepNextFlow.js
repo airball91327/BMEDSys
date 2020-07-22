@@ -192,10 +192,11 @@ $(function () {
                         $('#FlowCls option[value=""]').prop('selected', true);
                         $('#FlowUid').val("");
                     }
-                    if ($(this).val() !== "結案") {
-                        $(this).prop('disabled', true);
-                        $(this).hide();
-                    }
+                    /*2020/7/22 護理部反應*/
+                    //if ($(this).val() !== "結案") {
+                    //    $(this).prop('disabled', true);
+                    //    $(this).hide();
+                    //}
                 });
             }
         }

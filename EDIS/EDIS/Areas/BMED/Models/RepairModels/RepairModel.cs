@@ -86,5 +86,12 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [NotMapped]
         [Display(Name = "立帳日")]
         public string AssetAccDate { get; set; }
+        [NotMapped]
+        [Display(Name = "[是][否]為統包")]
+        public string NotInExceptDevice { get; set; }
+        [NotMapped]
+        [Display(Name = "費用")]
+        [DisplayFormat(DataFormatString = "{0:N0}")]
+        public decimal Cost { get; set; }
     }
 }
