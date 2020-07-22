@@ -1,10 +1,13 @@
 ﻿@model IEnumerable<EDIS.Areas.BMED.Models.UnSignListVModel>
 @using EDIS.Areas.BMED.Models
+@using Newtonsoft.Json
+
 @{
     Layout = null;
+    var qry = JsonConvert.DeserializeObject<ReportQryVModel>(TempData["qry"].ToString());
 }
 <p>
-    <a class="btn btn-default" href="@Url.Action("ExcelUS", TempData["qry"])">匯出Excel</a>
+    <a class="btn btn-default" href="@Url.Action("ExcelUS", qry)">匯出Excel</a>
 </p>
 
 <table class="table">

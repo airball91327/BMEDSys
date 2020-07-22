@@ -1,10 +1,12 @@
 ﻿@model IEnumerable<EDIS.Areas.BMED.Models.RpKpHistoryVModel>
+@using Newtonsoft.Json
 @{
     Layout = null;
+    var qry = JsonConvert.DeserializeObject<ReportQryVModel>(TempData["qry"].ToString());
 }
 
 <p>
-    <a class="btn btn-default" href="@Url.Action("ExcelRpKpHistory", TempData["qry"])">匯出Excel</a>
+    <a class="btn btn-default" href="@Url.Action("ExcelRpKpHistory", qry)">匯出Excel</a>
 </p>
 <div>
     @await Component.InvokeAsync("AssetView", new { id = ViewData["Ano"] })

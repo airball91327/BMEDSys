@@ -1,10 +1,12 @@
 ﻿@model IEnumerable<EDIS.Areas.BMED.Models.ProperRate>
+@using Newtonsoft.Json
 @{
     Layout = null;
+    var qry = JsonConvert.DeserializeObject<ReportQryVModel>(TempData["qry"].ToString());
 }
 <h4>設備妥善率統計表</h4>
 <p>
-    <a class="btn btn-default" href="@Url.Action("ExcelAssetProperRate", TempData["qry"])">匯出Excel</a>
+    <a class="btn btn-default" href="@Url.Action("ExcelAssetProperRate", qry)">匯出Excel</a>
 </p>
 
 <table class="table">
