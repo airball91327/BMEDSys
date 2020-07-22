@@ -6,11 +6,12 @@
 @inject CustomUserManager UserManager
 
 <script>
+    var url = '@Url.Action("NextFlow", "RepairFlow", new { Area = "BMED" })';
     function closeRepDoc(docId) {
         var r = confirm("是否直接結案?");
         if (r == true) {
             $.ajax({
-                url: '../BMED/RepairFlow/NextFlow',
+                url: url,
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -40,7 +41,7 @@
         var r = confirm("確定將此案件拉回?");
         if (r == true) {
             $.ajax({
-                url: '../BMED/RepairFlow/NextFlow',
+                url: url,
                 type: "POST",
                 dataType: "json",
                 data: {
