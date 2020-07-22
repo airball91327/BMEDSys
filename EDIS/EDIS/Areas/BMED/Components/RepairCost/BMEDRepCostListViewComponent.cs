@@ -34,7 +34,27 @@ namespace EDIS.Areas.BMED.Components.RepairCost
                 else
                     r.StockType = "簽單";
             });
-
+            //
+            var repair = _context.BMEDRepairs.Find(id);
+            if (!string.IsNullOrEmpty(repair.AssetNo))
+            {
+                AssetModel at = _context.BMEDAssets.Find(repair.AssetNo);
+                if (at != null)
+                {
+                    if (at.Cost != null)
+                    {
+                        if (at.Cost > 0)
+                        {
+                            decimal repcost = _context.BMEDRepairDtls.Where(m => m.AssetNo != null)
+                                .Where(m => m.AssetNo == at.AssetNo).Select(m => m.Cost)
+                                .Sum();
+                            ViewData["RepRatio"] = decimal.Round(repcost / at.Cost.Value * 100m, 2);
+                        }  
+                        else
+                            ViewData["RepRatio"] = 0;
+                    }
+                }
+            }
             /* Check the device's contract. */
             var repairDtl = _context.BMEDRepairDtls.Find(id);
             if (repairDtl.NotInExceptDevice == "Y") //該案件為統包

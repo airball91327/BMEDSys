@@ -29,6 +29,7 @@ namespace EDIS.Areas.BMED.Components.Repair
         public async Task<IViewComponentResult> InvokeAsync(string id)
         {
             RepairModel repair = _context.BMEDRepairs.Find(id);
+            RepairDtlModel repdtl = _context.BMEDRepairDtls.Find(id);
 
             /* Get and set value for NotMapped fields. */
             repair.DptName = _context.Departments.Find(repair.DptId).Name_C;
@@ -46,7 +47,18 @@ namespace EDIS.Areas.BMED.Components.Repair
                     }
                 }
             }
-
+            if (repdtl != null)
+            {
+                if (repdtl.NotInExceptDevice == "N")
+                {
+                    repair.NotInExceptDevice = "否";
+                    repair.Cost = repdtl.Cost;
+                }
+                else if (repdtl.NotInExceptDevice == "Y")
+                {
+                    repair.NotInExceptDevice = "是";
+                }
+            }
             return View(repair);
         }
 
