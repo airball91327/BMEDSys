@@ -97,8 +97,13 @@ else
                 <td>
                     @Html.DisplayFor(modelItem => item.TroubleDes)
                 </td>
-                <td>
+                <td width="75px">
                     @Html.DisplayFor(modelItem => item.DealState)
+                    @if (item.DealState == "報廢")
+                    {
+                        <br />
+                        <a href='http://eform2.cch.org.tw/Public/Purchase/FmNew.aspx?recno=@item.DocId' target="_blank">請購</a>
+                    }
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.DealDes)

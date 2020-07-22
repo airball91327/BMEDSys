@@ -16,6 +16,8 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         public string BMEDqtyFLOWTYPE { get; set; }
         public string BMEDqtyDPTID { get; set; }
         public string BMEDqtyDealStatus { get; set; }
+        public string BMEDqtyTROUBLEDES { get; set; }
+        public string BMEDqtyUserId { get; set; }
         [DataType(DataType.Date)]
         [Column(TypeName = "Date")]
         public string BMEDqtyApplyDateFrom { get; set; }

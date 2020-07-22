@@ -95,7 +95,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<SelectListItem> listItem5 = new List<SelectListItem>();
             foreach (string l in engs)
             {
-                var u = _context.AppUsers.Where(ur => ur.UserName == l).FirstOrDefault();
+                var u = _context.AppUsers.Where(r => r.UserName == l).FirstOrDefault();
                 if (u != null)
                 {
                     listItem5.Add(new SelectListItem
@@ -106,7 +106,19 @@ namespace EDIS.Areas.BMED.Controllers
                 }
             }
             ViewData["BMEDEngs"] = new SelectList(listItem5, "Value", "Text");
-
+            /* 擷取該使用者單位底下所有人員 */
+            var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
+            var dptUsers = _context.AppUsers.Where(a => a.DptId == ur.DptId).ToList();
+            List<SelectListItem> dptMemberList = new List<SelectListItem>();
+            foreach (var item in dptUsers)
+            {
+                dptMemberList.Add(new SelectListItem
+                {
+                    Text = item.FullName,
+                    Value = item.Id.ToString()
+                });
+            }
+            ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
             QryRepListData data = new QryRepListData();
 
             return View(data);
@@ -254,7 +266,8 @@ namespace EDIS.Areas.BMED.Controllers
             string qtyEngCode = qdata.BMEDqtyEngCode;
             string qtyTicketNo = qdata.BMEDqtyTicketNo;
             string qtyVendor = qdata.BMEDqtyVendor;
-
+            string qtyTroubledes = qdata.BMEDqtyTROUBLEDES;
+            string qtyUserId = qdata.BMEDqtyUserId;
             DateTime applyDateFrom = DateTime.Now;
             DateTime applyDateTo = DateTime.Now;
             /* Dealing search by date. */
@@ -318,6 +331,16 @@ namespace EDIS.Areas.BMED.Controllers
             {
                 rps = rps.Where(v => v.AssetName != null)
                          .Where(v => v.AssetName.Contains(aname)).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyTroubledes))   //故障描述
+            {
+                rps = rps.Where(v => v.TroubleDes != null)
+                         .Where(v => v.TroubleDes.Contains(qtyTroubledes)).ToList();
+            }
+            if (!string.IsNullOrEmpty(qtyUserId))     //申請人
+            {
+                int uid = Convert.ToInt32(qtyUserId);
+                rps = rps.Where(v => v.UserId == uid).ToList();
             }
             if (!string.IsNullOrEmpty(qtyTicketNo))   //發票號碼
             {

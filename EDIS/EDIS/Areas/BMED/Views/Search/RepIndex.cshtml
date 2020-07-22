@@ -9,10 +9,35 @@
 <script src="~/js/bootstrap-combobox.js"></script>
 
 <script type="text/javascript">
+    $.fn.addItems = function (data) {
+
+        return this.each(function () {
+            var list = this;
+            $.each(data, function (val, text) {
+
+                var option = new Option(text.text, text.value);
+                list.add(option);
+            });
+        });
+
+    };
     $(document).ready(function () {
         $('.combobox').combobox();
         /* While loading this page, default search repairDocs. */
         //$("#repSearchForm").submit();
+        $("#UserIdQryBtn").click(function () {
+            var queryStr = $("#UserIdQry").val();
+            $.ajax({
+                url: '../Repair/QueryUsers',
+                type: "GET",
+                data: { QueryStr: queryStr },
+                success: function (data) {
+                    var select = $('#BMEDqtyUserId');
+                    $('option', select).remove();
+                    select.addItems(data);
+                }
+            });
+        });
     });
 </script>
 
@@ -99,6 +124,22 @@
                 <div class="form-group">
                     <label for="BMEDqtyVendor" class="control-title">廠商(關鍵字)</label>
                     <input asp-for="BMEDqtyVendor" class="form-control-s" />
+                </div>
+                <div class="form-group">
+                    <label for="BMEDqtyTROBLEDES" class="control-title">故障描述<br />(關鍵字)</label>
+                    <input asp-for="BMEDqtyTROUBLEDES" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="BMEDqtyUserId" class="control-title">申請人</label>
+                    <input type="text" placeholder="輸入code或關鍵字查詢" class="form-control" id="UserIdQry" />
+                    <button type="button" class="btn btn-default" id="UserIdQryBtn">查詢</button>
+                    <select asp-for="BMEDqtyUserId" asp-items="@ViewData["DptMembers"] as SelectList" class="form-control">
+                        <option disabled selected>請選擇</option>
+                    </select>
                 </div>
             </div>
         </div>
