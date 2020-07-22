@@ -51,7 +51,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> NextFlowAsync(AssignModel assign)
+        public IActionResult NextFlow(AssignModel assign)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
             var repairDtl = _context.BMEDRepairDtls.Find(assign.DocId);
