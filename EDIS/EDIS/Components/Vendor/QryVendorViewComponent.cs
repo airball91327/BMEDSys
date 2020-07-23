@@ -1,6 +1,6 @@
-﻿using EDIS.Data;
+﻿using EDIS.Areas.BMED.Data;
 using EDIS.Models.Identity;
-using EDIS.Models.RepairModels;
+using EDIS.Areas.BMED.Models.RepairModels;
 using EDIS.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -13,9 +13,9 @@ namespace EDIS.Components.Vendor
 {
     public class QryVendorViewComponent : ViewComponent
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
-        public QryVendorViewComponent(ApplicationDbContext context)
+        public QryVendorViewComponent(BMEDDbContext context)
         {
             _context = context;
         }

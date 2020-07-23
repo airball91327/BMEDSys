@@ -1,0 +1,221 @@
+﻿@model EDIS.Models.Identity.AppUserModel
+
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewBag.Title = "新增/使用者";
+}
+
+@using EDIS.Models.Identity;
+@inject CustomUserManager UserManager
+@inject CustomRoleManager RoleManager
+
+<h2>新增</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="container">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="UserName" class="control-title"></label>
+                    <input asp-for="UserName" class="form-control" />
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="Password" class="control-title"></label>
+                    <input asp-for="Password" class="form-control" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="FullName" class="control-title"></label>
+                    <input asp-for="FullName" class="form-control" />
+                    <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="DptId" class="control-title"></label>
+                    <select asp-for="DptId" asp-items="@ViewData["DPTID"] as SelectList" class="form-control">
+                        <option selected disabled>請選擇</option>
+                    </select>
+                    <span asp-validation-for="DptId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    @Html.HiddenFor(model => model.VendorId)
+                    <label asp-for="VendorId" class="control-title"></label>
+                    <input asp-for="VendorName" class="form-control" />
+                    <input id="btnQtyVendor" type="button" value="查詢" class="btn btn-default" data-toggle="modal" data-target="#modalVENDOR">
+                    <span asp-validation-for="VendorId" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @if (UserManager.IsInRole(User, "Admin"))
+        {
+            <div class="row">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <div>
+                            <label class="control-title">設定角色</label>
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <div>
+                            <table style="width: 100%">
+                                @for (int i = 0; i < Model.InRoles.Count; i++)
+                                {
+                                    if (i % 3 == 0)
+                                    {
+                                        @Html.Raw("<tr>")
+                                    }
+                                    @Html.Raw("<td width='25%'>")
+                                    @Html.CheckBoxFor(model => model.InRoles[i].IsSelected)
+                                    @Html.HiddenFor(model => model.InRoles[i].RoleName)
+                                    @Html.Raw(Model.InRoles[i].Description)
+                                    @Html.Raw("</td>")
+                                    if (i % 3 == 2)
+                                    {
+                                        @Html.Raw("</tr>")
+                                    }
+                                }
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="Ext" class="control-title"></label>
+                    <input asp-for="Ext" class="form-control" />
+                    <span asp-validation-for="Ext" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="Mobile" class="control-title"></label>
+                    <input asp-for="Mobile" class="form-control" />
+                    <span asp-validation-for="Mobile" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="Email" class="control-title"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        @if (UserManager.IsInRole(User, "Super") || UserManager.IsInRole(User, "Admin") ||
+   UserManager.IsInRole(User, "Manager"))
+        {
+            <div class="row">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label asp-for="Status" class="control-title"></label>
+                        @Html.RadioButtonFor(model => model.Status, "Y")開啟
+                        @Html.RadioButtonFor(model => model.Status, "N")關閉
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.Status)
+        }
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="DateCreated" class="control-title"></label>
+                    @Html.DisplayFor(model => model.DateCreated, new { htmlAttributes = new { @class = "form-control" } })
+                    <span asp-validation-for="DateCreated" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="LastActivityDate" class="control-title"></label>
+                    @Html.DisplayFor(model => model.LastActivityDate, "{0:dd/MM/yyyy}")
+                    <span asp-validation-for="LastActivityDate" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">儲存</button>
+            <a class="btn btn-default" href="@Url.Action("Index")">回到使用者列表</a>
+        </div>
+    </div>
+</form>
+
+
+<!-- 廠商 Modal -->
+<div id="modalVENDOR" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background-color: #1D3C4C">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" style="color:#fff">&times;</button>
+                <h4 class="modal-title">選擇廠商</h4>
+            </div>
+            <div id="pnlSELECTVENDOR" class="modal-body">
+                @await Component.InvokeAsync("QryVendor")
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">儲存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            $('.modal').on('shown.bs.modal', function () {
+                //Make sure the modal and backdrop are siblings (changes the DOM)
+                $(this).before($('.modal-backdrop'));
+                //Make sure the z-index is higher than the backdrop
+                $(this).css("z-index", parseInt($('.modal-backdrop').css('z-index')) + 1);
+            });
+            $('#modalVENDOR').on('hidden.bs.modal', function () {
+                var vno = $("#Vno option:selected").val();
+                var vname = $("#Vno option:selected").text();
+                $("#VendorId").val(vno);
+                $("#VendorName").val(vname);
+            });
+        })
+    </script>
+}

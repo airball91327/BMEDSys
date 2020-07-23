@@ -45,7 +45,7 @@ namespace EDIS.Models.Identity
         public System.DateTime DateCreated { get; set; }
         [Display(Name = "最後修改時間")]
         public System.DateTime? LastActivityDate { get; set; }
-        [Required]
+        [Required(ErrorMessage = "必填寫欄位")]
         [Display(Name = "狀態")]
         public string Status { get; set; }
     }

@@ -312,8 +312,22 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     return PartialView("MonthFailRate", MonthFailRate(v));
                 case "月維修清單":
+                    if (v.Edate == null || v.Sdate == null)
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入時間區間!" }
+                        };
+                    }
                     return PartialView("MonthRepair", MonthRepair(v));
                 case "月保養清單":
+                    if (v.Edate == null || v.Sdate == null)
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入時間區間!" }
+                        };
+                    }
                     return PartialView("MonthKeep", MonthKeep(v));
                 case "維修保養統計表":
                     return PartialView("RepairKeep", RepairKeep(v));
@@ -2448,7 +2462,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<RpKpStokBdVModel> sv = new List<RpKpStokBdVModel>();
             List<RpKpStokBdVModel> sv2 = new List<RpKpStokBdVModel>();
             RpKpStokBdVModel rb;
-            var scv = _context.BMEDRepairDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
+            var rps = _context.BMEDRepairDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDRepairs, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
@@ -2479,9 +2493,9 @@ namespace EDIS.Areas.BMED.Controllers
                     rc.PartNo,
                     rc.Qty,
                     rc.TotalCost
-                })
-                .Union(
-                _context.BMEDKeepDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
+                }).ToList();
+
+            var ksp = _context.BMEDKeepDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDKeeps, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
@@ -2513,8 +2527,9 @@ namespace EDIS.Areas.BMED.Controllers
                     rc.PartNo,
                     rc.Qty,
                     rc.TotalCost
-                })
-                ).GroupBy(rd => rd.CustId).ToList();
+                }).ToList();
+                
+                var scv = rps.Union(ksp).GroupBy(rd => rd.CustId).ToList();
 
             foreach (var a in scv)
             {

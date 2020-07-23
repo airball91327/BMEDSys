@@ -186,7 +186,8 @@
                         if (UserManager.IsInRole(User, "Admin") || UserManager.IsInRole(User, "MedAdmin"))
                         {
                             <li class="@Html.IsSelected(controller: "KeepFormat", area: "BMED")
-                                       @Html.IsSelected(controller: "Asset", area: "BMED")">
+                                       @Html.IsSelected(controller: "Asset", area: "BMED")
+                                       @Html.IsSelected(controller: "AppUser", area: "")">
                                 <a href="#"><span class="nav-label">後台管理</span><span class="fa arrow"></span></a>
                                 <ul class="nav nav-third-level collapse @Html.IsSelected(controller: "KeepFormat", area: "BMED", cssClass: "in") @Html.IsSelected(controller: "Asset", area: "BMED", cssClass: "in")">
                                     <li class="@Html.IsSelected(controller: "KeepFormat", area: "BMED")">
@@ -202,6 +203,14 @@
                                         <ul class="nav nav-fourth-level collapse @Html.IsSelected(controller: "Asset", area: "BMED", cssClass: "in")">
                                             <li>
                                                 <a href="@Url.Action("Index", "Asset", new { Area = "BMED" })">資產設備一覽</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="@Html.IsSelected(controller: "AppUser", area: "")">
+                                        <a href="#"><span class="nav-label">人員管理</span><span class="fa arrow"></span></a>
+                                        <ul class="nav nav-fourth-level collapse @Html.IsSelected(controller: "AppUser", area: "", cssClass: "in")">
+                                            <li>
+                                                <a href="@Url.Action("Index", "AppUser", new { Area = "" })">使用者一覽</a>
                                             </li>
                                         </ul>
                                     </li>
