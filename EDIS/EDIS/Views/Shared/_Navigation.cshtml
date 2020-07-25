@@ -95,6 +95,9 @@
                             <li class="@Html.IsSelected(controller: "Search", action: "DelivIndex", area: "BMED")">
                                 <a href="@Url.Action("DelivIndex", "Search", new { Area = "BMED" })"><span class="nav-label">全院驗收案查詢</span></a>
                             </li>
+                            <li class="@Html.IsSelected(controller: "Search", action: "MedTransRdIdx", area: "BMED")">
+                                <a href="@Url.Action("MedTransRdIdx", "Search", new { Area = "BMED" })"><span class="nav-label">傳送資料查詢</span></a>
+                            </li>
                         </ul>
                     </li>
 

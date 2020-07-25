@@ -23,16 +23,20 @@ namespace EDIS.Areas.BMED.Models.MedTransRd
         [Display(Name = "傳送人員")]
         public int TF_EMPNO { get; set; }
         [Display(Name = "傳送人員姓名")]
-        public int TF_EMPNAM { get; set; }
+        public string TF_EMPNAM { get; set; }
         [Display(Name = "傳送日期")]
         public DateTime? TF_DATE { get; set; }
         [Display(Name = "記錄人員")]
         public int RD_EMPNO { get; set; }
+        [Display(Name = "記錄人員姓名")]
+        public string RD_EMPNAM { get; set; }
         [Display(Name = "有效")]
         public string EFG { get; set; }
         [Display(Name = "異動人員")]
         public int RTP { get; set; }
         [Display(Name = "異動時間")]
         public DateTime? RTT { get; set; }
+        [Display(Name = "申請部門")]
+        public string APPLYDPT { get; set; }
     }
 }

@@ -96,6 +96,12 @@
     <Content Update="Areas\BMED\Views\Search\DelivQryList.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
+    <Content Update="Areas\BMED\Views\Search\MedTransRdIdx.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Areas\BMED\Views\Search\MedTransRdQList.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Areas\BMED\Views\Shared\Components\AssetFileAssetList\Default.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
@@ -240,6 +246,7 @@
     <Folder Include="Areas\Admin\Models\" />
     <Folder Include="Areas\BMED\Models\BuyEvaluateModels\" />
     <Folder Include="Areas\BMED\Views\DelivFlow\" />
+    <Folder Include="Areas\BMED\Views\MedTransRd\" />
     <Folder Include="Areas\WebService\Controllers\" />
     <Folder Include="Areas\WebService\Data\" />
     <Folder Include="Areas\WebService\Views\" />

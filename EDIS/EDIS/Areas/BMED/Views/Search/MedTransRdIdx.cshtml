@@ -1,0 +1,130 @@
+﻿@model EDIS.Areas.BMED.Models.MedTransRd.MedTransRdQModel
+
+@{
+    Layout = "~/Views/Shared/_PassedLayout.cshtml";
+    ViewData["Title"] = "傳送資料查詢";
+}
+
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
+<script type="text/javascript">
+    $.fn.addItems = function (data) {
+
+        return this.each(function () {
+            var list = this;
+            $.each(data, function (val, text) {
+
+                var option = new Option(text.text, text.value);
+                list.add(option);
+            });
+        });
+
+    };
+    $(document).ready(function () {
+        $('.combobox').combobox();
+        /* While loading this page, default search repairDocs. */
+        //$("#repSearchForm").submit();
+        //$("#UserIdQryBtn").click(function () {
+        //    var queryStr = $("#UserIdQry").val();
+        //    $.ajax({
+        //        url: '../Repair/QueryUsers',
+        //        type: "GET",
+        //        data: { QueryStr: queryStr },
+        //        success: function (data) {
+        //            var select = $('#BMEDqtyUserId');
+        //            $('option', select).remove();
+        //            select.addItems(data);
+        //        }
+        //    });
+        //});
+    });
+</script>
+
+<h3>傳送資料查詢 - 總院</h3>
+<h4>醫療儀器</h4>
+<hr />
+
+<form asp-controller="Search" asp-action="GetMedTransRdQList" asp-area="BMED" data-ajax="true"
+      data-ajax-update="#pnlMEDTRANSRDLIST" data-ajax-method="POST" id="MedTransRdForm"
+      data-ajax-begin="$.Toast.showToast({
+      'title':'查詢中，請稍待...',
+      'icon':'loading',
+      'duration':0
+      })"
+      data-ajax-complete="$.Toast.hideToast()">
+
+    <div class="container">
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="DOCID" class="control-title">表單編號</label>
+                    <input asp-for="DOCID" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="ASSETNO" class="control-title">財產編號</label>
+                    <input asp-for="ASSETNO" class="form-control-s" />
+                </div>
+                <div class="form-group">
+                    <label for="ACCDPT" class="control-title">成本中心</label>
+                    <select asp-for="ACCDPT" asp-items="@ViewData["ACCDPT"] as SelectList" class="form-control combobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="PLANT_NAM" class="control-title">儀器名稱<br />(關鍵字)</label>
+                    <input asp-for="PLANT_NAM" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="STATUS" class="control-title">狀態</label>
+                    <select asp-for="STATUS" asp-items="@ViewData["STATUS"] as SelectList" class="form-control-s">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="APPLYDPT" class="control-title">申請部門</label>
+                    <select asp-for="APPLYDPT" asp-items="@ViewData["APPLYDPT"] as SelectList" class="form-control combobox">
+                        <option value="">請選擇</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="TF_DATE" class="control-title">送件/取件日期</label>
+                    @*<span>
+                        <select asp-for="BMEDqtyDateType" asp-items="@ViewData["DateType"] as SelectList" class="form-control-s"></select>
+                    </span>*@
+                    <input asp-for="TF_DATE_From" class="form-control" />
+                    <span> ~ </span>
+                    <input asp-for="TF_DATE_To" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <label for="DOC_TYP" class="control-title">類別</label>
+                    <label><input asp-for="DOC_TYP" value="請修" type="radio" />請修</label>
+                    <label><input asp-for="DOC_TYP" value="保養" type="radio" />保養</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class=form-inline>
+                <div class="form-group">
+                    <div style="margin-left:115px">
+                        <input id="btnQTY" type="submit" value="查詢" class="btn btn-default" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="pnlMEDTRANSRDLIST"></div>

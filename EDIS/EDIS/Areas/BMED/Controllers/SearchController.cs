@@ -13,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using EDIS.Areas.BMED.Models.DeliveryModels;
 using Microsoft.AspNetCore.Http;
 using EDIS.Repositories;
+using EDIS.Areas.BMED.Models.MedTransRd;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -120,6 +121,33 @@ namespace EDIS.Areas.BMED.Controllers
             }
             ViewData["DptMembers"] = new SelectList(dptMemberList, "Value", "Text");
             QryRepListData data = new QryRepListData();
+
+            return View(data);
+        }
+
+        public IActionResult MedTransRdIdx()
+        {
+            List<SelectListItem> FlowlistItem = new List<SelectListItem>();
+            FlowlistItem.Add(new SelectListItem { Text = "送件", Value = "送件" });
+            FlowlistItem.Add(new SelectListItem { Text = "取件", Value = "取件" });
+            ViewData["STATUS"] = new SelectList(FlowlistItem, "Value", "Text");
+            /* 成本中心 & 申請部門的下拉選單資料 */
+            var dptList = new[] { "K", "P", "C" };  //本院部門
+            var departments = _context.Departments.Where(d => dptList.Contains(d.Loc)).ToList();
+            List<SelectListItem> listItem = new List<SelectListItem>();
+            foreach (var item in departments)
+            {
+                listItem.Add(new SelectListItem
+                {
+                    Text = item.Name_C + "(" + item.DptId + ")",    //show DptName(DptId)
+                    Value = item.DptId
+                });
+            }
+
+            ViewData["ACCDPT"] = new SelectList(listItem, "Value", "Text");
+            ViewData["APPLYDPT"] = new SelectList(listItem, "Value", "Text");
+
+            MedTransRdQModel data = new MedTransRdQModel();
 
             return View(data);
         }
@@ -243,6 +271,13 @@ namespace EDIS.Areas.BMED.Controllers
             return View();
         }
 
+        [HttpPost]
+        public IActionResult GetMedTransRdQList(MedTransRdQModel qdata)
+        {
+            List<MedTransRd> rv = new List<MedTransRd>();
+
+            return View("MedTransRdQList", rv);
+        }
         /// <summary>
         /// Get the query result list of repair docs.
         /// </summary>
