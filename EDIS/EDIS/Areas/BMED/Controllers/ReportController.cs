@@ -18,6 +18,7 @@ using System.IO;
 using System.Data;
 using EDIS.Areas.BMED.Models;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -70,7 +71,7 @@ namespace EDIS.Areas.BMED.Controllers
 
         private List<AssetKpScheVModel> AssetKpSche(ReportQryVModel v)
         {
-
+            TempData["qry2"] = JsonConvert.SerializeObject(v);
             List<AssetKpScheVModel> sv = new List<AssetKpScheVModel>();
             var data = _context.BMEDAssets
                 .Join(_context.BMEDAssetKeeps.Where(x => x.Cycle > 0), a => a.AssetNo, k => k.AssetNo,
@@ -172,7 +173,7 @@ namespace EDIS.Areas.BMED.Controllers
             return sv;
         }
 
-        public void AssetKpScheExcel(ReportQryVModel v)
+        public IActionResult AssetKpScheExcel(ReportQryVModel v)
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -220,15 +221,20 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("設備保養排程年報");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=AssetKpSche.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "AssetKpSche.xlsx"
+            );
         }
         //public void ExcelQA(ReportQryVModel v)
         //{
@@ -306,8 +312,22 @@ namespace EDIS.Areas.BMED.Controllers
                     }
                     return PartialView("MonthFailRate", MonthFailRate(v));
                 case "月維修清單":
+                    if (v.Edate == null || v.Sdate == null)
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入時間區間!" }
+                        };
+                    }
                     return PartialView("MonthRepair", MonthRepair(v));
                 case "月保養清單":
+                    if (v.Edate == null || v.Sdate == null)
+                    {
+                        return new JsonResult(v)
+                        {
+                            Value = new { success = false, error = "請輸入時間區間!" }
+                        };
+                    }
                     return PartialView("MonthKeep", MonthKeep(v));
                 case "維修保養統計表":
                     return PartialView("RepairKeep", RepairKeep(v));
@@ -429,7 +449,7 @@ namespace EDIS.Areas.BMED.Controllers
 
             return View();
         }
-        public void ExcelAssetProperRate(ReportQryVModel v)
+        public IActionResult ExcelAssetProperRate(ReportQryVModel v)
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -460,19 +480,25 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("設備妥善率統計");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=MonthKeep.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
 
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "MonthKeep.xlsx"
+            );
         }
         private List<ProperRate> AssetProperRate(ReportQryVModel v)
         {
+            TempData["qry"] = JsonConvert.SerializeObject(v);
             var days = v.Edate.Value.Subtract(v.Sdate.Value).TotalDays;
             double faildays = 0;
             double dd = 0;
@@ -537,7 +563,7 @@ namespace EDIS.Areas.BMED.Controllers
             return sv;
         }
 
-        public void ExcelAssetKeepList()
+        public IActionResult ExcelAssetKeepList()
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -578,15 +604,21 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("儀器設備保養清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=AssetKeepList.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "AssetKeepList.xlsx"
+            );
         }
         public IActionResult AssetKeepList()
         {
@@ -705,7 +737,7 @@ namespace EDIS.Areas.BMED.Controllers
             TempData["qry2"] = v;
             return PartialView("AssetKpSche", AssetKpSche(v));
         }
-        public void ExcelRpKpHistory(ReportQryVModel v)
+        public IActionResult ExcelRpKpHistory(ReportQryVModel v)
         {
             //
             ExcelPackage excel = new ExcelPackage();
@@ -930,19 +962,25 @@ namespace EDIS.Areas.BMED.Controllers
             sheet3.Cells[7, 1].Value = "維修比";
             sheet3.Cells[7, 2].Value = ay.RepRatio;
             sheet3.Cells[8, 1].Value = "備註：維修比 = 維修總金額/取得金額。";
-        
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=RpKpHistory.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "RpKpHistory.xlsx"
+            );
         }
         private List<RpKpHistoryVModel> RpKpHistory(ReportQryVModel v)
         {
+            TempData["qry"] = JsonConvert.SerializeObject(v);
             List<RpKpHistoryVModel> sv = new List<RpKpHistoryVModel>();
             List<RpKpHistoryVModel> sv2 = new List<RpKpHistoryVModel>();
             if (string.IsNullOrEmpty(v.AssetNo))
@@ -1046,10 +1084,11 @@ namespace EDIS.Areas.BMED.Controllers
             return sv;
         }
 
-        private List<UnSignListVModel> UnSignList(ReportQryVModel v)
+        public List<UnSignListVModel> UnSignList(ReportQryVModel v)
         {
             List<UnSignListVModel> sv = new List<UnSignListVModel>();
             List<UnSignListVModel> sv2 = new List<UnSignListVModel>();
+            TempData["qry"] = JsonConvert.SerializeObject(v); ;
 
             sv = _context.BMEDRepairFlows.Where(f => f.Status == "?")
             .Join(_context.BMEDRepairDtls, f => f.DocId, rd => rd.DocId,
@@ -1240,7 +1279,7 @@ namespace EDIS.Areas.BMED.Controllers
             return sv;
         }
 
-        public void ExcelUS(ReportQryVModel v)
+        public IActionResult ExcelUS(ReportQryVModel v)
         {
             string str = "";
             str += "類別,表單編號,送單日期,完工日期,財產編號,設備名稱,型號,成本中心,成本中心名稱,";
@@ -1279,15 +1318,21 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("未結案清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=UnSignList.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "UnSignList.xlsx"
+            );
         }
 
 
@@ -1572,7 +1617,7 @@ namespace EDIS.Areas.BMED.Controllers
         //    return mv;
         //}
 
-        public void ExcelMR(ReportQryVModel v)
+        public IActionResult ExcelMR(ReportQryVModel v)
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -1612,21 +1657,26 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("月維修清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=MonthRepair.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
 
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "MonthRepair.xlsx"
+            );
         }
 
         public List<MonthRepairVModel> MonthRepair(ReportQryVModel v)
         {
-
+            TempData["qry"] = JsonConvert.SerializeObject(v);
             List<MonthRepairVModel> mv = new List<MonthRepairVModel>();
 
             mv = _context.BMEDRepairDtls
@@ -1749,7 +1799,7 @@ namespace EDIS.Areas.BMED.Controllers
             return mv;
         }
 
-        public void ExcelMK(ReportQryVModel v)
+        public IActionResult ExcelMK(ReportQryVModel v)
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -1783,20 +1833,25 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("月保養清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=MonthKeep.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
 
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "MonthKeep.xlsx"
+            );
         }
         public List<MonthKeepVModel> MonthKeep(ReportQryVModel v)
         {
-
+            TempData["qry"] = JsonConvert.SerializeObject(v);
             List<MonthKeepVModel> mv = new List<MonthKeepVModel>();
             string s = "";
             _context.BMEDKeepDtls.Where(d => d.EndDate >= v.Sdate)
@@ -2155,7 +2210,7 @@ namespace EDIS.Areas.BMED.Controllers
             return mv;
         }
 
-        public void ExcelRF(ReportQryVModel v)
+        public IActionResult ExcelRF(ReportQryVModel v)
         {
             DataTable dt = new DataTable();
             DataRow dw;
@@ -2187,15 +2242,21 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("重複故障清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=RepeatFail.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "RepeatFail.xlsx"
+            );
         }
         public List<RepeatFailVModel> RepeatFail(ReportQryVModel v)
         {
@@ -2206,6 +2267,7 @@ namespace EDIS.Areas.BMED.Controllers
             RepairEmpModel p;
             AssetModel a;
             DepartmentModel o;
+            TempData["qry"] = JsonConvert.SerializeObject(v);
 
             List<RepairDtlModel> rdtl = _context.BMEDRepairDtls.Where(d => d.EndDate >= v.Sdate)
                 .Where(d => d.EndDate <= v.Edate).ToList();
@@ -2400,7 +2462,7 @@ namespace EDIS.Areas.BMED.Controllers
             List<RpKpStokBdVModel> sv = new List<RpKpStokBdVModel>();
             List<RpKpStokBdVModel> sv2 = new List<RpKpStokBdVModel>();
             RpKpStokBdVModel rb;
-            var scv = _context.BMEDRepairDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
+            var rps = _context.BMEDRepairDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDRepairs, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
@@ -2431,9 +2493,9 @@ namespace EDIS.Areas.BMED.Controllers
                     rc.PartNo,
                     rc.Qty,
                     rc.TotalCost
-                })
-                .Union(
-                _context.BMEDKeepDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
+                }).ToList();
+
+            var ksp = _context.BMEDKeepDtls.Where(d => d.CloseDate != null).Where(d => d.CloseDate >= v.Sdate &&
                 d.CloseDate <= v.Edate)
                 .Join(_context.BMEDKeeps, rd => rd.DocId, r => r.DocId,
                 (rd, r) => new
@@ -2465,8 +2527,9 @@ namespace EDIS.Areas.BMED.Controllers
                     rc.PartNo,
                     rc.Qty,
                     rc.TotalCost
-                })
-                ).GroupBy(rd => rd.CustId).ToList();
+                }).ToList();
+                
+                var scv = rps.Union(ksp).GroupBy(rd => rd.CustId).ToList();
 
             foreach (var a in scv)
             {
@@ -2540,7 +2603,7 @@ namespace EDIS.Areas.BMED.Controllers
             return sv;
         }
 
-        public void ExcelSC(ReportQryVModel v)
+        public IActionResult ExcelSC(ReportQryVModel v)
         {
             string str = "";
             str += "類別,表單編號,送單日期,完工日期,財產編號,設備名稱,型號,成本中心,成本中心名稱,";
@@ -2582,18 +2645,25 @@ namespace EDIS.Areas.BMED.Controllers
             ExcelPackage excel = new ExcelPackage();
             var workSheet = excel.Workbook.Worksheets.Add("零件帳務清單");
             workSheet.Cells[1, 1].LoadFromDataTable(dt, true);
-            //using (var memoryStream = new MemoryStream())
-            //{
-            //    Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-            //    Response.AddHeader("content-disposition", "attachment;  filename=StokCost.xlsx");
-            //    excel.SaveAs(memoryStream);
-            //    memoryStream.WriteTo(Response.OutputStream);
-            //    Response.Flush();
-            //    Response.End();
-            //}
+
+            // Generate the Excel, convert it into byte array and send it back to the controller.
+            byte[] fileContents;
+            fileContents = excel.GetAsByteArray();
+
+            if (fileContents == null || fileContents.Length == 0)
+            {
+                return NotFound();
+            }
+
+            return File(
+                fileContents: fileContents,
+                contentType: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                fileDownloadName: "StokCost.xlsx"
+            );
         }
         public List<StokCostVModel> StokCost(ReportQryVModel v)
         {
+            TempData["qry"] = JsonConvert.SerializeObject(v);
             List<StokCostVModel> sv = new List<StokCostVModel>();
             List<StokCostVModel> sv2 = new List<StokCostVModel>();
 

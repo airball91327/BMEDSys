@@ -1,6 +1,8 @@
 ﻿@model IEnumerable<EDIS.Areas.BMED.Models.AssetKpScheVModel>
+@using Newtonsoft.Json
 @{
     Layout = null;
+    var qry2 = JsonConvert.DeserializeObject<ReportQryVModel>(TempData["qry2"].ToString());
 }
 <style type="text/css">
     .Sche {
@@ -11,12 +13,13 @@
     .hdtitle {
         margin-top: 5px;
     }
+
     .table-hover > tbody > tr:hover {
         background-color: cornflowerblue;
     }
 </style>
 <p>
-    <a class="btn btn-default" href="@Url.Action("AssetKpScheExcel", TempData["qry2"])">匯出Excel</a>
+    <a class="btn btn-default" href="@Url.Action("AssetKpScheExcel", qry2)">匯出Excel</a>
 </p>
 <table class="table table-bordered table-hover">
     <tr>

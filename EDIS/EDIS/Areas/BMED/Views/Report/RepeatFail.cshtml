@@ -1,10 +1,12 @@
 ﻿@model IEnumerable<EDIS.Areas.BMED.Models.RepeatFailVModel>
+@using Newtonsoft.Json
 @{
     Layout = null;
+    var qry = JsonConvert.DeserializeObject<ReportQryVModel>(TempData["qry"].ToString());
 }
 
 <p>
-    <a class="btn btn-default" href="@Url.Action("ExcelRF", TempData["qry"])">匯出Excel</a>
+    <a class="btn btn-default" href="@Url.Action("ExcelRF", qry)">匯出Excel</a>
 </p>
 <table class="table">
     <tr>
