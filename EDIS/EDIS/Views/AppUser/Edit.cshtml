@@ -5,6 +5,9 @@
     ViewBag.Title = "修改使用者";
 }
 
+<link href="~/css/bootstrap-combobox.css" rel="stylesheet" />
+<script src="~/js/bootstrap-combobox.js"></script>
+
 @using EDIS.Models.Identity;
 @inject CustomUserManager UserManager
 @inject CustomRoleManager RoleManager
@@ -38,6 +41,18 @@
                     <label asp-for="FullName" class="control-title"></label>
                     <input asp-for="FullName" class="form-control" />
                     <span asp-validation-for="FullName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label asp-for="DptId" class="control-title"></label>
+                    <select asp-for="DptId" asp-items="@ViewData["DPTID"] as SelectList" class="form-control combobox">
+                        <option selected disabled>請選擇</option>
+                    </select>
+                    <span asp-validation-for="DptId" class="text-danger"></span>
                 </div>
             </div>
         </div>
@@ -121,7 +136,7 @@
         </div>
 
         @if (UserManager.IsInRole(User, "Super") || UserManager.IsInRole(User, "Admin") ||
-       UserManager.IsInRole(User, "Manager"))
+            UserManager.IsInRole(User, "Manager"))
         {
             <div class="row">
                 <div class="form-inline">
@@ -187,6 +202,8 @@
 @section Scripts{
     <script>
         $(function () {
+            $('.combobox').combobox();
+
             $('.modal').on('shown.bs.modal', function () {
                 //Make sure the modal and backdrop are siblings (changes the DOM)
                 $(this).before($('.modal-backdrop'));

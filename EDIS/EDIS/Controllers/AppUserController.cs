@@ -224,7 +224,7 @@ namespace EDIS.Controllers
                         listItem.Add(li);
 
                     });
-            ViewData["DPTID"] = new SelectList(listItem, "Value", "Text");
+            ViewData["DPTID"] = new SelectList(listItem, "Value", "Text", u.DptId);
             return View(u);
         }
 
