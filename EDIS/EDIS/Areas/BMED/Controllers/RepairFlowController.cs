@@ -525,6 +525,14 @@ namespace EDIS.Areas.BMED.Controllers
                     string bf = JsonConvert.SerializeObject(body);
                     var response = await ERPWebServices.PostRepStuffAsync(mf, bf);
                     msg = response.Body.PostRepStuffResult;
+                    //回傳銷貨單號，回寫至請修單主檔
+                    var repair = _context.BMEDRepairs.Find(docId);
+                    if (repair != null)
+                    {
+                        repair.SalesDocId = msg;
+                        _context.Entry(repair).State = EntityState.Modified;
+                        _context.SaveChanges();
+                    }
                 }
             }
             return msg;
