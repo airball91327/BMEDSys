@@ -360,7 +360,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (!string.IsNullOrEmpty(aname))   //財產名稱
             {
-                kps = kps.Where(v => v.AssetName != null)
+                kps = kps.Where(v => !string.IsNullOrEmpty(v.AssetName))
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
             }
@@ -377,6 +377,7 @@ namespace EDIS.Areas.BMED.Controllers
             if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
             {
                 var resultDocIds = _context.BMEDKeepCosts.Include(kc => kc.TicketDtl)
+                                                         .Where(kc => !string.IsNullOrEmpty(kc.VendorName))
                                                          .Where(kc => kc.VendorName.Contains(qtyVendor))
                                                          .Select(kc => kc.DocId).Distinct();
                 kps = (from k in kps

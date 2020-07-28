@@ -164,7 +164,7 @@ namespace EDIS.Areas.BMED.Controllers
             }
             if (!string.IsNullOrEmpty(aname))   //財產名稱
             {
-                rps = rps.Where(v => v.AssetName != null)
+                rps = rps.Where(v => !string.IsNullOrEmpty(v.AssetName))
                          .Where(v => v.AssetName.Contains(aname))
                          .ToList();
             }
@@ -181,6 +181,7 @@ namespace EDIS.Areas.BMED.Controllers
             if (!string.IsNullOrEmpty(qtyVendor))   //廠商關鍵字
             {
                 var resultDocIds = _context.BMEDRepairCosts.Include(rc => rc.TicketDtl)
+                                                           .Where(rc => !string.IsNullOrEmpty(rc.VendorName))
                                                            .Where(rc => rc.VendorName.Contains(qtyVendor))
                                                            .Select(rc => rc.DocId).Distinct();
                 rps = (from r in rps
@@ -979,15 +980,17 @@ namespace EDIS.Areas.BMED.Controllers
             // No query string.
             if (string.IsNullOrEmpty(QueryStr) && string.IsNullOrEmpty(QueryAccDpt) && string.IsNullOrEmpty(QueryDelivDpt))
             {
-                assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
-                                                        a.Cname.Contains(QueryStr)).ToList();
+                //assets = _context.BMEDAssets.Where(a => a.AssetNo.Contains(QueryStr) ||
+                //                                        a.Cname.Contains(QueryStr)).ToList();
             }
             else
             {
                 assets = _context.BMEDAssets.ToList();
                 if (!string.IsNullOrEmpty(QueryStr))     /* Search assets by assetNo or Cname. */
                 {
-                    assets = assets.Where(a => a.AssetNo.Contains(QueryStr) ||
+                    assets = assets.Where(a => !string.IsNullOrEmpty(a.AssetNo))
+                                   .Where(a => !string.IsNullOrEmpty(a.Cname))
+                                   .Where(a => a.AssetNo.Contains(QueryStr) ||
                                                a.Cname.Contains(QueryStr)).ToList();
                 }
                 if (!string.IsNullOrEmpty(QueryAccDpt))    /* Search assets by AccDpt. */
