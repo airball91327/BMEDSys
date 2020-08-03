@@ -107,7 +107,8 @@
       'icon':'loading',
       'duration':0
       })"
-      data-ajax-complete="$.Toast.hideToast()">
+      data-ajax-complete="$.Toast.hideToast()"
+      data-ajax-failure="alert('錯誤!')">
 
     <h4>查詢條件 - 個人案件</h4>
 
@@ -222,7 +223,7 @@
 <div id="BMEDpnlREPLIST"></div>
 
 
-@if (UserManager.IsInRole(User, "MedAssetMgr") || UserManager.IsInRole(User, "Admin"))
+@*@if (UserManager.IsInRole(User, "MedAssetMgr") || UserManager.IsInRole(User, "Admin"))
 {
     <hr />
     <h4>未分派案件</h4>
@@ -230,4 +231,4 @@
     <div id="unsignListDiv">
         @await Component.InvokeAsync("BMEDRepResign")
     </div>
-}
+}*@

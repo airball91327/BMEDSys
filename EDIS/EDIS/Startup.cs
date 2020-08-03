@@ -40,23 +40,32 @@ namespace EDIS
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));//AzureConnection//EdisConnection
+            //services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(Configuration.GetConnectionString("EdisConnection")));//AzureConnection//EdisConnection
 
             services.AddDbContext<BMEDDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection")));//AzureConnection//EdisConnection
+                options.UseSqlServer(Configuration.GetConnectionString("EdisConnection"),
+            sqlServerOptionsAction: sqlOptions =>
+            {
+                sqlOptions.EnableRetryOnFailure(
+                maxRetryCount: 10,
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null);
+            }));//AzureConnection//EdisConnection
 
-            services.AddScoped<IRepository<RepairModel, string>, RepairRepository>();
-            services.AddScoped<IRepository<RepairDtlModel, string>, RepairDtlRepository>();
-            services.AddScoped<IRepository<RepairFlowModel, string[]>, RepairFlowRepository>();
+            //services.AddScoped<IRepository<RepairModel, string>, RepairRepository>();
+            //services.AddScoped<IRepository<RepairDtlModel, string>, RepairDtlRepository>();
+            //services.AddScoped<IRepository<RepairFlowModel, string[]>, RepairFlowRepository>();
+            //services.AddScoped<IRepository<AppUserModel, int>, AppUserRepository>();
+            //services.AddScoped<IRepository<DepartmentModel, string>, DepartmentRepository>();
+            //services.AddScoped<IRepository<DocIdStore, string[]>, DocIdStoreRepository>();
+            //services.AddScoped<IRepository<BuildingModel, int>, BuildingRepository>();
+            //services.AddScoped<IRepository<FloorModel, string[]>, FloorRepository>();
+            //services.AddScoped<IRepository<RepairEmpModel, string[]>, RepairEmpRepository>();
+            services.AddScoped<IRepository<AppRoleModel, int>, AppRoleRepository>();
             services.AddScoped<IRepository<AppUserModel, int>, AppUserRepository>();
             services.AddScoped<IRepository<DepartmentModel, string>, DepartmentRepository>();
             services.AddScoped<IRepository<DocIdStore, string[]>, DocIdStoreRepository>();
-            services.AddScoped<IRepository<BuildingModel, int>, BuildingRepository>();
-            services.AddScoped<IRepository<FloorModel, string[]>, FloorRepository>();
-            services.AddScoped<IRepository<RepairEmpModel, string[]>, RepairEmpRepository>();
-            services.AddScoped<IRepository<AppRoleModel, int>, AppRoleRepository>();
-
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairModel, string>, BMEDRepairRepository>();
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairDtlModel, string>, BMEDRepairDtlRepository>();
             services.AddScoped<BMEDIRepository<Areas.BMED.Models.RepairModels.RepairFlowModel, string[]>, BMEDRepairFlowRepository>();
@@ -65,7 +74,7 @@ namespace EDIS
             services.Configure<SecurityStampValidatorOptions>(options => options.ValidationInterval = TimeSpan.FromHours(10));
             //services.AddIdentity<ApplicationUser, IdentityRole>()
             services.AddIdentity<ApplicationUser, ApplicationRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
+                //.AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddEntityFrameworkStores<BMEDDbContext>()
                 .AddRoleStore<ApplicationRole>()
                 .AddUserStore<ApplicationUser>()

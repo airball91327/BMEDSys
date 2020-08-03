@@ -199,7 +199,7 @@ namespace EDIS.Areas.BMED.Controllers
             /* If no search result. */
             if (rps.Count() == 0)
             {
-                return View("List", rv);
+                return PartialView("List", rv);
             }
 
             switch (ftype)
@@ -483,7 +483,7 @@ namespace EDIS.Areas.BMED.Controllers
                 rv = rv.Where(r => r.IsCharged == qtyIsCharged).ToList();
             }
 
-            return View("List", rv);
+            return PartialView("List", rv);
         }
         [Authorize]
         public IActionResult Create()

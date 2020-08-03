@@ -4,14 +4,15 @@ using System.Linq;
 using EDIS.Data;
 using EDIS.Models.Identity;
 using EDIS.Models;
+using EDIS.Areas.BMED.Data;
 
 namespace EDIS.Repositories
 {
     public class DocIdStoreRepository : IRepository<DocIdStore, string[]>
     {
-        private readonly ApplicationDbContext _context;
-
-        public DocIdStoreRepository(ApplicationDbContext context)
+        //private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
+        public DocIdStoreRepository(BMEDDbContext context)
         {
             _context = context;
         }

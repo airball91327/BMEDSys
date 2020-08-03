@@ -14,6 +14,10 @@ using EDIS.Areas.BMED.Models.DeliveryModels;
 using Microsoft.AspNetCore.Http;
 using EDIS.Repositories;
 using EDIS.Areas.BMED.Models.MedTransRd;
+using System.Net.Http.Headers;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Text;
 
 namespace EDIS.Areas.BMED.Controllers
 {
@@ -272,9 +276,30 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult GetMedTransRdQList(MedTransRdQModel qdata)
+        public async Task<IActionResult> GetMedTransRdQList(MedTransRdQModel qdata)
         {
             List<MedTransRd> rv = new List<MedTransRd>();
+            //
+            HttpClient client = new HttpClient();
+            var str = JsonConvert.SerializeObject(qdata);
+            HttpContent content = new StringContent(str, Encoding.UTF8, "application/json");
+            client.BaseAddress = new Uri("http://dms.cch.org.tw:8080/");
+            string url = "BmedWebApi/api/MedTransRds";
+            client.DefaultRequestHeaders.Accept.Clear();
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            //HttpResponseMessage response = await client.GetAsync(url);
+            HttpResponseMessage response = await client.PostAsync(url, content);
+            string rstr = "";
+            if (response.IsSuccessStatusCode)
+            {
+                rstr = await response.Content.ReadAsStringAsync();
+                if (!string.IsNullOrEmpty(rstr))
+                {
+                    rv.AddRange(JsonConvert.DeserializeObject<List<MedTransRd>>(rstr));
+                }
+            }
+            client.Dispose();
 
             return View("MedTransRdQList", rv);
         }

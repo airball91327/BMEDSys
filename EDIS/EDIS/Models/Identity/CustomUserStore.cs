@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EDIS.Areas.BMED.Data;
 using EDIS.Data;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,8 +10,8 @@ namespace EDIS.Models.Identity
 {
     public class CustomUserStore : IUserStore<ApplicationUser>
     {
-        private readonly ApplicationDbContext _context;
-        public CustomUserStore(ApplicationDbContext context)
+        private readonly BMEDDbContext _context;
+        public CustomUserStore(BMEDDbContext context)
         {
             this._context = context;
         }

@@ -10,6 +10,7 @@ using EDIS.Areas.BMED.Models.KeepModels;
 using EDIS.Areas.BMED.Models.DeliveryModels;
 using EDIS.Models.Identity;
 using EDIS.Areas.BMED.Models.BuyEvaluateModels;
+using EDIS.Models;
 
 namespace EDIS.Areas.BMED.Data
 {
@@ -20,7 +21,7 @@ namespace EDIS.Areas.BMED.Data
         {
             
         }
-
+        public DbSet<DocIdStore> DocIdStores { get; set; }
         public DbSet<AppUserModel> AppUsers { get; set; }
         public DbSet<AppRoleModel> AppRoles { get; set; }
         public DbSet<DepartmentModel> Departments { get; set; }
@@ -74,6 +75,7 @@ namespace EDIS.Areas.BMED.Data
             base.OnModelCreating(builder);
             builder.Entity<AppUserModel>().HasKey(c => c.Id);
             builder.Entity<AppRoleModel>().HasKey(c => c.RoleId);
+            builder.Entity<DocIdStore>().HasKey(c => new { c.DocType, c.DocId });
             builder.Entity<UsersInRolesModel>().HasKey(c => new {c.UserId, c.RoleId});
             builder.Entity<RepairModel>().HasKey(c => new { c.DocId });
             builder.Entity<RepairDtlModel>().HasKey(c => new { c.DocId });

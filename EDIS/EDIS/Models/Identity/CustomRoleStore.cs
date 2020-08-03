@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EDIS.Areas.BMED.Data;
 using EDIS.Data;
 using Microsoft.AspNetCore.Identity;
 
@@ -9,8 +10,8 @@ namespace EDIS.Models.Identity
 {
     public class CustomRoleStore : IRoleStore<ApplicationRole>
     {
-        private readonly ApplicationDbContext _context;
-        public CustomRoleStore(ApplicationDbContext context)
+        private readonly BMEDDbContext _context;
+        public CustomRoleStore(BMEDDbContext context)
         {
             this._context = context;
         }

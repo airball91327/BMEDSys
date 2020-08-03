@@ -9,15 +9,16 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using EDIS.Models.AccountViewModels;
+using EDIS.Areas.BMED.Data;
 
 namespace EDIS.Models.Identity
 {
     public class CustomRoleManager : RoleManager<ApplicationRole>
     {
-        private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
         public IRoleStore<ApplicationRole> _roleStore;
-        public CustomRoleManager(ApplicationDbContext context, IRoleStore<ApplicationRole> store, IEnumerable<IRoleValidator<ApplicationRole>> roleValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<ApplicationRole>> logger)
+        public CustomRoleManager(BMEDDbContext context, IRoleStore<ApplicationRole> store, IEnumerable<IRoleValidator<ApplicationRole>> roleValidators, ILookupNormalizer keyNormalizer, IdentityErrorDescriber errors, ILogger<RoleManager<ApplicationRole>> logger)
             : base(store, roleValidators, keyNormalizer, errors, logger)
         {
             _context = context;

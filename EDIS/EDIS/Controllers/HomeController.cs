@@ -17,21 +17,21 @@ namespace EDIS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        //private readonly ApplicationDbContext _context;
         private readonly BMEDDbContext _BMEDcontext;
-        private readonly IRepository<RepairModel, string> _repRepo;
+        //private readonly IRepository<RepairModel, string> _repRepo;
         private readonly IRepository<AppUserModel, int> _userRepo;
         private readonly CustomUserManager userManager;
 
-        public HomeController(ApplicationDbContext context,
+        public HomeController(//ApplicationDbContext context,
                               BMEDDbContext BMEDcontext,
-                              IRepository<RepairModel, string> repairRepo,
+                              //IRepository<RepairModel, string> repairRepo,
                               IRepository<AppUserModel, int> userRepo,
                               CustomUserManager customUserManager)
         {
-            _context = context;
+            //_context = context;
             _BMEDcontext = BMEDcontext;
-            _repRepo = repairRepo;
+            //_repRepo = repairRepo;
             _userRepo = userRepo;
             userManager = customUserManager;
         }

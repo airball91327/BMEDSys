@@ -32,23 +32,23 @@ namespace EDIS.Controllers
         private readonly CustomSignInManager _signInManager;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
-        private readonly ApplicationDbContext _context;
-        private readonly BMEDDbContext _BMEDcontext;
+        //private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
 
         public AccountController(
             CustomUserManager userManager,
             CustomSignInManager signInManager,
             IEmailSender emailSender,
             ILogger<AccountController> logger,
-            ApplicationDbContext context,
+            //ApplicationDbContext context,
             BMEDDbContext BMEDcontext)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _logger = logger;
-            _context = context;
-            _BMEDcontext = BMEDcontext;
+            //_context = context;
+            _context = BMEDcontext;
         }
 
         [TempData]
@@ -69,7 +69,7 @@ namespace EDIS.Controllers
                 {
                     if (MailType == "Edit") //Edit Repair doc.
                     {
-                        var editDoc = _context.RepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                        var editDoc = _context.BMEDRepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
                                                           .FirstOrDefault();
                         int userId = _context.AppUsers.Where(a => a.UserName == User.Identity.Name).First().Id;
                         /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
@@ -88,7 +88,7 @@ namespace EDIS.Controllers
                     }
                     else if (MailType == "BMEDRepEdit") //Edit BMED Repair Doc.
                     {
-                        var editDoc = _BMEDcontext.BMEDRepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                        var editDoc = _context.BMEDRepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
                                                                   .FirstOrDefault();
                         int userId = _context.AppUsers.Where(a => a.UserName == User.Identity.Name).First().Id;
                         /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
@@ -107,7 +107,7 @@ namespace EDIS.Controllers
                     }
                     else if (MailType == "BMEDKeepEdit") //Edit BMED Keep Doc.
                     {
-                        var editDoc = _BMEDcontext.BMEDKeepFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                        var editDoc = _context.BMEDKeepFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
                                                                 .FirstOrDefault();
                         int userId = _context.AppUsers.Where(a => a.UserName == User.Identity.Name).First().Id;
                         /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
@@ -172,7 +172,7 @@ namespace EDIS.Controllers
                         if (string.IsNullOrEmpty(loginUser.Password))
                         {
                             // vendor's password will default to unitoNo, if not changed.
-                            var vendor = _BMEDcontext.BMEDVendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
+                            var vendor = _context.BMEDVendors.Where(v => v.VendorId == loginUser.VendorId).FirstOrDefault();
                             if (vendor != null)
                             {
                                 string defaultPW = vendor.UniteNo;
@@ -250,7 +250,7 @@ namespace EDIS.Controllers
                         {
                             if (MailType == "Edit")
                             {
-                                var editDoc = _context.RepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                                var editDoc = _context.BMEDRepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
                                                                   .FirstOrDefault();
                                 int userId = _context.AppUsers.Where(a => a.UserName == model.UserName).First().Id;
                                 /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
@@ -278,50 +278,50 @@ namespace EDIS.Controllers
                         return View(model);
                     }
                 }
-                else  //外包帳號 or 值班帳號
-                {
-                    /* Check and get external user. */
-                    var ExternalUser = _context.ExternalUsers.Where(ex => ex.UserName == model.UserName).FirstOrDefault();
-                    if( ExternalUser != null && ExternalUser.Password == model.Password )
-                    {
-                        var signInId = ExternalUser.Id.ToString();
-                        var user = new ApplicationUser { Id = signInId, UserName = model.UserName };
+                //else  //外包帳號 or 值班帳號
+                //{
+                //    /* Check and get external user. */
+                //    var ExternalUser = _context.ExternalUsers.Where(ex => ex.UserName == model.UserName).FirstOrDefault();
+                //    if( ExternalUser != null && ExternalUser.Password == model.Password )
+                //    {
+                //        var signInId = ExternalUser.Id.ToString();
+                //        var user = new ApplicationUser { Id = signInId, UserName = model.UserName };
 
-                        await _signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = model.RememberMe });
+                //        await _signInManager.SignInAsync(user, new AuthenticationProperties { IsPersistent = model.RememberMe });
 
-                        /* If login from mail. */
-                        if (MailDocId != "")
-                        {
-                            if (MailType == "Edit")
-                            {
-                                var editDoc = _context.RepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
-                                                                  .FirstOrDefault();
-                                int userId = _context.AppUsers.Where(a => a.UserName == model.UserName).First().Id;
-                                /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
-                                if (editDoc.Status == "?" && editDoc.UserId == userId)
-                                {
-                                    return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
-                                }
-                                else
-                                {
-                                    return RedirectToAction("Index", "Home");
-                                }
-                            }
-                            return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
-                        }
+                //        /* If login from mail. */
+                //        if (MailDocId != "")
+                //        {
+                //            if (MailType == "Edit")
+                //            {
+                //                var editDoc = _context.RepairFlows.Where(r => r.DocId == MailDocId).OrderByDescending(r => r.StepId)
+                //                                                  .FirstOrDefault();
+                //                int userId = _context.AppUsers.Where(a => a.UserName == model.UserName).First().Id;
+                //                /* 編輯流程在登入者身上，進入Edit，否則導回首頁 */
+                //                if (editDoc.Status == "?" && editDoc.UserId == userId)
+                //                {
+                //                    return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
+                //                }
+                //                else
+                //                {
+                //                    return RedirectToAction("Index", "Home");
+                //                }
+                //            }
+                //            return RedirectToAction(MailType, "Repair", new { Area = "", id = MailDocId });
+                //        }
 
-                        _logger.LogInformation("使用者已經登入.");
-                        if (!string.IsNullOrEmpty(returnUrl))
-                            return RedirectToLocal(returnUrl);
+                //        _logger.LogInformation("使用者已經登入.");
+                //        if (!string.IsNullOrEmpty(returnUrl))
+                //            return RedirectToLocal(returnUrl);
 
-                        return RedirectToAction("Index", "Home");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "帳號或密碼錯誤.");
-                        return View(model);
-                    }
-                }
+                //        return RedirectToAction("Index", "Home");
+                //    }
+                //    else
+                //    {
+                //        ModelState.AddModelError(string.Empty, "帳號或密碼錯誤.");
+                //        return View(model);
+                //    }
+                //}
                 //if (result.RequiresTwoFactor)
                 //{
                 //    return RedirectToAction(nameof(LoginWith2fa), new { returnUrl, model.RememberMe });

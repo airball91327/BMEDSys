@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EDIS.Areas.BMED.Data;
 using EDIS.Data;
 using EDIS.Models.Identity;
 using EDIS.Models.RepairModels;
@@ -9,9 +10,9 @@ namespace EDIS.Repositories
 {
     public class DepartmentRepository : IRepository<DepartmentModel, string>
     {
-        private readonly ApplicationDbContext _context;
-
-        public DepartmentRepository(ApplicationDbContext context)
+        //private readonly ApplicationDbContext _context;
+        private readonly BMEDDbContext _context;
+        public DepartmentRepository(BMEDDbContext context)
         {
             _context = context;
         }
