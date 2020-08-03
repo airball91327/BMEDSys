@@ -46,7 +46,7 @@ namespace EDIS.Areas.BMED.Controllers
         }
 
         [HttpPost]
-        public IActionResult NextFlow(AssignModel assign)
+        public async Task<IActionResult> NextFlow(AssignModel assign)
         {
             var ur = _userRepo.Find(u => u.UserName == this.User.Identity.Name).FirstOrDefault();
 
@@ -456,8 +456,11 @@ namespace EDIS.Areas.BMED.Controllers
             //
             ERPRepHead hd = new ERPRepHead();
             hd.BIL_NO = docId;
-            hd.PS_DD = DateTime.Now;
+            hd.PS_DD = DateTime.Now.Date;
             hd.SAL_NO = User.Identity.Name;
+#if DEBUG
+            hd.SAL_NO = "344033";
+#endif
             //Get keep doc's stock.
             var keepCosts = _context.BMEDKeepCosts.Where(rc => rc.DocId == docId).ToList();
             if (keepCosts.Count() > 0)
@@ -479,6 +482,7 @@ namespace EDIS.Areas.BMED.Controllers
                             UP = Convert.ToDecimal(stock.Price),
                             AMT = Convert.ToDecimal(stock.TotalCost)
                         });
+                        i++;
                     }
                     //
                     string mf = JsonConvert.SerializeObject(hd);

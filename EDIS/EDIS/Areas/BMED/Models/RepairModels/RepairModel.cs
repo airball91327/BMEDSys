@@ -93,5 +93,7 @@ namespace EDIS.Areas.BMED.Models.RepairModels
         [Display(Name = "費用")]
         [DisplayFormat(DataFormatString = "{0:N0}")]
         public decimal Cost { get; set; }
+        [Display(Name = "銷貨單號")]
+        public string SalesDocId { get; set; }
     }
 }

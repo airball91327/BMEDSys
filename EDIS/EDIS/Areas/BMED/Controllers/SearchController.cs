@@ -978,34 +978,38 @@ namespace EDIS.Areas.BMED.Controllers
             foreach (DelivFlowModel f in rf)
             {
                 DeliveryModel r = _context.Deliveries.Find(f.DocId);
-                AppUserModel p = _context.AppUsers.Find(r.UserId);
-                DepartmentModel c = _context.Departments.Find(p.DptId);
+                AppUserModel p = r == null ? null : _context.AppUsers.Find(r.UserId);
+                DepartmentModel c = p == null ? null : _context.Departments.Find(p.DptId);
                 //BuyEvaluate b = db.BuyEvaluates.Find(r.PurchaseNo);
-                i = new DeliveryListVModel();
-                i.DocType = "驗收";
-                i.DocId = r.DocId;
-                i.UserId = r.UserId;
-                i.UserName = r.UserName;
-                if (p != null && p.DptId != null)
+                if (r != null)
                 {
-                    i.Company = p.DptId;
-                    i.CompanyNam = c == null ? "" : c.Name_C;
+                    i = new DeliveryListVModel();
+                    i.DocType = "驗收";
+                    i.DocId = r.DocId;
+                    i.UserId = r.UserId;
+                    i.UserName = r.UserName;
+                    if (p != null)
+                    {
+                        i.Company = p.DptId;
+                        i.CompanyNam = c == null ? "" : c.Name_C;
+                    }
+                    i.ContractNo = r.ContractNo;
+                    i.PurchaseNo = r.PurchaseNo;
+                    i.CrlItemNo = r.CrlItemNo;
+                    i.AccDpt = r.AccDpt;
+                    var accDpt = _context.Departments.Find(r.AccDpt);
+                    i.AccDptNam = accDpt == null ? "" : accDpt.Name_C;
+                    i.BudgetId = "";
+                    if (f.Status == "?")
+                        i.Days = DateTime.Now.Subtract(r.ApplyDate.GetValueOrDefault()).Days;
+                    else
+                        i.Days = null;
+                    i.Flg = f.Status;
+                    i.FlowUid = f.UserId;
+                    i.VendorNo = r.VendorId;
+                    i.ApplyDate = r.ApplyDate;
+                    dv.Add(i);
                 }
-                i.ContractNo = r.ContractNo;
-                i.PurchaseNo = r.PurchaseNo;
-                i.CrlItemNo = r.CrlItemNo;
-                i.AccDpt = r.AccDpt;
-                i.AccDptNam = _context.Departments.Find(r.AccDpt) == null ? "" : _context.Departments.Find(r.AccDpt).Name_C;
-                i.BudgetId = "";
-                if (f.Status == "?")
-                    i.Days = DateTime.Now.Subtract(r.ApplyDate.GetValueOrDefault()).Days;
-                else
-                    i.Days = null;
-                i.Flg = f.Status;
-                i.FlowUid = f.UserId;
-                i.VendorNo = r.VendorId;
-                i.ApplyDate = r.ApplyDate;
-                dv.Add(i);
             }
             //
             return dv;
